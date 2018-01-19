@@ -1,4 +1,6 @@
 node_modules
 .idea
+.bash_profile.bash
+.bashrc
 *.swp
 *.swo
