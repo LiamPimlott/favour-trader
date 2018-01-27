@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import './App.css';
 
 class App extends Component {
-  state = {welcomeMessage: []}
+    constructor(){
+        super()
+        this.state = {
+            welcomeMessage: null
+        }
+    }
   
   componentDidMount() {
-    fetch('/')
-      .then(res => res.json())
-      .then(welcomeMessage => this.setState({ welcomeMessage }));
+    axios.get('http://localhost:3001/')
+        .then(res => {
+            console.log(res.data);
+            var welcomeMessage = res.data.firstRequest;
+            this.setState({ welcomeMessage: welcomeMessage });
+        });
   }
 
   render() {
