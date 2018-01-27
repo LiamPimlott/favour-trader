@@ -5,7 +5,7 @@ var router = express.Router();
 var Favour = require('../models/favours');
 
 /* GET root endpoint. */
-router.get('/', function(req, res, next) {
+router.get('/api', function(req, res, next) {
   //We could access our Favours collection via Favour
   res.json({firstRequest: "Hello world!"});
 });
