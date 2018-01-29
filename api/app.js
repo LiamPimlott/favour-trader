@@ -2,6 +2,7 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
+var db = require("./db");
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -16,7 +17,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 
 // DATA MODELS
-var Favour = require('./models/favours');
+//var Favour = require('./models/favours');
 
 // // view engine setup
 app.set('views', path.join(__dirname, 'views'));
