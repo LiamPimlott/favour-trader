@@ -2,29 +2,23 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
-var db = require("./db");
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-//In ./bin/www we set our port to either a predetermined port number in production env,
-// or by default for local testing: 3001
-
+var debug = require('debug')('app:production');
+var devDebug = require('debug')('app:dev');
+var db = require('./db');
 
 // IMPORTING ROUTES
-var index = require('./routes/index');
 var users = require('./routes/users');
-
-// DATA MODELS
-//var Favour = require('./models/favours');
+var favours = require('./routes/favours');
 
 // // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // APP CONFIG
-//mongoose.connect("db connection string goes here");
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,8 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // REGISTERING OUR ROUTES//
 ///////////////////////////
 
-app.use('/', index);
 app.use('/users', users);
+app.use('/favours', favours);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -49,14 +43,11 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = process.env.APPENV === 'development' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
 
-
-app.listen(3001, function () {
-    console.log("App running on port 3001");
-});
+module.exports = app;

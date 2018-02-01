@@ -1,11 +1,10 @@
-#!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('api:server');
+var app = require('./app');
+var debug = require('debug')('app:production');
+var devDebug = require('debug')('app:dev')
 var http = require('http');
 
 /**
@@ -85,6 +84,7 @@ function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    : 'port ' + addr.port; 
+  devDebug('Listening on ' + bind);
+  devDebug("Server started");
 }

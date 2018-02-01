@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-// Simple mongoose schema example
+
 var favourSchema = new mongoose.Schema({
    name: String,
    image: String,

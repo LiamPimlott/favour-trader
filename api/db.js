@@ -1,17 +1,35 @@
-var config = require('./config.js');
+var Promise = require('promise');
 var mongoose = require('mongoose');
+var devDebug = require('debug')('app:dev');
 
-var dbConf = new config.dbConfig();
-var userName = dbConf.userName;
-var password = dbConf.password;
-const uri = "mongodb://"+userName+":"+password+"@favor-trader-shard-00-00-djlzv.mongodb.net:27017,favor-trader-shard-00-01-djlzv.mongodb.net:27017,favor-trader-shard-00-02-djlzv.mongodb.net:27017/test?ssl=true&replicaSet=favor-trader-shard-0&authSource=admin";
+function loadConfig(){
+  return new Promise(function (fulfill, reject){
+  		var config = require('./config');
+  		var dbconfig = new config.dbConfig();
+    	fulfill(dbconfig);
+    });
+}
+
+function connect(){
+    loadConfig().done(function (config){
+     	mongoose.connect(config.uri).then (
+		(connection) => {
+			devDebug("Development DB is loaded")
+			module.exports.db = connection
+		},
+		(err) => {
+			console.log(err);
+		} 
+	)
+    });
+}
+
+connect();
 
 
-mongoose.connect(uri).then (
-	(connection) => {
-		module.exports.db = connection
-	},
-	(err) => {
-		console.log(err);
-	} 
-);
+
+
+
+
+
+

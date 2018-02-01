@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "set APPENV=production&& nodemon server",
+    "dev": "set DEBUG=app:dev&& set APPENV=development&& nodemon server"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -12,6 +13,10 @@
     "express": "~4.15.5",
     "mongoose": "^5.0.1",
     "morgan": "~1.9.0",
+    "promise": "^8.0.1",
     "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.11"
   }
 }

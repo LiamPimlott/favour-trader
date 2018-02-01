@@ -5,10 +5,11 @@ var router = express.Router();
 var User = require('../models/users');
 
 /* GET users listing. */
-router.get('/api', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', function(req, res, next) {
+  res.json({firstRequest: "Hello world! in Users"});
 });
-router.post('/api/create', function(req, res, next) {
+
+router.post('/create', function(req, res, next) {
 	var  user = new User();
 	user.name = 'Ismail';
 	user.save(function(err){
@@ -18,7 +19,7 @@ router.post('/api/create', function(req, res, next) {
  			res.json({message: 'User Successfully Added'});
 	});
 });
-router.get('/api/retrieve-all', function(req, res, next) {
+router.get('/retrieve-all', function(req, res, next) {
 	User.find(function(err, users) {
  		if (err){
  			res.send(err);
@@ -27,10 +28,10 @@ router.get('/api/retrieve-all', function(req, res, next) {
 		} 		
  	});
  });
-router.get('/api/retrieve', function(req, res, next) {
+router.get('/retrieve', function(req, res, next) {
 	var query = User.findOne({ 'name': 'Ismail' });
 
-	// selecting the `name` and `occupation` fields
+	// selecting the `name` fields
 	query.select('name');
 
 	// execute the query at a later time
@@ -43,7 +44,7 @@ router.get('/api/retrieve', function(req, res, next) {
   	
 	});
 });
-router.delete('/api/delete', function(req, res, next) {
+router.delete('/delete', function(req, res, next) {
 	var query = User.deleteOne({ 'name': 'Ismail' });
 
 	// selecting the `name` and `occupation` fields
