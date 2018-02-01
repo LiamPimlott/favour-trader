@@ -1,6 +1,5 @@
 var mongoose = require("mongoose");
 
-
 var favourSchema = new mongoose.Schema({
    name: String,
    image: String,

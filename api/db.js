@@ -25,11 +25,3 @@ function connect(){
 }
 
 connect();
-
-
-
-
-
-
-
-
