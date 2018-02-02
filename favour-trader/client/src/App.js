@@ -12,7 +12,7 @@ class App extends Component {
   componentDidMount() {
       fetch('/users')
           .then(res => res.json())
-          .then(data => this.setState({ welcomeMessage: data.firstRequest}))
+          .then(data => this.setState({ welcomeMessage: data.firstRequest}));
     }
 
   render() {

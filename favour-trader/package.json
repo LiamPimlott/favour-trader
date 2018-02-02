@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set APPENV=production&& nodemon server",
-    "dev": "set DEBUG=app:dev&& set APPENV=development&& nodemon server"
+    "prodServer": "export APPENV=production&& nodemon server",
+    "devServer": "export DEBUG=app:dev&& export APPENV=development&& nodemon server",
+    "devClient": "node start-client.js",
+    "dev": "concurrently \"npm run devServer\" \"npm run devClient\""
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -17,6 +19,7 @@
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
+    "concurrently": "^3.5.1",
     "nodemon": "^1.14.11"
   }
 }

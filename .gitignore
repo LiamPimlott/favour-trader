@@ -4,5 +4,4 @@ node_modules
 ~.bash_profile.bash
 *.swp
 *.swo
-api/config.js
-api/npm-debug.log
+favour-trader/npm-debug.log
