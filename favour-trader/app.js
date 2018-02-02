@@ -10,9 +10,15 @@ var debug = require('debug')('app:production');
 var devDebug = require('debug')('app:dev');
 var db = require('./db');
 
+var seedDB = require("./seed-db");
+
 // IMPORTING ROUTES
 var users = require('./routes/users');
-var favours = require('./routes/favours');
+var favours = require('./routes/contracts');
+
+// SEEDING DB
+devDebug("WARNING: Seeding DB");
+seedDB();
 
 // APP CONFIG
 app.use(logger('dev'));
@@ -27,7 +33,7 @@ app.set('view engine', 'pug');
 
 // REGISTERING OUR ROUTES
 app.use('/users', users);
-app.use('/favours', favours);
+app.use('/contracts', favours);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
