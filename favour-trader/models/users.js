@@ -50,11 +50,11 @@ var userSchema = new mongoose.Schema({
     type: String
   },
   has: {
-    type: [{ type: mongoose.Schema.Type.ObjectId, ref: "Skill" }]
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }]
   },
   wants: {
-    type:[{ type: mongoose.Schema.Type.ObjectId, ref: "Skill" }]
+    type:[{ type: mongoose.Schema.Types.ObjectId, ref: "Skill" }]
   }
 });
 
-module.exports = mongoose.model("User", user);
+module.exports = mongoose.model("User", userSchema);
