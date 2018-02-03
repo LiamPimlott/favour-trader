@@ -2,31 +2,39 @@ var mongoose = require("mongoose");
 
 var nameSchema = new mongoose.Schema({
   first: {
-  	type:String
+  	type:String,
+    minlength: 3,
   },
   last: {
-  	type: String
+  	type: String,
+    minlength: 3,
   }
-});
-
-nameSchema.pre('save', function (next) {
-	if (this.first.length <= 2) {
-    return next(new Error('First Name is too Short.'));
-  }
-	if (this.last.length <= 2) {
-    return next(new Error('Last Name is too Short.'));
-  }
-  next();
 });
 
 var addressSchema = new mongoose.Schema({
-  number: Number,
-  street: String,
-  postalCode: String,
-  city: String,
-  state: String,
-  country: String,
+  number: {
+    type: Number,
+    required: true
+  },
+  street: { 
+    type: String,
+    required: true
+  },
+  postalCode: { 
+    type:String,
+    required: true
+  },
+  city: { 
+    type:String
+  },
+  state: { 
+    type:String
+  },
+  country: { 
+    type:String
+  }
 });
+
 
 var userSchema = new mongoose.Schema({
   name: {
