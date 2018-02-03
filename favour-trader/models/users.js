@@ -10,10 +10,10 @@ var nameSchema = new mongoose.Schema({
 });
 
 nameSchema.pre('save', function (next) {
-	if (2 > this.first.length) {
+	if (this.first.length <= 2) {
     return next(new Error('First Name is too Short.'));
   }
-	if (2 > this.last.length) {
+	if (this.last.length <= 2) {
     return next(new Error('Last Name is too Short.'));
   }
   next();
@@ -28,10 +28,7 @@ var addressSchema = new mongoose.Schema({
   country: String,
 });
 
-var objectId = mongoose.Schema.Types.ObjectId;
-var skillSchema = new mongoose.Schema({ skill: objectId });
-
-var user = new mongoose.Schema({
+var userSchema = new mongoose.Schema({
   name: {
     type: nameSchema,
     required: [true, 'Name is required.'],
@@ -53,10 +50,10 @@ var user = new mongoose.Schema({
     type: String
   },
   has: {
-    type: skillSchema
+    type: [{ type: mongoose.Schema.Type.ObjectId, ref: "Skill" }]
   },
   wants: {
-    type: skillSchema
+    type:[{ type: mongoose.Schema.Type.ObjectId, ref: "Skill" }]
   }
 });
 
