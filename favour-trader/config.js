@@ -4,8 +4,8 @@ class dbConfig {
 	constructor() {
 		var appEnv = process.env.APPENV;
 		if (process.env.APPENV === 'production') {
-			this.userName = "prod_user";
-			this.password = "prod_pass";
+			this.userName = "prod";
+			this.password = "prod";
 			this.uri = "mongodb://"+this.userName+":"+this.password+"@favor-trader-shard-00-00-djlzv.mongodb.net:27017,favor-trader-shard-00-01-djlzv.mongodb.net:27017,favor-trader-shard-00-02-djlzv.mongodb.net:27017/test?ssl=true&replicaSet=favor-trader-shard-0&authSource=admin";
 		}
 		if (process.env.APPENV === 'development') {
