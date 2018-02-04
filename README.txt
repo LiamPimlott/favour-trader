@@ -1,5 +1,5 @@
 COMP 4350: Software Engineering 2
-
+Project: FavourTrader
 Group 8 (Team 8x8):
 Alexander Mark
 Joseph Bernshine
@@ -10,8 +10,28 @@ Jian Wen Chen
 Ismail Khowaja
 Beom-Jin Park
 
-Project: FavourTrader
+Installation / Running Locally:
+** In order to run this project locally, please ensure you have the latest version of Node (https://nodejs.org/en/).
+
+Option 1 - Running server or client individually:
+a) Running the server / api
+- Navigate to /favour-trader/
+- Run npm install to install required packages (only once)
+- Run npm run prodServer or npm run devServer to spin up the server locally with either prod or dev environment flags.
+
+b) Running the web client
+- Navigate to /favour-trader/client
+- Run npm install to install required packages (only once)
+- Run npm start to spin up a local instance of the client (this will automatically try to connect to local back-end intance)
+
+Option 2 - Running server and web client concurrently:
+- Navigate to /favour-trader/
+- Run npm install to install required packages (only once)
+- Run npm run dev to run the dev server and dev client concurrently in one shell
+
+Running Mobile Client:
+- TBD
 
 Notes for working on this repository:
-- Please ensure you have atleast 1 code review before you merge your branch
-- Please only work off of the (soon to be) 'develop' branch (we will merge develop into master at times when we all agree to do so)
+- Please ensure you have at least 1 code review before you merge your branch
+- Please only work off of the 'develop' branch (we will merge develop into master at times when we all agree to do so)
