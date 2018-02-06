@@ -9,7 +9,7 @@ export default class Login extends React.Component {
 	render(){
 		const { navigate } = this.props.navigation;
 		
-		return(
+		return( 
 
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
 				<Image source={require('../images/test.jpg')} style={styles.backgroundImage}></Image>
@@ -40,12 +40,13 @@ export default class Login extends React.Component {
 					
 					</View> 
 				</View> 
-				<TouchableOpacity 
-							style={styles.buttonSignUp}
-						>
-							<Text style={styles.buttonTextAcc}>No Account?</Text>
-							<Text style={styles.buttonText}>SIGN UP</Text>
-				</TouchableOpacity>
+					<TouchableOpacity 
+						style={styles.buttonSignUp}
+						onPress = { () => navigate('SignUp') }
+					>
+						<Text style={styles.buttonTextAcc}>No Account?</Text>
+						<Text style={styles.buttonText}>SIGN UP</Text>
+					</TouchableOpacity>
 		  </KeyboardAvoidingView>
 		  
 		);
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
 	buttonContainer: { 
 		backgroundColor: '#6F4B9B',
 		justifyContent: 'center',
-		height: 75,
+		height: '20%',
 		width: 400,
 		marginTop: 10, 
 		marginBottom: 5,
