@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 
+import './NotFound.css';
+
 class NotFound extends Component {
 
   render() {
     return (
-      <div>
-        Oops! The page you're looking for can't be found.
+      <div className='NotFound-text'>
+        <h1>
+          <p>Oops!</p>
+        </h1>
+        <div>
+          <b>The page you're looking for does not exist :(</b>
+        </div>
       </div>
     );
   }
