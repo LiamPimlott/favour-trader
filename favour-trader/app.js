@@ -9,7 +9,6 @@ var bodyParser = require('body-parser');
 var debug = require('debug')('app:production');
 var devDebug = require('debug')('app:dev');
 var db = require('./db');
-
 var seedDB = require("./seed-db");
 
 // IMPORTING ROUTES

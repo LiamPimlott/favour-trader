@@ -12,15 +12,14 @@ var data = [
     {
         offerStatus: "testing"
     },
-]
+];
+
 function seedDB(){
-    //Remove all campgrounds
     Contract.remove({}, function(err){
         if(err){
             devDebug(err);
         } else {
             devDebug("Removed old contracts");
-            //add a few campgrounds
             data.forEach(function(seed){
                 Contract.create(seed, function(err, contract){
                     if(err){
@@ -32,7 +31,6 @@ function seedDB(){
             });
         }
     });  
-    //add a few comments
 }
 
 module.exports = seedDB;
