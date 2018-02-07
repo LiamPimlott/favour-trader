@@ -10,8 +10,9 @@ class Header extends Component {
         </header>
         <div>
           <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/account">Account</Link></li>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/account">Account</Link></li>
+              <li><Link to="/login">Login</Link></li>
           </ul>
         </div>
       </div>
