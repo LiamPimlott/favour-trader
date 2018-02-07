@@ -1,5 +1,7 @@
 .App {
-  text-align: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .App-logo {
@@ -25,4 +27,19 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+.Nav-wrapper {
+  top: 0;
+  position: fixed;
+  width: 100%;
+  height: 20px;
+}
+
+.SideMenu-wrapper {
+
+}
+
+.PageContent-wrapper {
+
 }

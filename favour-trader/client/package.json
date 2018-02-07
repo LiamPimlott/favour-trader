@@ -7,6 +7,7 @@
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.0",
+    "react-sidenav": "file:node_modules\\react-sidenav",
     "reactstrap": "^5.0.0-beta"
   },
   "scripts": {
@@ -15,5 +16,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:3001/"
+  "proxy": "http://localhost:3001/",
+  "devDependencies": {
+    "react-icons-kit": "file:node_modules\\react-icons-kit"
+  }
 }

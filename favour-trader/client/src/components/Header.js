@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './Header.css';
 
 class Header extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to FavourTrader</h1>
-        </header>
-        <div>
-          <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/create-account">Create Account</Link></li>
-            <li><Link to="/profile">Profile</Link></li>
-          </ul>
+      <div className={'Header'}>
+        <div className={'PretendNavbar'}>
+          Put a navbar up here! 
+          <Link to="/"> Home</Link>
+          <Link to="/create-account"> Create Account</Link>
+          <Link to="/profile"> Profile</Link>
         </div>
       </div>
     );
