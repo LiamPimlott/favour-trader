@@ -1,7 +1,13 @@
 /**
+ * loading developement environment vars from .env 
+ */
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+}
+
+/**
  * Module dependencies.
  */
-
 var app = require('./app');
 var debug = require('debug')('app:production');
 var devDebug = require('debug')('app:dev')
