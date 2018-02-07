@@ -33,11 +33,11 @@ class CreateAccount extends Component {
 	<FormGroup>
           <Label for="state">State/Province </Label>
           <Input type="text" name="state" id="state" placeholder=" ex. Manitoba " />
-        </FormGroup>
-        <FormGroup>
+     	</FormGroup>
+     	<FormGroup>
           <Label for="email">Email</Label>
           <Input type="email" name="email" id="email" placeholder=" ex. favourtrader@gmail.com" />
-        </FormGroup>
+     	</FormGroup>
 	<FormGroup>
           <Label for="confirmEmail">Confirm Email </Label>
           <Input type="email" name="confirmEmail" id="confirmEmail"/<
