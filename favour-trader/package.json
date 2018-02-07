@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prodServer": "set APPENV=production&& nodemon server",
-    "devServer": "set DEBUG=app:dev&& set APPENV=development&& nodemon server",
+    "prodServer": "export APPENV=production&& nodemon server",
+    "devServer": "export DEBUG=app:dev&& export APPENV=development&& nodemon server",
     "devClient": "node start-client.js",
     "dev": "concurrently \"npm run devServer\" \"npm run devClient\""
   },
