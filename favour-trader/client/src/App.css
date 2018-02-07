@@ -33,13 +33,34 @@
   top: 0;
   position: fixed;
   width: 100%;
-  height: 20px;
+  height: 30px;
+  color: white;
+  text-decoration: none;
+  background-color: #333;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  z-index: 3;
+}
+
+.Nav-wrapper a{
+  text-decoration: none;
+  color: white;
 }
 
 .SideMenu-wrapper {
-
+  width: 20%;
+  height: 100%;
+  position: fixed;
+  margin-top: 30px;
+  position: fixed;
+  z-index: 2;
 }
 
 .PageContent-wrapper {
-
+  margin-top: 40px;
+  position: fixed;
+  text-align: center;
+  height: 100%;
+  width: 100%;
 }
