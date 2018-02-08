@@ -40,7 +40,7 @@ class CreateAccount extends Component {
 				</FormGroup>
 			<FormGroup>
 				  <Label for="confirmEmail">Confirm Email </Label>
-				  <Input type="email" name="confirmEmail" id="confirmEmail"/<
+				  <Input type="email" name="confirmEmail" id="confirmEmail"/>
 			</FormGroup>
 			<FormGroup>
 				  <Label for="password">Password </Label>
