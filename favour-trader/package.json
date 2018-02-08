@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prodServer": "set APPENV=production&& nodemon server",
-    "devServer": "set DEBUG=app:dev&& set APPENV=development&& nodemon server",
+    "prod": "export NODE_ENV=production&& nodemon server",
+    "devServer": "nodemon server",
     "devClient": "node start-client.js",
     "dev": "concurrently \"npm run devServer\" \"npm run devClient\""
   },
@@ -12,6 +12,7 @@
     "body-parser": "~1.18.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
+    "dotenv": "^5.0.0",
     "express": "~4.15.5",
     "mongoose": "^5.0.1",
     "morgan": "~1.9.0",

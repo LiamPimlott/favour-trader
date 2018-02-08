@@ -1,28 +1,53 @@
-var Promise = require('promise');
 var mongoose = require('mongoose');
 var devDebug = require('debug')('app:dev');
+var config = require('./config.js');
+var Contract = require("./models/contract");
 
-function loadConfig(){
-  return new Promise(function (fulfill, reject){
-  		var config = require('./config.js');
-  		var dbconfig = new config.dbConfig();
-		fulfill(dbconfig);
-	});
+var data = [
+	{
+			offerStatus: "in limbo"
+	},
+	{
+			offerStatus: "not started"
+	},
+	{
+			offerStatus: "testing"
+	},
+];
+
+function seedDB(){
+	Contract.remove({}, function(err){
+			if(err){
+				devDebug(err);
+			} else{
+				devDebug("Removed old contracts");
+				data.forEach(function(seed){
+					Contract.create(seed, function(err, contract){
+						if(err){
+							devDebug(err);
+						} else{
+							devDebug("Added Contract");
+						}
+					});
+				});
+			}
+	});  
 }
 
-function connect(){
-	loadConfig().done(function (config){
-		devDebug("Connecting to "+process.env.APPENV+" DB");
-	 	mongoose.connect(config.uri).then (
+function getConnection(shouldSeed) {
+	mongoose.connect(config.db.connectString).then(
 		(connection) => {
-			devDebug("Development DB is loaded")
-			module.exports.db = connection
+			devDebug("Connected to "+config.env+" DB");
+			if(shouldSeed === true){
+				devDebug("WARNING: Seeding DB");
+				seedDB();
+			}
+			return connection;
 		},
 		(err) => {
-			console.log(err);
-		} 
-	)
-	});
-}
+		  devDebug(err);
+	  }
+	);
+};
 
-connect();
+module.exports.getConnection = getConnection;
