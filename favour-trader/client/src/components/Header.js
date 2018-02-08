@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
+import './Header.css';
 class Header extends Component {
   render() {
+    const { toggleSideMenu } = this.props;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to FavourTrader</h1>
-        </header>
+      <div className={'Header'}>
         <div>
-          <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/create-account">Create Account</Link></li>
-              <li><Link to="/login">Login</Link></li>
-              <li><Link to="/profile">Profile</Link></li>
-          </ul>
+          <button className={'btn'} onClick={toggleSideMenu}>Toggle Menu</button>
+        </div>
+        <div>
+          *PRETEND PLACEHOLDER NAVBAR*:
+          <Link to="/"> Home</Link>
+          <Link to="/create-account"> Create Account </Link>
+          <Link to="/login">Login </Link>
+          <Link to="/profile"> Profile</Link>
         </div>
       </div>
     );
