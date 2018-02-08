@@ -1,96 +1,24 @@
 var express = require('express');
-var jwt = require('jsonwebtoken');
-var config = require('../config/main');
 var router = express.Router();
-var devDebug = require('debug')('app:dev');
-var passport = require('passport');
-
 
 // DATA MODELS
-var User = require('../models/user');
+var User = require('../models/users');
 
 /* GET users listing. */
-router.get('/all', function(req, res, next) {
-	User.find({}, function(err, users){
-		if (err) {
-			devDebug(err);
-			next();
-		} else {
-			res.json(users);
-		}
+router.get('/', function(req, res, next) {
+  res.json({firstRequest: "Hello world! in Users"});
+});
+
+router.post('/create', function(req, res, next) {
+	var  user = new User();
+	user.name = 'Ismail';
+	user.save(function(err){
+ 		if (err)
+ 			res.send(err);
+ 		else
+ 			res.json({message: 'User Successfully Added'});
 	});
 });
-
-// TEST AUTH - tests authentication with jwt bearer header
-router.get('/auth', passport.authenticate('jwt', { session: false }), function(req, res) {
-	res.send('It worked! User name is: '+ req.user.name);
-});
-
-// CREATE - Create a new user with a unique email.
-router.post('/register', function(req, res, next) {
-	if(!req.body.email || !req.body.password) {
-		res.json({ success: false, message: "Please enter an email and password to register."})
-	} else {
-		var newUser = new User({
-			email: req.body.email,
-			password: req.body.password,
-			name: req.body.name,
-			postalCode: req.body.postalCode,
-			city: req.body.city,
-			state: req.body.state,
-			country: req.body.country
-		});
-		// attempt to save the new user
-		newUser.save(function(err) {
-			if (err) {
-				devDebug(err);
-				res.json({ success: false, message: "Email already exists or fields missing."});
-			} else {
-				res.json({success: true, message: 'Successfully created new user.'});
-			}
-		})
-	}
-});
-
-// LOGIN - authenticate user and get a JWT
-router.post('/login', function(req, res) {
-	User.findOne({ email: req.body.email }, function(err, user) {
-		if (err) throw err;
-		if (!user) {
-			res.json({ success: false, message: 'User not found.'});
-		} else {
-			// Check if password matches
-			user.comparePassword(req.body.password, function(err, isMatch) {
-				if (err) {
-					res.send("error");
-				} else if (isMatch && !err) {
-					// Create the token
-					devDebug(user.toJSON());
-					const userPayload = {
-						id: user._id,
-						email: user.email,
-						name: user.name,
-						role: user.role
-					};
-					var token = jwt.sign(userPayload, config.jwt.secret, {
-						expiresIn: 60 // in seconds
-					});
-					res.json({ 
-						success: true,
-						message: "Login successful.",
-						token: 'Bearer ' + token
-					})
-				} else {
-					res.json({ success: false, message: "Incorrect password."});
-				}
-			})
-		}
-	})
-})
-
-//
-
-
 router.get('/retrieve-all', function(req, res, next) {
 	User.find(function(err, users) {
  		if (err){
