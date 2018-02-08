@@ -5,7 +5,6 @@ var router = express.Router();
 var devDebug = require('debug')('app:dev');
 var passport = require('passport');
 
-
 // DATA MODELS
 var User = require('../models/user');
 
