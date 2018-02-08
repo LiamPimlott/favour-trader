@@ -9,24 +9,23 @@ var bodyParser = require('body-parser');
 var debug = require('debug')('app:production');
 var devDebug = require('debug')('app:dev');
 var db = require('./db');
-var seedDB = require("./seed-db");
 
 // IMPORTING ROUTES
 var users = require('./routes/users');
 var favours = require('./routes/contracts');
 
-// SEEDING DB
-devDebug("WARNING: Seeding DB");
-seedDB();
+// CONNECT TO DB
+const seedDB = false;
+db.getConnection(seedDB);
 
 // APP CONFIG
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-// Serve static files from the React app
+// Point epxress to our static create-react-app bundle
 app.use(express.static(path.join(__dirname, 'client/build')));
-// // view engine setup
+// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
