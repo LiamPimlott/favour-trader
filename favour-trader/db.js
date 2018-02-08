@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var devDebug = require('debug')('app:dev');
-var config = require('./config.js');
+var config = require('./config/main');
 var Contract = require("./models/contract");
 
 var data = [
