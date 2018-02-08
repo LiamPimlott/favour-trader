@@ -5,6 +5,7 @@ var router = express.Router();
 var devDebug = require('debug')('app:dev');
 var passport = require('passport');
 
+
 // DATA MODELS
 var User = require('../models/user');
 
@@ -22,7 +23,7 @@ router.get('/all', function(req, res, next) {
 
 // TEST AUTH - tests authentication with jwt bearer header
 router.get('/auth', passport.authenticate('jwt', { session: false }), function(req, res) {
-	res.send('It worked! User name is: '+ req.user);
+	res.send('It worked! User name is: '+ req.user.name);
 });
 
 // CREATE - Create a new user with a unique email.
@@ -33,18 +34,11 @@ router.post('/register', function(req, res, next) {
 		var newUser = new User({
 			email: req.body.email,
 			password: req.body.password,
-			name: {
-				first: req.body.firstName,
-				last: req.body.lastName,
-			},
-			address: {
-                number: req.body.streetNumber,
-                street: req.body.streetName,
-                postalCode: req.body.postalCode,
-                city: req.body.city,
-                state: req.body.province,
-                country: req.body.country
-            },
+			name: req.body.name,
+			postalCode: req.body.postalCode,
+			city: req.body.city,
+			state: req.body.state,
+			country: req.body.country
 		});
 		// attempt to save the new user
 		newUser.save(function(err) {
@@ -70,21 +64,21 @@ router.post('/login', function(req, res) {
 				if (err) {
 					res.send("error");
 				} else if (isMatch && !err) {
+					// Create the token
+					devDebug(user.toJSON());
 					const userPayload = {
 						id: user._id,
 						email: user.email,
 						name: user.name,
 						role: user.role
 					};
-					// Need err handling? Create the token.
 					var token = jwt.sign(userPayload, config.jwt.secret, {
 						expiresIn: 60 // in seconds
 					});
 					res.json({ 
 						success: true,
 						message: "Login successful.",
-						token: 'Bearer ' + token,
-						isAuth: req.isAuthenticated()
+						token: 'Bearer ' + token
 					})
 				} else {
 					res.json({ success: false, message: "Incorrect password."});
@@ -93,6 +87,9 @@ router.post('/login', function(req, res) {
 		}
 	})
 })
+
+//
+
 
 router.get('/retrieve-all', function(req, res, next) {
 	User.find(function(err, users) {

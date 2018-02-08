@@ -9,11 +9,8 @@ var bodyParser = require('body-parser');
 var debug = require('debug')('app:production');
 var devDebug = require('debug')('app:dev');
 var passport = require('passport');
-var jwt = require('jsonwebtoken');
-
 // LOCAL IMPORTS
 var db = require('./db');
-
 // IMPORTING ROUTES
 var users = require('./routes/users');
 var favours = require('./routes/contracts');
@@ -37,12 +34,16 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+// passport config
+app.use(passport.initialize());
+require('./config/passport')(passport);
+
 
 ////////////////////////
 // REGISTERING ROUTES //
 ////////////////////////
 
-app.use('/users', users);
+app.use('/api/users', users);
 app.use('/contracts', favours);
 
 // The "catchall" handler: for any request that doesn't

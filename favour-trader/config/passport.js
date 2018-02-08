@@ -2,7 +2,6 @@ var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var User = require('../models/user');
 var config = require('../config/main');
-var devDebug = require('debug')('app:dev');
 
 // Sets up passport JwtStrategy 
 module.exports = function(passport) {
@@ -10,7 +9,7 @@ module.exports = function(passport) {
     opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
     opts.secretOrKey = config.jwt.secret;
     passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-        devDebug("Recieved token payload: "+jwt_payload);
+        console.log(jwt_payload);
         User.findById(jwt_payload.id, function(err, user) {
             if (err) {
                 return done(err, false);
