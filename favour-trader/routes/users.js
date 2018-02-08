@@ -71,15 +71,13 @@ router.post('/login', function(req, res) {
 				if (err) {
 					res.send("error");
 				} else if (isMatch && !err) {
-					// Create the token
-					devDebug(user.toJSON());
 					const userPayload = {
 						id: user._id,
 						email: user.email,
 						name: user.name,
 						role: user.role
 					};
-					// need err handling?
+					// Need err handling? Create the token.
 					var token = jwt.sign(userPayload, config.jwt.secret, {
 						expiresIn: 60 // in seconds
 					});
@@ -96,9 +94,6 @@ router.post('/login', function(req, res) {
 		}
 	})
 })
-
-//
-
 
 router.get('/retrieve-all', function(req, res, next) {
 	User.find(function(err, users) {
