@@ -1,4 +1,4 @@
-// REQUIRED PACKAGES (Some of these may end up getting removed eg. pug, favicon...etc)
+// NPM PACKAGES (Some of these may end up getting removed eg. pug, favicon...etc)
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
@@ -8,29 +8,42 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var debug = require('debug')('app:production');
 var devDebug = require('debug')('app:dev');
+var passport = require('passport');
+// LOCAL IMPORTS
 var db = require('./db');
-
 // IMPORTING ROUTES
 var users = require('./routes/users');
 var favours = require('./routes/contracts');
 
-// CONNECT TO DB
+////////////////
+// APP CONFIG //
+////////////////
+
+// connecting to DB
 const seedDB = false;
 db.getConnection(seedDB);
-
-// APP CONFIG
+// logs requests to console
 app.use(logger('dev'));
+// use body parser to get POST requests for API use.
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// parse cookies (may not need later since were using jwt, not sure yet)
 app.use(cookieParser());
-// Point epxress to our static create-react-app bundle
+// point express to our static create-react-app bundle
 app.use(express.static(path.join(__dirname, 'client/build')));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+// passport config
+app.use(passport.initialize());
+require('./config/passport')(passport);
 
-// REGISTERING OUR ROUTES
-app.use('/users', users);
+
+////////////////////////
+// REGISTERING ROUTES //
+////////////////////////
+
+app.use('/api/users', users);
 app.use('/contracts', favours);
 
 // The "catchall" handler: for any request that doesn't
@@ -39,6 +52,10 @@ app.get('*', (req, res) => {
   devDebug("Sending create-react-app build");
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
+
+////////////////////
+// ERROR HANDLING //
+////////////////////
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
