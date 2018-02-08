@@ -7,7 +7,7 @@ const userRef = {
 };
 
 var contractSchema = new mongoose.Schema({
-    parties: [ userRef ],
+    parties: [userRef],
     favors: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Favor'

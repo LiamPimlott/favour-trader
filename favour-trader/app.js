@@ -1,32 +1,31 @@
 // NPM PACKAGES (Some of these may end up getting removed eg. pug, favicon...etc)
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var debug = require('debug')('app:production');
-var devDebug = require('debug')('app:dev');
-var passport = require('passport');
+const express = require('express');
+const app = express();
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const debug = require('debug')('app:production');
+const devDebug = require('debug')('app:dev');
+const passport = require('passport');
 // LOCAL IMPORTS
-var db = require('./db');
+const db = require('./db');
+const config = require("./config/main");
 // IMPORTING ROUTES
-var users = require('./routes/users');
-var favours = require('./routes/contracts');
+const users = require('./routes/users');
+const favours = require('./routes/contracts');
 
 ////////////////
 // APP CONFIG //
 ////////////////
 
 // connecting to DB
-const seedDB = false;
-db.getConnection(seedDB);
+db.getConnection(config.db.seedDB);
 // logs requests to console
 app.use(logger('dev'));
 // use body parser to get POST requests for API use.
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 // parse cookies (may not need later since were using jwt, not sure yet)
 app.use(cookieParser());
 // point express to our static create-react-app bundle
@@ -49,8 +48,8 @@ app.use('/contracts', favours);
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  devDebug("Sending create-react-app build");
-  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+    devDebug("Sending create-react-app build");
+    res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
 ////////////////////
@@ -58,21 +57,21 @@ app.get('*', (req, res) => {
 ////////////////////
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = process.env.APPENV === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = process.env.APPENV === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;
