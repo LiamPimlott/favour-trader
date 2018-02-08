@@ -3,17 +3,20 @@
 }
 
 .btn {
-    background-color: white; /* Green */
+    background-color: #9978C2;
     border: none;
-    color: black;
+    color: white;
     padding: 3px 21px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    border-radius: 2px;
-    margin-top: 3px;
+    border-radius: 3px;
+    margin-top: 5px; 
+	box-shadow: none !important;
 }
 
 .btn:active {
-    background-color: grey;
+    background-color: #7851A9;
+	outline: none !important;
+	box-shadow: none;
 }
