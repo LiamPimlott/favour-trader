@@ -8,7 +8,7 @@ var passport = require('passport');
 // DATA MODELS
 var User = require('../models/user');
 
-/* GET users listing. */
+// GET - ALL - WARNING: unsecure, should be accesible only to admins.
 router.get('/all', function(req, res, next) {
 	User.find({}, function(err, users){
 		if (err) {
@@ -20,45 +20,38 @@ router.get('/all', function(req, res, next) {
 	});
 });
 
-// TEST AUTH - tests authentication with jwt bearer header
+// GET - AUTH - tests if a token passed is valid
 router.get('/auth', passport.authenticate('jwt', { session: false }), function(req, res) {
-	res.send('It worked! User name is: '+ req.user);
+	res.send('Token is valid! User name is: ' + req.user.name.first + ' ' + req.user.name.last);
 });
 
-// CREATE - Create a new user with a unique email.
-router.post('/register', function(req, res, next) {
+// POST - REGISTER - Create a new user with a unique email.
+router.post('/register', function(req, res) {
 	if(!req.body.email || !req.body.password) {
 		res.json({ success: false, message: "Please enter an email and password to register."})
 	} else {
 		var newUser = new User({
 			email: req.body.email,
 			password: req.body.password,
-			name: {
-				first: req.body.firstName,
-				last: req.body.lastName,
-			},
-			address: {
-                number: req.body.streetNumber,
-                street: req.body.streetName,
-                postalCode: req.body.postalCode,
-                city: req.body.city,
-                state: req.body.province,
-                country: req.body.country
-            },
+			name: req.body.name,
+			address: req.body.address,
 		});
 		// attempt to save the new user
-		newUser.save(function(err) {
+		newUser.save(function(err, newUser) {
 			if (err) {
 				devDebug(err);
 				res.json({ success: false, message: "Email already exists or fields missing."});
 			} else {
-				res.json({success: true, message: 'Successfully created new user.'});
+				res.json({
+					success: true,
+					message: 'Successfully created new user.',
+				});
 			}
 		})
 	}
 });
 
-// LOGIN - authenticate user and get a JWT
+// POST - LOGIN - authenticate user and return a JWT.
 router.post('/login', function(req, res) {
 	User.findOne({ email: req.body.email }, function(err, user) {
 		if (err) throw err;
@@ -68,7 +61,8 @@ router.post('/login', function(req, res) {
 			// Check if password matches
 			user.comparePassword(req.body.password, function(err, isMatch) {
 				if (err) {
-					res.send("error");
+					devDebug(err);
+					res.json({ success: false, message: "Internal server error."});
 				} else if (isMatch && !err) {
 					const userPayload = {
 						id: user._id,
@@ -76,9 +70,9 @@ router.post('/login', function(req, res) {
 						name: user.name,
 						role: user.role
 					};
-					// Need err handling? Create the token.
+					// Create the token. (note, should this have err handling?)
 					var token = jwt.sign(userPayload, config.jwt.secret, {
-						expiresIn: 60 // in seconds
+						expiresIn: 120 // in seconds
 					});
 					res.json({ 
 						success: true,
@@ -94,45 +88,62 @@ router.post('/login', function(req, res) {
 	})
 })
 
-router.get('/retrieve-all', function(req, res, next) {
-	User.find(function(err, users) {
- 		if (err){
- 			res.send(err);
- 		} else{
- 			res.json(users)
-		} 		
- 	});
- });
-router.get('/retrieve', function(req, res, next) {
-	var query = User.findOne({ 'name': 'Ismail' });
-
-	// selecting the `name` fields
-	query.select('name');
-
-	// execute the query at a later time
-	query.exec(function (err, person) {
-  		if (err) {
-  			res.send(err);
-  		} else {
-  			res.json(person);
-  		}
-  	
+// PUT - UPDATE - updates a user profile
+router.put('/update', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+	User.findByIdAndUpdate(req.user.id, req.body, (err, updatedUser) => {
+		if (err) {
+			devDebug(err);
+			next(err);
+		} else {
+			devDebug("Returning updated user: " + updatedUser);
+			res.json({
+				success: true,
+				message: "User updated.",
+				user: updatedUser
+			});
+		}
 	});
 });
-router.delete('/delete', function(req, res, next) {
-	var query = User.deleteOne({ 'name': 'Ismail' });
 
-	// selecting the `name` and `occupation` fields
-	query.select('name');
+// GET - MATCHES - returns a json object containing all the users your has and wants line up with.
+router.get('/matches', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+	User.findById(req.user.id, 'wants', (err, userWants) => {
+		if (err) {
+			devDebug(err);
+			next(err);
+		} else {
+			User.find({ has: { $elemMatch: { $in: req.user.wants } } }).
+			select('name about has wants').
+			populate('has').
+			populate('wants').
+			exec( (err, matchedUsers) => {
+				if (err) {
+					devDebug(err);
+					next(err);
+				} else {
+					devDebug('Returning matched users: ' + users);
+					res.json({
+						success: true,
+						message: "User matches found.",
+						matches: matchedUsers,
+					});
+				}
+			});
+		}
+	})
+ });
 
-	// execute the query at a later time
-	query.exec(function (err, writeOpResult) {
-  		if (err) {
-  			res.send(err);
-  		} else {
-  			res.send("User was Successfully deleted")
-  		}
-  	
+ // DELETE - DELETE - deletes the user associated with the provided token from the db.
+router.delete('/delete', passport.authenticate('jwt', { session: false }), function(req, res) {
+	User.findByIdAndRemove(req.user.id, (err) => {
+		if (err) {
+			devDebug(err);
+			res.json({ success: false, message: "Could not delete user."});
+		}
+		res.json({ 
+			success: true, 
+			message: "User " + req.user.name.first + " " + req.user.name.last + " deleted."
+		});
 	});
 });
 
