@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
-let NameSchema = new mongoose.Schema({
+var NameSchema = new mongoose.Schema({
   first: {
     type: String,
     minlength: 2,

@@ -27,7 +27,7 @@ router.get('/auth', passport.authenticate('jwt', { session: false }), function(r
 
 // POST - REGISTER - Create a new user with a unique email.
 router.post('/register', function(req, res) {
-	if(!req.body.email || !req.body.password) {
+	if (!req.body.email || !req.body.password) {
 		res.json({ success: false, message: "Please enter an email and password to register."})
 	} else {
 		var newUser = new User({
@@ -35,12 +35,15 @@ router.post('/register', function(req, res) {
 			password: req.body.password,
 			name: req.body.name,
 			address: req.body.address,
+			about: req.body.about,
+			has: req.body.has,
+			wants: req.body.wants
 		});
 		// attempt to save the new user
 		newUser.save(function(err, user) {
 			if (err) {
 				devDebug(err);
-				res.json({ success: false, message: "Email already exists or fields missing."});
+				res.json({ success: false, message: "Email already exists or required fields missing."});
 			} else {
 				const userPayload = {
 					id: user._id,
@@ -49,12 +52,12 @@ router.post('/register', function(req, res) {
 					role: user.role
 				};
 				const token = jwt.sign(userPayload, config.jwt.secret, {
-					expiresIn: 120 // in seconds
+					expiresIn: 300 // in seconds
 				});
 				res.json({
 					success: true,
 					message: 'Successfully created new user.',
-					token: ' Bearer ' + token,
+					token: 'Bearer ' + token,
 				});
 			}
 		})
@@ -64,7 +67,10 @@ router.post('/register', function(req, res) {
 // POST - LOGIN - authenticate user and return a JWT.
 router.post('/login', function(req, res) {
 	User.findOne({ email: req.body.email }, function(err, user) {
-		if (err) throw err;
+		if (err) {
+			devDebug(err);
+			next(err);
+		}
 		if (!user) {
 			res.json({ success: false, message: 'User not found.'});
 		} else {
@@ -72,7 +78,7 @@ router.post('/login', function(req, res) {
 			user.comparePassword(req.body.password, function(err, isMatch) {
 				if (err) {
 					devDebug(err);
-					res.json({ success: false, message: "Internal server error."});
+					next(err);
 				} else if (isMatch && !err) {
 					const userPayload = {
 						id: user._id,
@@ -97,8 +103,9 @@ router.post('/login', function(req, res) {
 	})
 })
 
-// PUT - UPDATE - updates a user profile
+// PUT - UPDATE - updates a user profile with provided fields
 router.put('/update', passport.authenticate('jwt', { session: false }), function(req, res, next) {
+	//Check if provided skills are valid
 	User.findByIdAndUpdate(req.user.id, req.body, (err, updatedUser) => {
 		if (err) {
 			devDebug(err);
@@ -116,12 +123,12 @@ router.put('/update', passport.authenticate('jwt', { session: false }), function
 
 // GET - MATCHES - returns a json object containing all the users your has and wants line up with.
 router.get('/matches', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-	User.findById(req.user.id, 'wants', (err, userWants) => {
+	User.findById(req.user.id, 'wants', (err, user) => {
 		if (err) {
 			devDebug(err);
 			next(err);
 		} else {
-			User.find({ has: { $elemMatch: { $in: req.user.wants } } }).
+			User.find({ has: { $elemMatch: { $in: user.wants } } }).
 			select('name about has wants').
 			populate('has').
 			populate('wants').
@@ -130,7 +137,7 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 					devDebug(err);
 					next(err);
 				} else {
-					devDebug('Returning matched users: ' + users);
+					devDebug('Returning matched users: ' + matchedUsers);
 					res.json({
 						success: true,
 						message: "User matches found.",
@@ -139,7 +146,7 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 				}
 			});
 		}
-	})
+	});
  });
 
  // DELETE - DELETE - deletes the user associated with the provided token from the db.
