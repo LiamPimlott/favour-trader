@@ -14,7 +14,7 @@ const config = require("./config/main");
 // IMPORTING ROUTES
 const users = require('./routes/users');
 const favours = require('./routes/contracts');
-const skills = require('./routes/skills')
+const skills = require('./routes/skills');
 
 ////////////////
 // APP CONFIG //
