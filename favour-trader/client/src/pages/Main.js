@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
+import ContractModal from '../components/ContractModal.js';
 import axios from 'axios'
+
 class Main extends Component {
   constructor() {
     super();
     this.state = {
       users: [],
+      selectedUser: {},
+      modalOpen: false,
     };
+
+    this.toggleModal = this.toggleModal.bind(this);
+    this.renderUsers = this.renderUsers.bind(this);
   }
 
   componentDidMount() {
@@ -14,17 +21,31 @@ class Main extends Component {
       .then(data => this.setState({ users: data }));
   }
 
+  toggleModal(user) {
+    this.setState({
+      selectedUser: user,
+      modalOpen: !this.state.modalOpen,
+    });
+  }
+
   renderUsers(users) {
     return (
-      <ul>
+      <div>
       {
-        users.map(function(user) {
-          return (<li key={user._id}> {user.email} </li>)
-        })
+        (users) ? (
+          <ul>
+          {
+            users.map(function(user) {
+              return (<li key={user._id} onClick={this.toggleModal.bind(this, user)}> {user.email} </li>)
+            }, this)
+          }
+          </ul>
+        ) : (
+          ''
+        )
       }
-      </ul>
+      </div>
     );
-
   }
 
   render() {
@@ -36,6 +57,7 @@ class Main extends Component {
         <div>
           {this.renderUsers(this.state.users)}
         </div>
+        <ContractModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})} user={this.state.selectedUser}/>
       </div>
     );
   }
