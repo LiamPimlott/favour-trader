@@ -37,14 +37,24 @@ router.post('/register', function(req, res) {
 			address: req.body.address,
 		});
 		// attempt to save the new user
-		newUser.save(function(err, newUser) {
+		newUser.save(function(err, user) {
 			if (err) {
 				devDebug(err);
 				res.json({ success: false, message: "Email already exists or fields missing."});
 			} else {
+				const userPayload = {
+					id: user._id,
+					email: user.email,
+					name: user.name,
+					role: user.role
+				};
+				const token = jwt.sign(userPayload, config.jwt.secret, {
+					expiresIn: 120 // in seconds
+				});
 				res.json({
 					success: true,
 					message: 'Successfully created new user.',
+					token: ' Bearer ' + token,
 				});
 			}
 		})
@@ -78,7 +88,6 @@ router.post('/login', function(req, res) {
 						success: true,
 						message: "Login successful.",
 						token: 'Bearer ' + token,
-						isAuth: req.isAuthenticated()
 					})
 				} else {
 					res.json({ success: false, message: "Incorrect password."});
