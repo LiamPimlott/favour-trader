@@ -14,6 +14,7 @@ const config = require("./config/main");
 // IMPORTING ROUTES
 const users = require('./routes/users');
 const favours = require('./routes/contracts');
+const skills = require('./routes/skills')
 
 ////////////////
 // APP CONFIG //
@@ -43,6 +44,7 @@ require('./config/passport')(passport);
 ////////////////////////
 
 app.use('/api/users', users);
+app.use('/api/skills', skills);
 app.use('/contracts', favours);
 
 // The "catchall" handler: for any request that doesn't
