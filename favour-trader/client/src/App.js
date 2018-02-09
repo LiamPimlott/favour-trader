@@ -4,7 +4,20 @@ import RouteRenderer from './components/RouteRenderer.js';
 import SidePanel from './components/SidePanel.js';
 import AuthService from './components/AuthService.js';
 import './App.css';
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem } from 'reactstrap';
 
+  
 class App extends Component {
   constructor() {
     super();
@@ -24,7 +37,34 @@ class App extends Component {
 
   render() {
     return (
+	
       <div className={'App'}>
+	  
+		<Navbar color="dark" dark expand="md">
+		
+			<NavbarBrand href="/">favourTrader</NavbarBrand>
+			
+			<NavbarToggler onClick={this.toggle} />
+			<Nav className="ml-auto" navbar>
+				<NavItem>
+					<NavLink href="/">Home</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink href="/Profile">Profile</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink href="/create-account">Sign Up</NavLink>
+				</NavItem>
+				<NavItem>
+						<NavLink href="/login">Login</NavLink>					
+				</NavItem>
+				<NavItem>
+					<NavLink href="/">Signout</NavLink>
+				</NavItem>
+			</Nav>
+		</Navbar>
+
+		
         <div className={'Nav-wrapper'}>
           <Header toggleSideMenu={this.toggleSideMenu}/>
         </div>

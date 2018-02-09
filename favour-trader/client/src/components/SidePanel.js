@@ -5,9 +5,9 @@ class SidePanel extends Component {
   render() {
     const { isVisible } = this.props;
     const dockStyle = {
-      width: '20px',
-      marginTop: '30px',
-      backgroundColor: 'lightgrey',
+      width: '0px',
+      marginTop: '55px',
+      backgroundColor: '#9978C2',
     };
 
     return (

@@ -9,7 +9,7 @@ class CreateAccount extends Component {
 			<FormGroup>
 				  <Label for="firstName">First Name </Label>
 				  <Input type="text" name="firstName" id="firstName" placeholder=" ex. Joe " />
-				</FormGroup>
+			</FormGroup>
 			<FormGroup>
 				  <Label for="lastName">Last Name </Label>
 				  <Input type="text" name="password" id="lastName" placeholder=" ex. Blow " />
