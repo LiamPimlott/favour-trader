@@ -6,10 +6,10 @@ var devDebug = require('debug')('app:dev');
 var Contract = require('../models/contract');
 
 /* GET root endpoint. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     //We could access our Favours collection via Favour
-    Contract.find({}, function(err, allContracts){
-        if(err){
+    Contract.find({}, function (err, allContracts) {
+        if (err) {
             devDebug(err);
         } else {
             res.json(allContracts);

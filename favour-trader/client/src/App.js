@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Header from './components/Header.js';
 import RouteRenderer from './components/RouteRenderer.js';
 import SidePanel from './components/SidePanel.js';
+import AuthService from './components/AuthService.js';
 import './App.css';
 import {
   Collapse,
@@ -25,6 +26,7 @@ class App extends Component {
     };
 
     this.toggleSideMenu = this.toggleSideMenu.bind(this);
+    this.Auth = new AuthService();
   }
 
   toggleSideMenu() {
@@ -69,8 +71,8 @@ class App extends Component {
         <div className={'SideMenu-wrapper'}>
           <SidePanel isVisible={this.state.sideMenuOpen}/>
         </div>
-        <div className={'PageContent-wrapper'}> 
-           <RouteRenderer />
+        <div className={'PageContent-wrapper'}>
+          <RouteRenderer authService={this.Auth}/>
         </div>
       </div>
     );
