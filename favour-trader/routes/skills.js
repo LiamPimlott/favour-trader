@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const devDebug = require('debug')('app:dev');
+var passport = require('passport');
 let msg = null;
 
 let skillsList = [{
     "skill": "Plumbing"
 }, {
-    "skill": "Painter"
+    "skill": "Painting"
 }, {
     "skill": "Electrical"
 }, {
@@ -14,15 +15,15 @@ let skillsList = [{
 }, {
     "skill": "Cleaning"
 }, {
-    "skill": "LandScapping"
+    "skill": "LandScaping"
 }, {
-    "skill": "Gardner"
+    "skill": "Gardening"
 }, {
     "skill": "Cooking"
 }, {
     "skill": "Driving"
 }, {
-    "skill": "Computer Technician"
+    "skill": "Computer Repair"
 }];
 
 // DATA MODELS
