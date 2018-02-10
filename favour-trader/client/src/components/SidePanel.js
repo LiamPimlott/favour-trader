@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Dock from 'react-dock';
+import SidePanelContent from './SidePanelContent';
 
 class SidePanel extends Component {
   render() {
@@ -8,11 +9,14 @@ class SidePanel extends Component {
       width: '0px',
       marginTop: '55px',
       backgroundColor: '#9978C2',
+      overflow: 'hidden',
     };
 
     return (
       <Dock size={0.2} position='left' isVisible={isVisible} dimMode={'none'} dockStyle={dockStyle}>
-      {/* you can pass a function as a child here or child components */}
+      {
+        <SidePanelContent/>
+      }
       </Dock>
     );
   }
