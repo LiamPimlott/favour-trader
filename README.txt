@@ -1,5 +1,7 @@
 COMP 4350: Software Engineering 2
 Project: FavourTrader
+Trello: https://trello.com/b/14MpAe9b
+
 Group 8 (Team 8x8):
 Alexander Mark
 Joseph Bernshine
