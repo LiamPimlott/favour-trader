@@ -13,8 +13,6 @@ class MatchCard extends Component {
                     <CardBody>
                         <CardTitle>{user.name.first}</CardTitle>
                         <CardSubtitle>{user.email}</CardSubtitle>
-                        <CardText>Some quick example text to build on the card title and make up the bulk of the card's
-                            content.</CardText>
                         <Button size={'sm'} color={'primary'} onClick={reveal}>View Profile</Button>
                     </CardBody>
                 </Card>
