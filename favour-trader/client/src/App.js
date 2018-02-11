@@ -60,7 +60,7 @@ class App extends Component {
                   <NavLink href="/Profile">Profile</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink onClick={this.Auth.logout()} href="/">Signout</NavLink>
+                  <NavLink onClick={this.Auth.logout} href="/">Signout</NavLink>
                 </NavItem>
               </Nav>
             )

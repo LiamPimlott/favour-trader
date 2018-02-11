@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 
 class Login extends Component {
     constructor() {
@@ -7,6 +8,7 @@ class Login extends Component {
         this.state = {
             email: "",
             password: "",
+            redirect: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -16,7 +18,9 @@ class Login extends Component {
     componentWillMount(){
         const { authService } = this.props;
         if(authService.loggedIn()) {
-            this.props.history.replace('/');
+            this.setState({
+                redirect: true,
+            });
         }
     }
 
@@ -24,7 +28,9 @@ class Login extends Component {
         const { authService } = this.props;
         authService.login(this.state.email, this.state.password)
             .then(res => {
-                this.props.history.replace('/');
+                this.setState({
+                    redirect: true,
+                });
             })
             .catch(err =>{
                 alert(err);
@@ -44,6 +50,9 @@ class Login extends Component {
     render() {
         return (
             <div>
+                {
+                    (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
+                }
                 <Form action={null}>
                     <FormGroup row>
                         <Label for="email" sm={2}>Login:</Label>
