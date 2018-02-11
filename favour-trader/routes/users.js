@@ -163,4 +163,30 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), funct
 	});
 });
 
+router.post('/hasskills', function (req, res) {
+	User.find({'email': req.body.email})
+		.select('has')
+		.populate('has')
+		.exec( (err, skill) => {
+			if (err) {
+				res.send(err.message);
+			} else {
+				res.send(skill);
+			}
+		})
+});
+
+router.post('/wantskills', function (req, res) {
+    User.find({'email': req.body.email})
+        .select('wants')
+        .populate('wants')
+        .exec( (err, skill) => {
+            if (err) {
+                res.send(err.message);
+            } else {
+                res.send(skill);
+            }
+        })
+});
+
 module.exports = router;
