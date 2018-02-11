@@ -4,13 +4,17 @@ import './Header.css';
 
 class Header extends Component {
   render() {
-    const { toggleSideMenu } = this.props;
+    const { toggleSideMenu, authService } = this.props;
 
     return (
       <div className={'Header'}>
-        <div>
+      {
+        (authService.loggedIn()) ? (
           <button className={'btn'} onClick={toggleSideMenu} aria-pressed="false">Toggle Menu</button>
-        </div>
+        ) : (
+          ''
+        )
+      }
       </div>
     );
   }

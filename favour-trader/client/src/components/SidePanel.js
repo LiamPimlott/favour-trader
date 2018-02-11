@@ -4,7 +4,7 @@ import SidePanelContent from './SidePanelContent';
 
 class SidePanel extends Component {
   render() {
-    const { isVisible } = this.props;
+    const { isVisible, authService } = this.props;
     const dockStyle = {
       width: '0px',
       marginTop: '55px',
@@ -15,7 +15,11 @@ class SidePanel extends Component {
     return (
       <Dock size={0.2} position='left' isVisible={isVisible} dimMode={'none'} dockStyle={dockStyle}>
       {
-        <SidePanelContent/>
+        (authService.loggedIn()) ? (
+          <SidePanelContent authService={authService}/>
+        ) : (
+          ''
+        )
       }
       </Dock>
     );

@@ -26,7 +26,7 @@ class App extends Component {
     };
 
     this.toggleSideMenu = this.toggleSideMenu.bind(this);
-    this.Auth = new AuthService();
+    this.authService = new AuthService();
   }
 
   toggleSideMenu() {
@@ -42,7 +42,7 @@ class App extends Component {
         <NavbarBrand href="/">favourTrader</NavbarBrand>
         <NavbarToggler onClick={this.toggle} />
           {
-            (!this.Auth.loggedIn()) ? (
+            (!this.authService.loggedIn()) ? (
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <NavLink href="/create-account">Sign Up</NavLink>
@@ -60,7 +60,7 @@ class App extends Component {
                   <NavLink href="/Profile">Profile</NavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink onClick={this.Auth.logout} href="/">Signout</NavLink>
+                  <NavLink onClick={this.authService.logout} href="/">Signout</NavLink>
                 </NavItem>
               </Nav>
             )
@@ -68,13 +68,13 @@ class App extends Component {
       </Navbar>
 
       <div className={'Nav-wrapper'}>
-        <Header toggleSideMenu={this.toggleSideMenu}/>
+        <Header toggleSideMenu={this.toggleSideMenu} authService={this.authService}/>
       </div>
       <div className={'SideMenu-wrapper'}>
-        <SidePanel isVisible={this.state.sideMenuOpen}/>
+        <SidePanel isVisible={this.state.sideMenuOpen} authService={this.authService}/>
       </div>
       <div className={'PageContent-wrapper'}>
-        <RouteRenderer authService={this.Auth}/>
+        <RouteRenderer authService={this.authService}/>
       </div>
     </div>
     );

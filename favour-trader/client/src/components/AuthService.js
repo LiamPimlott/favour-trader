@@ -17,7 +17,7 @@ export default class AuthService {
         }, {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.getToken(),
+            'Authorization': this.getToken(),
         }).then(res => {
             this.setToken(res.token); // Setting the token in localStorage
             return Promise.resolve(res);
