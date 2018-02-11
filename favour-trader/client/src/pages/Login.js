@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Col, Button, Fade, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
+import './Login.css';
 
 class Login extends Component {
     constructor() {
@@ -9,9 +10,11 @@ class Login extends Component {
             email: "",
             password: "",
             redirect: false,
+            failedAttempt: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.renderErrorText = this.renderErrorText.bind(this);
         this.submit = this.submit.bind(this);
     }
 
@@ -28,9 +31,15 @@ class Login extends Component {
         const { authService } = this.props;
         authService.login(this.state.email, this.state.password)
             .then(res => {
-                this.setState({
-                    redirect: true,
-                });
+                if (res.success && res.token) {
+                    this.setState({
+                        redirect: true,
+                    });
+                } else {
+                    this.setState({
+                        failedAttempt: true,
+                    });
+                }
             })
             .catch(err =>{
                 alert(err);
@@ -45,6 +54,12 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+    }
+
+    renderErrorText() {
+        return (
+            <Fade className={'Login-failedAttempt'}>The information you have entered not valid.</Fade>
+        );
     }
 
     render() {
@@ -77,10 +92,13 @@ class Login extends Component {
                         </Col>
                     </FormGroup>
                     <FormGroup check row>
-                        <Col sm={{ size: 10, offset: 2 }}>
-                            <Button onClick={this.submit}>Submit</Button>
+                        <Col sm={{ size: 10 }}>
+                            <Button className={'position-absolute Login-btn'} onClick={this.submit}>Submit</Button>
                         </Col>
                     </FormGroup>
+                    {
+                        (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
+                    }
                 </Form>
             </div>
         );
