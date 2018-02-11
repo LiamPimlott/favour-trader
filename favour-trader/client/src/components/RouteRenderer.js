@@ -25,8 +25,11 @@ class RouteRenderer extends Component {
         </Switch>
       ) : (
         <Switch>
+          <Route exact path='/' component={Main}/>
           <Route path='/create-account' component={CreateAccount}/>
-          <Route path='*' render={(routeProps) => this.insertAuth(routeProps, this.props)}/>
+          <Route exact path='/profile' component={Profile}/>
+          <Route path='/login' render={(routeProps) => this.insertAuth(routeProps, this.props)}/>
+          <Route path='*' component={NotFound}/>
         </Switch>
       )
     );
