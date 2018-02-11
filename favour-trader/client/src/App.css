@@ -33,11 +33,17 @@
     position: absolute;
     top: 15%;
     padding-bottom: 5%;
+    left: 4.5%;
+}
+
+.SideMenu-closed{
+    display:none;
 }
 
 @media (max-width: 700px) {
     .app-body {
         top: 25%;
+        left: 1%;
     }
 }
 

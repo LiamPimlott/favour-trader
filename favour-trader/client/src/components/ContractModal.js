@@ -12,7 +12,6 @@ class ContractModal extends Component {
               <Modal isOpen={isOpen} toggle={toggle} backdrop={false}>
                 <ModalHeader toggle={toggle}>{user.email}</ModalHeader>
                 <ModalBody>
-                  <hr/>
                   <div>
                     User address: {
                       Object.keys(user.address).map((value) => {

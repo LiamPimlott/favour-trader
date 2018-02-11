@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Header from './components/Header.js';
 import RouteRenderer from './components/RouteRenderer.js';
 import SidePanel from './components/SidePanel.js';
 import AuthService from './components/AuthService.js';
@@ -73,8 +72,8 @@ class App extends Component {
                     }
                 </Navbar>
 
-                <div className={'container app-body'}>
-                    <div className={'SideMenu-wrapper'}>
+                <div className={'container app-body text-center'}>
+                    <div className={(this.state.sideMenuOpen) ? ('SideMenu-wrapper') : ('SideMenu-closed')}>
                         <SidePanel isVisible={this.state.sideMenuOpen} authService={this.authService}/>
                     </div>
                     <RouteRenderer authService={this.authService}/>

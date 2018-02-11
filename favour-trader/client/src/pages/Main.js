@@ -56,7 +56,7 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <header>
+                <header className={'d-flex justify-content-center'}>
                     <h1>Welcome to FavourTrader</h1>
                 </header>
                 <div>
