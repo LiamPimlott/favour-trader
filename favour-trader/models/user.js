@@ -10,7 +10,7 @@ var NameSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
   }
-})
+});
 
 var AddressSchema = new mongoose.Schema({
   number: {

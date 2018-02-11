@@ -45,7 +45,7 @@ require('./config/passport')(passport);
 
 app.use('/api/users', users);
 app.use('/api/skills', skills);
-app.use('/contracts', favours);
+app.use('/api/contracts', favours);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

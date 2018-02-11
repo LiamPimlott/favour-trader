@@ -1,19 +1,50 @@
 var mongoose = require("mongoose");
-const userRef = {
-    id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    }
-};
 
-var contractSchema = new mongoose.Schema({
-    parties: [userRef],
-    favors: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Favor'
-    }],
-    lastOfferBy: String,
-    offerStatus: String
+var FavourSchema = new mongoose.Schema({
+    terms: {
+        type: String,
+        required: true,
+    },
+    completed: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 });
 
-module.exports = mongoose.model("Contract", contractSchema);
+var ContractSchema = new mongoose.Schema({
+    offeror: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'User'
+        },
+        favours: [ FavourSchema ],
+        requestTermination: {
+            type: Boolean,
+            required: true,
+            default: false
+        }
+    },
+    offeree: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required:true,
+            ref: 'User'
+        },
+        favours: [ FavourSchema ],
+        requestTermination: {
+            type: Boolean,
+            required: true,
+            default: false
+        }
+    },
+    status: {
+        type: String,
+        enum: ['Pending', 'Accepted', 'Declined'],
+        required: true,
+        default: 'Pending'
+    }
+});
+
+module.exports = mongoose.model("Contract", ContractSchema);

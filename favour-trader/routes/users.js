@@ -88,7 +88,7 @@ router.post('/login', function(req, res) {
 					};
 					// Create the token. (note, should this have err handling?)
 					var token = jwt.sign(userPayload, config.jwt.secret, {
-						expiresIn: 120 // in seconds
+						expiresIn: 1800 // in seconds
 					});
 					res.json({ 
 						success: true,
