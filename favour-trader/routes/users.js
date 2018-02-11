@@ -26,9 +26,10 @@ router.get('/auth', passport.authenticate('jwt', { session: false }), function(r
 });
 
 // GET - USERS - returns the currently logged in user's profile.
-router.get('/', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+router.get('/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+	devDebug("YOUR IN THE ROOT!!!");
 	User.findById(req.user.id).
-	select('name about has wants')
+	select('name about has wants').
 	populate('has').
 	populate('wants'). 
 	exec( (err, foundUser) => {
@@ -44,9 +45,9 @@ router.get('/', passport.authenticate('jwt', { session: false }), function (req,
 });
 
 // GET - USERS/ID - returns a user's profile by their id.
-router.get('/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+router.get('/:id/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.params.id).
-	select('name about has wants')
+	select('name about has wants').
 	populate('has').
 	populate('wants'). 
 	exec( (err, foundUser) => {
@@ -64,31 +65,31 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), function (r
 // GET - HAS - returns the currently logged in user's has.
 router.get('/has', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
-		select('has').
-		populate('has').
-		exec( (err, userHas) => {
-			if (err) {
-				devDebug(err);
-				next(err);
-			} else {
-				res.json({ success: true, message: "User's has skills retrieved.", user: userHas});
-			}
-		})
+	select('has').
+	populate('has').
+	exec( (err, userHas) => {
+		if (err) {
+			devDebug(err);
+			next(err);
+		} else {
+			res.json({ success: true, message: "User's has skills retrieved.", user: userHas});
+		}
+	});
 });
 
 // GET - WANTS - returns the currently logged in user's wants.
 router.get('/wants', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
-		select('wants').
-		populate('wants').
-		exec( (err, userWants) => {
-			if (err) {
-				devDebug(err);
-				next(err);
-			} else {
-				res.json({ success: true, message: "User's wanted skills retrieved.", user: userWants});
-			}
-		})
+	select('wants').
+	populate('wants').
+	exec( (err, userWants) => {
+		if (err) {
+			devDebug(err);
+			next(err);
+		} else {
+			res.json({ success: true, message: "User's wanted skills retrieved.", user: userWants});
+		}
+	})
 });
 
 // POST - REGISTER - Create a new user with a unique email.
@@ -118,7 +119,7 @@ router.post('/register', function(req, res) {
 					role: user.role
 				};
 				const token = jwt.sign(userPayload, config.jwt.secret, {
-					expiresIn: 300 // in seconds
+					expiresIn: 1800 // in seconds
 				});
 				res.json({
 					success: true,
