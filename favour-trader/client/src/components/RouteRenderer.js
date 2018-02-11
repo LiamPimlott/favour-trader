@@ -7,9 +7,6 @@ import Profile from '../pages/Profile.js';
 import Login from '../pages/Login.js';
 
 class RouteRenderer extends Component {
-  insertAuth(routeProps, extraProps) {
-    return (<Login {...routeProps} {...extraProps} />);
-  }
 
   redirectToLogin() {
     return (<Redirect to={'/login'}/>);
@@ -22,14 +19,14 @@ class RouteRenderer extends Component {
         <Switch>
           <Route exact path='/' component={Main}/>
           <Route path='/create-account' component={CreateAccount}/>
-          <Route exact path='/profile' component={Profile}/>
-          <Route path='/login' render={(routeProps) => this.insertAuth(routeProps, this.props)}/>
+          <Route exact path='/profile' render={(routeProps) => (<Profile {...routeProps} {...this.props}/>)}/>
+          <Route path='/login' render={(routeProps) => (<Login {...routeProps} {...this.props} />)}/>
           <Route path='*' component={NotFound}/>
         </Switch>
       ) : (
         <Switch>
           <Route path='/create-account' component={CreateAccount}/>
-          <Route path='/login' render={(routeProps) => this.insertAuth(routeProps, this.props)}/>
+          <Route path='/login' render={(routeProps) => (<Login {...routeProps} {...this.props} />)}/>
           <Route path='*' render={() => this.redirectToLogin()}/>
         </Switch>
       )
