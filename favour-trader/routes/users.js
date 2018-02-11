@@ -25,6 +25,72 @@ router.get('/auth', passport.authenticate('jwt', { session: false }), function(r
 	res.send('Token is valid! User name is: ' + req.user.name.first + ' ' + req.user.name.last);
 });
 
+// GET - USERS - returns the currently logged in user's profile.
+router.get('/', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+	User.findById(req.user.id).
+	select('name about has wants')
+	populate('has').
+	populate('wants'). 
+	exec( (err, foundUser) => {
+		if (err) {
+			devDebug(err);
+			next(err);
+		} else if (!foundUser) {
+			res.json({ success: false, message: "User does not exist."})
+		} else {
+			res.json({ success: true, message: "User profile retrieved.", user: foundUser});
+		}
+	});
+});
+
+// GET - USERS/ID - returns a user's profile by their id.
+router.get('/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+	User.findById(req.params.id).
+	select('name about has wants')
+	populate('has').
+	populate('wants'). 
+	exec( (err, foundUser) => {
+		if (err) {
+			devDebug(err);
+			next(err);
+		} else if (!foundUser) {
+			res.json({ success: false, message: "User does not exist."})
+		} else {
+			res.json({ success: true, message: "User profile retrieved.", user: foundUser});
+		}
+	});
+});
+
+// GET - HAS - returns the currently logged in user's has.
+router.get('/has', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+	User.findById(req.user.id).
+		select('has').
+		populate('has').
+		exec( (err, userHas) => {
+			if (err) {
+				devDebug(err);
+				next(err);
+			} else {
+				res.json({ success: true, message: "User's has skills retrieved.", user: userHas});
+			}
+		})
+});
+
+// GET - WANTS - returns the currently logged in user's wants.
+router.get('/wants', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+	User.findById(req.user.id).
+		select('wants').
+		populate('wants').
+		exec( (err, userWants) => {
+			if (err) {
+				devDebug(err);
+				next(err);
+			} else {
+				res.json({ success: true, message: "User's wanted skills retrieved.", user: userWants});
+			}
+		})
+});
+
 // POST - REGISTER - Create a new user with a unique email.
 router.post('/register', function(req, res) {
 	if (!req.body.email || !req.body.password) {
@@ -161,32 +227,6 @@ router.delete('/delete', passport.authenticate('jwt', { session: false }), funct
 			message: "User " + req.user.name.first + " " + req.user.name.last + " deleted."
 		});
 	});
-});
-
-router.post('/hasskills', function (req, res) {
-	User.find({'email': req.body.email})
-		.select('has')
-		.populate('has')
-		.exec( (err, skill) => {
-			if (err) {
-				res.send(err.message);
-			} else {
-				res.send(skill);
-			}
-		})
-});
-
-router.post('/wantskills', function (req, res) {
-    User.find({'email': req.body.email})
-        .select('wants')
-        .populate('wants')
-        .exec( (err, skill) => {
-            if (err) {
-                res.send(err.message);
-            } else {
-                res.send(skill);
-            }
-        })
 });
 
 module.exports = router;
