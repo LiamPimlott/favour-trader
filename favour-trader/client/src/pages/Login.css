@@ -1,6 +1,12 @@
-.Login-failedAttempt {
-    color: red;
+.Login-failedAttemptText {
     font-size: 10px;
+    position: absolute;
+    top: -25%;
+}
+
+.Login-failedAttemptContainer {
+    display: flex;
+    justify-content: center;
 }
 
 .Login-btn {
