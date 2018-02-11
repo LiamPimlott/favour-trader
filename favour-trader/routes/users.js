@@ -33,8 +33,18 @@ router.post('/register', function(req, res) {
 		var newUser = new User({
 			email: req.body.email,
 			password: req.body.password,
-			name: req.body.name,
-			address: req.body.address,
+			name: {
+				first: req.body.first,
+				last: req.body.last
+			},
+			address: {
+				number: req.body.streetNumber,
+				street: req.body.streetName,
+				postalCode: req.body.postalCode,
+				city: req.body.city,
+				state: req.body.state,
+				country: req.body.country
+            },
 			about: req.body.about,
 			has: req.body.has,
 			wants: req.body.wants
