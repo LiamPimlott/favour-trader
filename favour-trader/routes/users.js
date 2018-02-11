@@ -27,7 +27,6 @@ router.get('/auth', passport.authenticate('jwt', { session: false }), function(r
 
 // GET - USERS - returns the currently logged in user's profile.
 router.get('/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-	devDebug("YOUR IN THE ROOT!!!");
 	User.findById(req.user.id).
 	select('name about has wants').
 	populate('has').
