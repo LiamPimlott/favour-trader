@@ -4,17 +4,12 @@ import SidePanel from './components/SidePanel.js';
 import AuthService from './components/AuthService.js';
 import './App.css';
 import {
-    Collapse,
     Navbar,
     NavbarToggler,
     NavbarBrand,
     Nav,
     NavItem,
     NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem
 } from 'reactstrap';
 
 
@@ -39,7 +34,8 @@ class App extends Component {
         return (
             <div>
                 <Navbar color="dark" dark expand="md" className={'fixed-top'}>
-                    <button className={'btn btn-link'} onClick={this.toggleSideMenu} aria-pressed="false">
+                    <button className={(this.authService.loggedIn()) ? ('btn btn-link') : ('btn btn-link d-none')}
+                            onClick={this.toggleSideMenu} aria-pressed="false">
                         <i className="fas fa-align-justify fa-3x"></i>
                     </button>
                     <NavbarBrand href="/">favourTrader</NavbarBrand>

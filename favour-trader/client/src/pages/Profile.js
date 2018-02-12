@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Media, Jumbotron, Container, Row, Col } from 'reactstrap';
-import { ListGroup, ListGroupItem, Badge } from 'reactstrap';
+import { ListGroup, ListGroupItem } from 'reactstrap';
 import axios from 'axios'
 
 class Profile extends Component {

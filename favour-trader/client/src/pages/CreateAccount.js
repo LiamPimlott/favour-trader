@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Fade, Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Col} from 'reactstrap';
+import {Fade, Button, Form, FormGroup, Label, Input, Card, CardTitle, Col} from 'reactstrap';
 import axios from 'axios';
 import './CreateAccount.css';
 import { Redirect } from 'react-router-dom';
@@ -43,7 +43,6 @@ class CreateAccount extends Component {
     }
 
     skillSelected(skill, label) {
-        let skillType;
         if (label === 'Skills You Have') {
             let hasSkills = this.state.hasSkills;
             let index = hasSkills.indexOf(skill);
