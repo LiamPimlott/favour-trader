@@ -39,3 +39,11 @@ Running Mobile Client:
 Notes for working on this repository:
 - Please ensure you have at least 1 code review before you merge your branch
 - Please only work off of the 'develop' branch (we will merge develop into master at times when we all agree to do so)
+
+## Testing
+
+The tests use Mocha and Chai. They connect to a totally different MongoDB instance as to not destroy the dev or prod dbs.
+They also run the server locally. The implementation is a little hacky. ¯\_(ツ)_/¯
+Running the tests:
+- Do option 1a at least.
+- Run npm test
