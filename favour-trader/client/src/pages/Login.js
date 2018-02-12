@@ -58,7 +58,7 @@ class Login extends Component {
 
     renderErrorText() {
         return (
-            <Fade className={'Login-failedAttempt'}>The information you have entered not valid.</Fade>
+            <Fade className={'Login-failedAttempt'}>The information you have entered is not valid.</Fade>
         );
     }
 

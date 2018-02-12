@@ -1,3 +1,7 @@
 .Form-input {
 	width: 10
 }
+
+.SkillList {
+	list-style-type: none;
+}

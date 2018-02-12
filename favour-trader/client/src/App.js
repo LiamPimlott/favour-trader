@@ -40,7 +40,7 @@ class App extends Component {
             <div>
                 <Navbar color="dark" dark expand="md" className={'fixed-top'}>
                     <button className={'btn btn-link'} onClick={this.toggleSideMenu} aria-pressed="false">
-                        <i class="fas fa-align-justify fa-3x"></i>
+                        <i className="fas fa-align-justify fa-3x"></i>
                     </button>
                     <NavbarBrand href="/">favourTrader</NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>

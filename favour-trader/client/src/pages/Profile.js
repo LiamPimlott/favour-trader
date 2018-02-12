@@ -24,8 +24,6 @@ class Profile extends Component {
 							Authorization: authService.getToken()
 						}
 				};
-
-				console.log(config);
 				
 				axios.get('/api/users/profile', config)
 				.then(res => res.data.user)

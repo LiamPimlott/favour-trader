@@ -1,5 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {Fade, Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Col} from 'reactstrap';
+import axios from 'axios';
+import './CreateAccount.css';
 import { Redirect } from 'react-router-dom';
 
 class CreateAccount extends Component {
@@ -17,6 +19,9 @@ class CreateAccount extends Component {
             state: "",
             redirect: false,
             failedAttempt: false,
+            allSkills: [],
+            hasSkills: [],
+            wantSkills: [],
         };
         this.handleChange = this.handleChange.bind(this);
         this.renderErrorText = this.renderErrorText.bind(this);        
@@ -24,18 +29,87 @@ class CreateAccount extends Component {
     }   
 
     componentWillMount() {
-        console.log(this.props);
         const { authService } = this.props;
+
+        axios.get('/api/skills/all')
+        .then(res => res.data)
+        .then(data => this.setState({allSkills: data }));
+
         if (authService.loggedIn()) {
             this.setState({
                 redirect: true,
             });
         }
-    }    
+    }
+
+    skillSelected(skill, label) {
+        let skillType;
+        if (label === 'Skills You Have') {
+            let hasSkills = this.state.hasSkills;
+            let index = hasSkills.indexOf(skill);
+            if (index !== -1) {
+                hasSkills.splice(index, 1);
+            } else {
+                hasSkills.push(skill);
+            }
+            this.setState({
+                hasSkills,
+            })
+        } else {
+            let wantSkills = this.state.wantSkills;
+            let index = wantSkills.indexOf(skill);
+            if (index !== -1) {
+                wantSkills.splice(index, 1);
+            } else {
+                wantSkills.push(skill);
+            }
+            this.setState({
+                wantSkills,
+            })
+        }
+    }
+
+    renderSelectOptions(label) {
+        const skills = this.state.allSkills;
+        return(
+            <FormGroup>
+            <Label for="exampleSelectMulti">{label}</Label>
+            {
+                (skills !== []) ? (
+                    <ul className={'SkillList'} name="selectMulti" id="exampleSelectMulti" multiple>
+                        {
+                            skills.map(function (skill) {
+                                return (
+                                <li className={'text-left mr-3'} key={skill._id}>
+                                    <input className={'mr-1'} type={'checkbox'} onClick={this.skillSelected.bind(this, skill, label)}/>
+                                    {skill.skill}
+                                </li>)
+                            }, this)
+                        }
+                    </ul>
+                ) : (
+                        ''
+                )
+            }
+            </FormGroup>
+        );
+    }
 
     submit() {
         const { authService } = this.props;
-        authService.signup(this.state.firstName,this.state.lastName,this.state.streetNumber,this.state.street,this.state.postalCode,this.state.city,this.state.state,this.state.email, this.state.password)
+        authService.signup(
+            this.state.firstName,
+            this.state.lastName,
+            this.state.streetNumber,
+            this.state.street,
+            this.state.postalCode,
+            this.state.city,
+            this.state.state,
+            this.state.email,
+            this.state.password,
+            this.state.hasSkills,
+            this.state.wantSkills,
+        )
             .then(res => {
                 if (res.success && res.token) {
                     this.setState({
@@ -60,7 +134,7 @@ class CreateAccount extends Component {
 
     renderErrorText() {
         return (
-            <Fade className={'signup-failedAttempt'}>The information you have entered not valid.</Fade>
+            <Fade className={'signup-failedAttempt'}>The information you have entered is not valid.</Fade>
         );
     }
 
@@ -191,6 +265,12 @@ class CreateAccount extends Component {
                                        placeholder=" ex. Password"/>
                                 </Col>
                             </FormGroup>
+                            {
+                                this.renderSelectOptions("Skills You Have")
+                            }
+                            {
+                                this.renderSelectOptions("Skills You Want")
+                            }
                             <Button onClick={this.submit}>Submit</Button>
                             {
                                 (this.state.failedAttempt) ? (this.renderErrorText()) : ('')

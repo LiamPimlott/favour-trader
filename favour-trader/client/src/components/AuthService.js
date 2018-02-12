@@ -10,7 +10,19 @@ export default class AuthService {
         this.getProfile = this.getProfile.bind(this);
     }
 
-    signup(firstName,lastName,streetNumber,streetName,postalCode,city,state,email,password){
+    signup(
+        firstName,
+        lastName,
+        streetNumber,
+        streetName,
+        postalCode,
+        city,
+        state,
+        email,
+        password,
+        hasSkills,
+        wantSkills
+    ){
         return this.fetch('/api/users/register',{
             "email": email,
             "password": password,            
@@ -20,7 +32,9 @@ export default class AuthService {
             "streetName": streetName,
             "postalCode": postalCode,
             "city": city,
-            "state": state,                                  
+            "state": state,
+            "has": hasSkills,
+            "wants": wantSkills,
         },{
             'Accept': 'application/json',
             'Content-Type': 'application/json',
