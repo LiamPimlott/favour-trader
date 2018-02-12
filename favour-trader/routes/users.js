@@ -199,19 +199,26 @@ router.put('/update', passport.authenticate('jwt', { session: false }), function
 
 // GET - MATCHES - returns a json object containing all the users your has and wants line up with.
 router.get('/matches', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-	User.findById(req.user.id, 'wants', (err, user) => {
+	User.findById(req.user.id, 'wants has', (err, user) => {
 		if (err) {
 			devDebug(err);
 			next(err);
 		} else {
-			User.find({ has: { $elemMatch: { $in: user.wants } } }).
-			select('name email about has wants').
+			User.find({ 
+				$and: [
+					{has: { $elemMatch: { $in: user.wants } } },
+					{wants: { $elemMatch: { $in: user.has } } },
+				]
+			}).
+			select('name address email about has wants').
 			populate('has').
 			populate('wants').
 			exec( (err, matchedUsers) => {
 				if (err) {
 					devDebug(err);
 					next(err);
+				} else if (matchedUsers.length <= 0) {
+					res.json({ success: false, message: "Sorry, you dont have any matches :(\nTry updating your desired skills."});
 				} else {
 					res.json({
 						success: true,

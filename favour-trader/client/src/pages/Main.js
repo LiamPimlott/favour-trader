@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ContractModal from '../components/ContractModal.js';
+import UserProfileModal from '../components/UserProfileModal.js';
 import axios from 'axios'
 import {Row} from 'reactstrap';
 import MatchCard from "../components/MatchCard";
@@ -72,9 +72,12 @@ class Main extends Component {
                     <h1 className={'center-helper'}>Welcome to FavourTrader</h1>
                 </header>
                 <div className={'center-helper'}>
-                    {this.renderMatches(this.state.matchedUsers)}
+                    { this.state.matchedUsers ?
+                        this.renderMatches(this.state.matchedUsers) :
+                        "Sorry, No Matches :( Try updating the skills you are seeking."
+                    }
                 </div>
-                <ContractModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}
+                <UserProfileModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}
                                user={this.state.selectedUser}/>
             </div>
         );
