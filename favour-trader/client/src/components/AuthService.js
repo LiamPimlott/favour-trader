@@ -6,8 +6,39 @@ export default class AuthService {
     constructor(domain) {
         this.fetch = this.fetch.bind(this); // React binding stuff
         this.login = this.login.bind(this);
+        this.signup = this.signup.bind(this);
         this.getProfile = this.getProfile.bind(this);
     }
+
+    signup(firstName,lastName,streetNumber,street,postalCode,city,state,email,password){
+        return this.fetch('/api/users/register',{
+            "email": email,
+            "password": password,
+            "name": {
+                "firstName": firstName,
+                "lastName": lastName
+            },
+            "address": {
+                "streetNumber": streetNumber,
+                "street": street,
+                "postalCode": postalCode,
+                "city": city,
+                "state": state,
+               
+            },
+            
+        },{
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': this.getToken(),
+        }).then(res => {
+            if (res.success && res.token) {
+                this.setToken(res.token); // Setting the token in localStorage
+            }
+            return Promise.resolve(res);
+        });
+    }
+
 
     login(email, password) {
         // Get a token from api server using the fetch api

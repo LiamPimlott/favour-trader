@@ -1,7 +1,54 @@
 import React, {Component} from 'react';
 import {Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle} from 'reactstrap';
+import { Redirect } from 'react-router-dom';
 
 class CreateAccount extends Component {
+    constructor(){
+        super();
+        this.state = {
+            email: "",
+            password: "",
+            firstName: "",
+            lastName: "",
+            streetNumber: "",
+            street: "",
+            postalCode: "",
+            city: "",
+            state: "",
+            redirect: false,
+            failedAttempt: false,
+        };
+
+
+    }
+
+    componentWillMount() {
+        const { authService } = this.props;
+        if (authService.loggedIn()) {
+            this.setState({
+                redirect: true,
+            });
+        }
+    }    
+
+    submit() {
+        const { authService } = this.props;
+        authService.signup(this.state.firstName,this.state.lastName,this.state.streetNumber,this.state.street,this.state.postalCode,this.state.city,this.state.state,this.state.email, this.state.password)
+            .then(res => {
+                if (res.success && res.token) {
+                    this.setState({
+                        redirect: true,
+                    });
+                } else {
+                    this.setState({
+                        failedAttempt: true,
+                    });
+                }
+            })
+            .catch(err => {
+                alert(err);
+            });
+    }
 
     render() {
         return (
@@ -16,7 +63,7 @@ class CreateAccount extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <Label for="lastName">Last Name </Label>
-                                <Input type="text" name="password" id="lastName" placeholder=" ex. Blow "/>
+                                <Input type="text" name="lastName" id="lastName" placeholder=" ex. Blow "/>
                             </FormGroup>
                             <FormGroup>
                                 <Label for="streetNumber">Street Number </Label>
