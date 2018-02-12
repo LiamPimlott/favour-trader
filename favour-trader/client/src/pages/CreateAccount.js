@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Fade, Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle} from 'reactstrap';
+import {Fade, Button, Form, FormGroup, Label, Input, FormText, Card, CardTitle, Col} from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 
 class CreateAccount extends Component {
@@ -74,97 +74,122 @@ class CreateAccount extends Component {
                     <Card outline className={'offset-md-4 col-md-8'}>
                         <CardTitle className={'p-2'}>Sign Up</CardTitle>
                         <Form className={'p-3'}>
-                            <FormGroup>
-                                <Label for="firstName">First Name </Label>
+                            <FormGroup row>
+                                <Label for="firstName" className={'text-left'} sm={3}>First Name: </Label>
+                                <Col sm={9}>
                                 <Input type="text" 
                                     value={this.state.firstName}
                                     onChange={this.handleChange}
                                     name="firstName" 
                                     id="firstName" 
                                     placeholder=" ex. Joe "/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="lastName">Last Name </Label>
+                            <FormGroup row>
+                                <Label for="lastName" className={'text-left'} sm={3}>Last Name: </Label>
+                                <Col sm={9}>
                                 <Input type="text" 
                                     value={this.state.lastName}
                                     onChange={this.handleChange}
                                     name="lastName" 
                                     id="lastName" 
                                     placeholder=" ex. Blow "/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="streetNumber">Street Number </Label>
+                            <FormGroup row>
+                                <Label for="streetNumber" className={'text-left'}  sm={3}>Street Number: </Label>
+                                <Col sm={9}>
                                 <Input type="text" 
                                     value={this.state.streetNumber}
                                     onChange={this.handleChange}
                                     name="streetNumber" 
                                     id="streetNumber" 
                                     placeholder=" ex. 100 "/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="street">Street </Label>
+                            <FormGroup row>
+                                <Label for="street" className={'text-left'} sm={3}>Street: </Label>
+                                <Col sm={9}>
                                 <Input type="text" 
                                     value={this.state.street}
                                     onChange={this.handleChange}
                                     name="street" 
                                     id="street" 
                                     placeholder=" ex. Favour Street "/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="postalCode">Postal Code/ZIP </Label>
-                                <Input type="text" 
+                            <FormGroup row>
+                                <Label for="postalCode" className={'text-left'} sm={3}>Postal Code/ZIP: </Label>
+                                <Col sm={9}>
+                                <Input type="text"
                                     value={this.state.postalCode}
                                     onChange={this.handleChange} 
                                     name="postalCode" 
                                     id="postalCode" 
                                     placeholder=" ex. A1A 1A1 "/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="city">City </Label>
-                                <Input type="text" 
+                            <FormGroup row>
+                                <Label for="city" className={'text-left'} sm={3}>City: </Label>
+                                <Col sm={9}>
+                                <Input type="text"
                                     value={this.state.city}
                                     onChange={this.handleChange} 
                                     name="city" 
                                     id="city" 
                                     placeholder=" ex. Winnipeg "/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="state">State/Province </Label>
-                                <Input type="text" 
+                            <FormGroup row>
+                                <Label for="state" className={'text-left'} sm={3}>State/Province: </Label>
+                                <Col sm={9}>
+                                <Input type="text"
                                     value={this.state.state}
                                     onChange={this.handleChange} 
                                     name="state" 
                                     id="state" 
                                     placeholder=" ex. Manitoba "/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="email">Email</Label>
-                                <Input type="email" 
+                            <FormGroup row>
+                                <Label for="email" className={'text-left'} sm={3}>Email: </Label>
+                                <Col sm={9}>
+                                <Input type="email"
                                     value={this.state.email}
                                     onChange={this.handleChange} 
                                     name="email" 
                                     id="email" 
                                     placeholder=" ex. favourtrader@gmail.com"/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="confirmEmail">Confirm Email </Label>
-                                <Input type="email" 
+                            <FormGroup row>
+                                <Label for="confirmEmail" className={'text-left'} sm={3}>Confirm Email: </Label>
+                                <Col sm={9}>
+                                <Input type="email"
                                     name="confirmEmail" 
-                                    id="confirmEmail"/>
+                                    id="confirmEmail"
+                                       placeholder=" ex. favourtrader@gmail.com"/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="password">Password </Label>
-                                <Input type="password" 
+                            <FormGroup row>
+                                <Label for="password" className={'text-left'} sm={3}>Password: </Label>
+                                <Col sm={9}>
+                                <Input type="password"
                                     alue={this.state.password}
                                     onChange={this.handleChange}
                                     name="password" 
-                                    id="password"/>
+                                    id="password"
+                                       placeholder=" ex. Password"/>
+                                </Col>
                             </FormGroup>
-                            <FormGroup>
-                                <Label for="confirmPassword">Confirm Password </Label>
-                                <Input type="password" 
+                            <FormGroup row>
+                                <Label for="confirmPassword" className={'text-left'} sm={3}>Confirm Password: </Label>
+                                <Col sm={9}>
+                                <Input type="password"
                                     name="confirmPassword" 
-                                    id="confirmPassword"/>
+                                    id="confirmPassword"
+                                       placeholder=" ex. Password"/>
+                                </Col>
                             </FormGroup>
                             <Button onClick={this.submit}>Submit</Button>
                             {

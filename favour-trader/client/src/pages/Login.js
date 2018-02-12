@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Col, Button, Fade, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Card, CardTitle, Col, Button, Fade, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import './Login.css';
 
@@ -64,14 +64,17 @@ class Login extends Component {
 
     render() {
         return (
-            <div>
+            <div className={'container'}>
                 {
                     (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
                 }
-                <Form action={null}>
+                <div className={'row'}>
+                    <Card outline className={'offset-md-6 col-md-6'}>
+                        <CardTitle className={'p-2'}>Sign In</CardTitle>
+                <Form className={'p-3'} action={null}>
                     <FormGroup row>
-                        <Label for="email" sm={2}>Login:</Label>
-                        <Col sm={10}>
+                        <Label for="email" sm={3}>Login:</Label>
+                        <Col sm={9}>
                             <Input value={this.state.email}
                                 onChange={this.handleChange}
                                 type="email"
@@ -81,8 +84,8 @@ class Login extends Component {
                         </Col>
                     </FormGroup>
                     <FormGroup row>
-                        <Label for="password" sm={2}>Password:</Label>
-                        <Col sm={10}>
+                        <Label for="password" sm={3}>Password:</Label>
+                        <Col sm={9}>
                             <Input value={this.state.password}
                                 onChange={this.handleChange}
                                 type="password"
@@ -91,15 +94,14 @@ class Login extends Component {
                                 placeholder="Password" />
                         </Col>
                     </FormGroup>
-                    <FormGroup check row>
-                        <Col sm={{ size: 10 }}>
-                            <Button className={'position-absolute Login-btn'} onClick={this.submit}>Submit</Button>
-                        </Col>
-                    </FormGroup>
+                    <Button onClick={this.submit}>Submit</Button>
+
                     {
                         (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
                     }
                 </Form>
+                    </Card>
+                </div>
             </div>
         );
     }
