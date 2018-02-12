@@ -167,7 +167,9 @@ class CreateAccount extends Component {
                                     id="confirmPassword"/>
                             </FormGroup>
                             <Button onClick={this.submit}>Submit</Button>
-                          
+                            {
+                                (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
+                            }
                         </Form>
                     </Card>
                 </div>
