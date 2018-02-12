@@ -61,8 +61,8 @@ router.get('/:id/profile', passport.authenticate('jwt', { session: false }), fun
 	});
 });
 
-// GET - HAS - returns the currently logged in user's has.
-router.get('/has', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+// POST - HAS - returns the currently logged in user's has.
+router.post('/has', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
 	select('has').
 	populate('has').
@@ -76,8 +76,8 @@ router.get('/has', passport.authenticate('jwt', { session: false }), function (r
 	});
 });
 
-// GET - WANTS - returns the currently logged in user's wants.
-router.get('/wants', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+// POST - WANTS - returns the currently logged in user's wants.
+router.post('/wants', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
 	select('wants').
 	populate('wants').

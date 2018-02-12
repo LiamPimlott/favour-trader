@@ -16,10 +16,12 @@ class SidePanelContent extends Component {
         const { authService } = this.props;
         if (authService.loggedIn()) {
             const userProfile = authService.getProfile();
-            const headers = {
+            const config = {
+               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': authService.getToken(),
+                }
             };
 
             axios.get('/api/skills/all')
@@ -30,15 +32,15 @@ class SidePanelContent extends Component {
                 const userEmail = userProfile.email;
                 axios.post('/api/users/has', {
                     email: userEmail,
-                }, headers)
-                .then(res => res.data)
-                .then(data => this.setState({ hasSkills: data[0].has }));
+                }, config)
+                .then(res => res.data.user)
+                .then(user => this.setState({ hasSkills: user.has }));
 
                 axios.post('/api/users/wants', {
                     email: userEmail,
-                }, headers)
-                .then(res => res.data)
-                .then(data => this.setState({ wantSkills: data[0].wants }));
+                }, config)
+                .then(res => res.data.user)
+                .then(user => this.setState({ wantSkills: user.wants }));
             }
         }
     }
