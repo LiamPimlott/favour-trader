@@ -15,6 +15,7 @@ class CreateAccount extends Component {
             streetNumber: "",
             streetName: "",
             postalCode: "",
+            country: "",
             city: "",
             state: "",
             redirect: false,
@@ -102,6 +103,7 @@ class CreateAccount extends Component {
             this.state.streetNumber,
             this.state.street,
             this.state.postalCode,
+            this.state.country,
             this.state.city,
             this.state.state,
             this.state.email,
@@ -200,6 +202,17 @@ class CreateAccount extends Component {
                                     name="postalCode" 
                                     id="postalCode" 
                                     placeholder=" ex. A1A 1A1 "/>
+                                </Col>
+                            </FormGroup>
+                            <FormGroup row>
+                                <Label for="country" className={'text-left'} sm={3}>Country: </Label>
+                                <Col sm={9}>
+                                    <Input type="text"
+                                           value={this.state.country}
+                                           onChange={this.handleChange}
+                                           name="country"
+                                           id="country"
+                                           placeholder=" ex. Canada "/>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
