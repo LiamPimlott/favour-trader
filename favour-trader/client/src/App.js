@@ -39,6 +39,9 @@ class App extends Component {
         return (
             <div>
                 <Navbar color="dark" dark expand="md" className={'fixed-top'}>
+                    <button className={'btn btn-link'} onClick={this.toggleSideMenu} aria-pressed="false">
+                        <i class="fas fa-align-justify fa-3x"></i>
+                    </button>
                     <NavbarBrand href="/">favourTrader</NavbarBrand>
                     <NavbarToggler onClick={this.toggle}/>
                     {
@@ -61,11 +64,6 @@ class App extends Component {
                                 </NavItem>
                                 <NavItem>
                                     <NavLink onClick={this.authService.logout} href="/">Signout</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <button className={'btn'} onClick={this.toggleSideMenu} aria-pressed="false">Toggle
-                                        Menu
-                                    </button>
                                 </NavItem>
                             </Nav>
                         )
