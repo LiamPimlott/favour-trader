@@ -13,20 +13,14 @@ export default class AuthService {
     signup(firstName,lastName,streetNumber,streetName,postalCode,city,state,email,password){
         return this.fetch('/api/users/register',{
             "email": email,
-            "password": password,
-            
-                "firstName": firstName,
-                "lastName": lastName,
-            
-            
-                "streetNumber": streetNumber,
-                "streetName": streetName,
-                "postalCode": postalCode,
-                "city": city,
-                "state": state,
-               
-            
-            
+            "password": password,            
+            "firstName": firstName,
+            "lastName": lastName,
+            "streetNumber": streetNumber,
+            "streetName": streetName,
+            "postalCode": postalCode,
+            "city": city,
+            "state": state,                                  
         },{
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -38,8 +32,7 @@ export default class AuthService {
             return Promise.resolve(res);
         });
     }
-
-
+    
     login(email, password) {
         // Get a token from api server using the fetch api
         return this.fetch(`/api/users/login`, {
