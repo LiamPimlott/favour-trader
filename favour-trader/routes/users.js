@@ -205,7 +205,7 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 			next(err);
 		} else {
 			User.find({ has: { $elemMatch: { $in: user.wants } } }).
-			select('name about has wants').
+			select('name email about has wants').
 			populate('has').
 			populate('wants').
 			exec( (err, matchedUsers) => {
@@ -213,7 +213,6 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 					devDebug(err);
 					next(err);
 				} else {
-					devDebug('Returning matched users: ' + matchedUsers);
 					res.json({
 						success: true,
 						message: "User matches found.",

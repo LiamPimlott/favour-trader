@@ -11,7 +11,7 @@ class MatchCard extends Component {
             <Col sm="4" className={'pb-3'}>
                 <Card>
                     <CardBody>
-                        <CardTitle>{user.name.first}</CardTitle>
+                        <CardTitle>{user.name.first + " " + user.name.last.charAt(0) + "."}</CardTitle>
                         <CardSubtitle>{user.email}</CardSubtitle>
                         <Button size={'sm'} color={'primary'} onClick={reveal}>View Profile</Button>
                     </CardBody>
