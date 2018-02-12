@@ -13,7 +13,6 @@ class RouteRenderer extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { authService } = this.props;
     return (
       (authService.loggedIn()) ? (
