@@ -13,19 +13,20 @@ class RouteRenderer extends Component {
   }
 
   render() {
+    console.log(this.props);
     const { authService } = this.props;
     return (
       (authService.loggedIn()) ? (
         <Switch>
           <Route exact path='/' component={Main}/>
-          <Route path='/create-account' component={CreateAccount}/>
           <Route exact path='/profile' render={(routeProps) => (<Profile {...routeProps} {...this.props}/>)}/>
           <Route path='/login' render={(routeProps) => (<Login {...routeProps} {...this.props} />)}/>
+          <Route path='/create-account' render={(routeProps) => (<CreateAccount {...routeProps} {...this.props} />)}/>         
           <Route path='*' component={NotFound}/>
         </Switch>
       ) : (
         <Switch>
-          <Route path='/create-account' component={CreateAccount}/>
+          <Route path='/create-account' render={(routeProps) => (<CreateAccount {...routeProps} {...this.props} />)}/>
           <Route path='/login' render={(routeProps) => (<Login {...routeProps} {...this.props} />)}/>
           <Route path='*' render={() => this.redirectToLogin()}/>
         </Switch>

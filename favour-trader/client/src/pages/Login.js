@@ -72,7 +72,7 @@ class Login extends Component {
                     <FormGroup row>
                         <Label for="email" sm={2}>Login:</Label>
                         <Col sm={10}>
-                            <Input value={this.state.emailInput}
+                            <Input value={this.state.email}
                                 onChange={this.handleChange}
                                 type="email"
                                 name="email"
