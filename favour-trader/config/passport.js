@@ -1,7 +1,8 @@
 var JwtStrategy = require('passport-jwt').Strategy;
 var ExtractJwt = require('passport-jwt').ExtractJwt;
 var User = require('../models/user');
-var config = require('../config/main');
+var Config = require('../config/main'); 
+var config = new Config();
 var devDebug = require('debug')('app:dev');
 
 // Sets up passport JwtStrategy 
