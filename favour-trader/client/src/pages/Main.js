@@ -57,9 +57,9 @@ class Main extends Component {
         return (
             <div>
                 <header className={'d-flex justify-content-center'}>
-                    <h1>Welcome to FavourTrader</h1>
+                    <h1 className={'center-helper'}>Welcome to FavourTrader</h1>
                 </header>
-                <div>
+                <div className={'center-helper'}>
                     {this.renderUsers(this.state.users)}
                 </div>
                 <ContractModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}

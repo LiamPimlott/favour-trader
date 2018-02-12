@@ -20,6 +20,11 @@
     }
 }
 
+.center-helper {
+    left: 12%;
+    position: relative;
+}
+
 .SideMenu-wrapper {
     width: 20%;
     height: 100%;
