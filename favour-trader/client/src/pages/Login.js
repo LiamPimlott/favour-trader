@@ -69,7 +69,7 @@ class Login extends Component {
                     (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
                 }
                 <div className={'row'}>
-                    <Card outline className={'offset-md-6 col-md-6'}>
+                    <Card outline className={'col-md-5 login-center'}>
                         <CardTitle className={'p-2'}>Sign In</CardTitle>
                 <Form className={'p-3'} action={null}>
                     <FormGroup row>

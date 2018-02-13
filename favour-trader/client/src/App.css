@@ -21,8 +21,8 @@
 }
 
 .center-helper {
-    left: 12%;
-    position: relative;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .SideMenu-wrapper {
@@ -35,8 +35,8 @@
 }
 
 .app-body {
-    position: absolute;
-    top: 15%;
+    margin-left: auto;
+    margin-right: auto;
     padding-bottom: 5%;
     left: 4.5%;
 }

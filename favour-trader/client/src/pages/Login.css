@@ -8,3 +8,9 @@
     display: flex;
     justify-content: center;
 }
+
+.login-center {
+    position: absolute;
+    margin-right: auto;
+    margin-left: auto;
+}

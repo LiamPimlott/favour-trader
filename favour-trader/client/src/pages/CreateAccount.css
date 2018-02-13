@@ -5,3 +5,9 @@
 .SkillList {
 	list-style-type: none;
 }
+
+.signup-center {
+	position: absolute;
+	margin-left: auto;
+	margin-right: auto;
+}
