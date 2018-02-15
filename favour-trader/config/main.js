@@ -17,10 +17,7 @@ module.exports = function(){
             return config;
         case 'test':
             config.db.connectString = process.env.DB_PREFIX + process.env.TEST_DB_USER + ':' + process.env.TEST_DB_PASS + process.env.TEST_DB_HOST;
-            // console.log(JSON.stringify(config));
             return config;
 
     }
 };
-
-// module.exports = config;
