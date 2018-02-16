@@ -10,8 +10,8 @@ const devDebug = require('debug')('app:dev');
 const passport = require('passport');
 // LOCAL IMPORTS
 const db = require('./db');
-var Config = require('./config/main'); //see config/main for why it's done this way.
-const config = new Config();
+var ConfigClass = require('./config/main'); //see config/main for why it's done this way.
+const config = new ConfigClass();
 // IMPORTING ROUTES
 const users = require('./routes/users');
 const favours = require('./routes/contracts');

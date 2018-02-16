@@ -23,8 +23,7 @@ const users = [
             lastName: "Ripptoe",
             postalCode: "r3p1z2"
     }
-]
-
+];
 
     describe("/ALL users", function () {
         beforeEach(function (done) {

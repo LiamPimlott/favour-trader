@@ -3,6 +3,10 @@
  * Rather, it exports a function that does that.
  * Before, what happened when the config was being created is that it was a constant, unchanging JSON object that config/main returned. This caused a lot of problems with connecting to an alternate DB in that it just didn't happen for me.
  * config/main now returns a function that returns an instance of our config variable (as far as I can tell). It changes the instance based on the environment set (currently only test and dev). I think this is a solid way to handle environment changes.
+ * 
+ * When it's required, the data can be accessed like this:
+ * var ConfigClass = require('../config/main');
+ * const config = new ConfigClass();
  */
 
 var config = {
