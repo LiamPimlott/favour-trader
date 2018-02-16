@@ -99,7 +99,7 @@ class Login extends Component {
                         <br/> <br/>
                         <div className={'signUp-redirect'}>
                             <span>New to FavorTrader?</span>
-                            <a href={'/create-account'}>sign up here</a>
+                            <a href={'/create-account'}> Sign up here</a>
                         </div>
                     </div>
                 </Row>
