@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {Fade} from "reactstrap"
-import {Card, Row, Button, Col, Icon, Input} from 'react-materialize';
-import {Redirect} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Fade } from "reactstrap";
+import { Row, Button, Col, Icon, Input } from 'react-materialize';
+import { Redirect } from 'react-router-dom';
 import './Login.css';
 
 class Login extends Component {
@@ -20,7 +20,7 @@ class Login extends Component {
     }
 
     componentWillMount() {
-        const {authService} = this.props;
+        const { authService } = this.props;
         if (authService.loggedIn()) {
             this.setState({
                 redirect: true,
