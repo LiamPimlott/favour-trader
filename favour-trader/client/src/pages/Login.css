@@ -5,13 +5,24 @@
 
 .login-header {
     background: #343a40;
+    font-size: medium;
     padding-bottom: 2.5%;
 }
 
-.login-form {
-    position: relative;
-    top: 5%;
+.login-header span {
+    font-size: large;
 }
+
+#login-form {
+    position: relative;
+    top: 8%;
+}
+
+
+.input-field input::placeholder, .materialize-textarea:focus:not([readonly]) + label {
+    color: #343a40 !important;
+}
+
 .input-field input:focus + label, .materialize-textarea:focus:not([readonly]) + label {
     color: #343a40 !important;
 }
@@ -22,3 +33,6 @@
     box-shadow: 0 1px 0 0 #343a40 !important;
 }
 
+.signUp-redirect {
+    margin-bottom: 5%;
+}

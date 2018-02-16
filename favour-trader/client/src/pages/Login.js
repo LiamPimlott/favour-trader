@@ -59,7 +59,7 @@ class Login extends Component {
 
     renderErrorText() {
         return (
-            <Fade>You have entered an invalid email address or password.</Fade>
+            <Fade className={'center'}>You have entered an invalid email address or password.</Fade>
         );
     }
 
@@ -70,30 +70,38 @@ class Login extends Component {
                     (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
                 }
                 <Row>
-                    <Card className={'z-depth-3 center'}
-                          header={<span className={'text-white login-header card-title'}>Favor <Icon>swap_horiz</Icon> Trader</span>}>
+                    <div className={'z-depth-3 center'}>
+                        <div className={"login-header"}>
+                            <span className={'card-title text-white'}>Favor <Icon>swap_horiz</Icon> Trader</span>
+                        </div>
                         {
                             (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
                         }
-                        <Col s={12}>
-                            <Input value={this.state.email}
-                                   onChange={this.handleChange}
-                                   type="email" name="email"
-                                   id="email"
-                                   placeholder="Email Address"/>
-                        </Col>
-                        <Col s={12}>
-                            <Input value={this.state.password}
-                                   onChange={this.handleChange}
-                                   type="password"
-                                   name="password"
-                                   id="password"
-                                   placeholder="Password"/>
-                        </Col>
-                        <Button className={'center blue-grey darken-3 z-depth-2'} onClick={this.submit}>Login</Button>
+                        <div id={'login-form'}>
+                            <Col s={12}>
+                                <Input value={this.state.email}
+                                       onChange={this.handleChange}
+                                       type="email" name="email"
+                                       id="email"
+                                       placeholder="Email Address"/>
+                            </Col>
+                            <Col s={12}>
+                                <Input value={this.state.password}
+                                       onChange={this.handleChange}
+                                       type="password"
+                                       name="password"
+                                       id="password"
+                                       placeholder="Password"/>
+                            </Col>
+                            <Button className={'center blue-grey darken-3 z-depth-2'}
+                                    onClick={this.submit} waves={'light'} >Login</Button>
+                        </div>
                         <br/> <br/>
-                        <span>New to FavorTrader? <a href={'/create-account'}>sign up here</a> </span>
-                    </Card>
+                        <div className={'signUp-redirect'}>
+                            <span>New to FavorTrader?</span>
+                            <a href={'/create-account'}>sign up here</a>
+                        </div>
+                    </div>
                 </Row>
             </div>
         );
