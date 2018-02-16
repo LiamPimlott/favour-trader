@@ -1,16 +1,38 @@
-.Login-failedAttemptText {
-    font-size: 10px;
-    position: absolute;
-    top: -25%;
-}
-
-.Login-failedAttemptContainer {
-    display: flex;
-    justify-content: center;
-}
-
-.login-center {
-    position: absolute;
+.center {
     margin-right: auto;
     margin-left: auto;
+}
+
+.login-header {
+    background: #343a40;
+    font-size: medium;
+    padding-bottom: 2.5%;
+}
+
+.login-header span {
+    font-size: large;
+}
+
+#login-form {
+    position: relative;
+    top: 8%;
+}
+
+
+.input-field input::placeholder, .materialize-textarea:focus:not([readonly]) + label {
+    color: #343a40 !important;
+}
+
+.input-field input:focus + label, .materialize-textarea:focus:not([readonly]) + label {
+    color: #343a40 !important;
+}
+
+/* label underline focus color */
+.input-field input:focus, .materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #343a40 !important;
+    box-shadow: 0 1px 0 0 #343a40 !important;
+}
+
+.signUp-redirect {
+    margin-bottom: 5%;
 }

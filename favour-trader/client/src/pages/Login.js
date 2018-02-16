@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, CardTitle, Col, Button, Fade, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Fade } from "reactstrap";
+import { Row, Button, Col, Icon, Input } from 'react-materialize';
 import { Redirect } from 'react-router-dom';
 import './Login.css';
 
@@ -18,9 +19,9 @@ class Login extends Component {
         this.submit = this.submit.bind(this);
     }
 
-    componentWillMount(){
+    componentWillMount() {
         const { authService } = this.props;
-        if(authService.loggedIn()) {
+        if (authService.loggedIn()) {
             this.setState({
                 redirect: true,
             });
@@ -28,7 +29,7 @@ class Login extends Component {
     }
 
     submit() {
-        const { authService } = this.props;
+        const {authService} = this.props;
         authService.login(this.state.email, this.state.password)
             .then(res => {
                 if (res.success && res.token) {
@@ -41,14 +42,14 @@ class Login extends Component {
                     });
                 }
             })
-            .catch(err =>{
+            .catch(err => {
                 alert(err);
             });
     }
 
     handleChange(e) {
         this.setState({
-          [e.target.id]: e.target.value
+            [e.target.id]: e.target.value
         });
     }
 
@@ -58,7 +59,7 @@ class Login extends Component {
 
     renderErrorText() {
         return (
-            <Fade className={'Login-failedAttempt'}>The information you have entered is not valid.</Fade>
+            <Fade className={'center'}>You have entered an invalid email address or password.</Fade>
         );
     }
 
@@ -68,40 +69,40 @@ class Login extends Component {
                 {
                     (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
                 }
-                <div className={'row'}>
-                    <Card outline className={'col-md-5 login-center'}>
-                        <CardTitle className={'p-2'}>Sign In</CardTitle>
-                <Form className={'p-3'} action={null}>
-                    <FormGroup row>
-                        <Label for="email" sm={3}>Login:</Label>
-                        <Col sm={9}>
-                            <Input value={this.state.email}
-                                onChange={this.handleChange}
-                                type="email"
-                                name="email"
-                                id="email"
-                                placeholder="Email Address" />
-                        </Col>
-                    </FormGroup>
-                    <FormGroup row>
-                        <Label for="password" sm={3}>Password:</Label>
-                        <Col sm={9}>
-                            <Input value={this.state.password}
-                                onChange={this.handleChange}
-                                type="password"
-                                name="password"
-                                id="password"
-                                placeholder="Password" />
-                        </Col>
-                    </FormGroup>
-                    <Button onClick={this.submit}>Submit</Button>
-
-                    {
-                        (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
-                    }
-                </Form>
-                    </Card>
-                </div>
+                <Row>
+                    <div className={'z-depth-3 center'}>
+                        <div className={"login-header"}>
+                            <span className={'card-title text-white'}>Favor <Icon>swap_horiz</Icon> Trader</span>
+                        </div>
+                        {
+                            (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
+                        }
+                        <div id={'login-form'}>
+                            <Col s={12}>
+                                <Input value={this.state.email}
+                                       onChange={this.handleChange}
+                                       type="email" name="email"
+                                       id="email"
+                                       placeholder="Email Address"/>
+                            </Col>
+                            <Col s={12}>
+                                <Input value={this.state.password}
+                                       onChange={this.handleChange}
+                                       type="password"
+                                       name="password"
+                                       id="password"
+                                       placeholder="Password"/>
+                            </Col>
+                            <Button className={'center blue-grey darken-3 z-depth-2'}
+                                    onClick={this.submit} waves={'light'} >Login</Button>
+                        </div>
+                        <br/> <br/>
+                        <div className={'signUp-redirect'}>
+                            <span>New to FavorTrader?</span>
+                            <a href={'/create-account'}> Sign up here</a>
+                        </div>
+                    </div>
+                </Row>
             </div>
         );
     }
