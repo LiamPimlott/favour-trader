@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var devDebug = require('debug')('app:dev');
-var config = require('./config/main');
+var ConfigClass = require('./config/main'); 
+const config = new ConfigClass(); //see config/main for why it's done this way.
 var Contract = require("./models/contract");
 
 var data = [

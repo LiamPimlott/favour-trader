@@ -1,6 +1,7 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
-var config = require('../config/main');
+var ConfigClass = require('../config/main');
+const config = new ConfigClass();//See comments in config/main for an explanation
 var router = express.Router();
 var devDebug = require('debug')('app:dev');
 var passport = require('passport');
@@ -119,7 +120,7 @@ router.post('/register', function(req, res) {
 		newUser.save(function(err, user) {
 			if (err) {
 				devDebug(err);
-				res.json({ success: false, message: "Email already exists or required fields missing."});
+				res.json({ success: false, message: "Email already exists or required fields missing.", error: err});
 			} else {
 				const userPayload = {
 					id: user._id,
