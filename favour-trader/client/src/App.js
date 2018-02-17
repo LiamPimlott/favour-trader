@@ -2,77 +2,142 @@ import React, {Component} from 'react';
 import RouteRenderer from './components/RouteRenderer.js';
 import SidePanel from './components/SidePanel.js';
 import AuthService from './components/AuthService.js';
+import {Redirect} from 'react-router-dom';
 import './App.css';
-import {
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-} from 'reactstrap';
+import {Menu, Icon, Layout} from 'antd';
 
+const {Header, Content, Sider, Footer} = Layout;
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            sideMenuOpen: false,
+            collapsed: true,
+            current: 'login'
         };
 
         this.toggleSideMenu = this.toggleSideMenu.bind(this);
+        this.handleClick = this.handleClick.bind(this);
         this.authService = new AuthService();
     }
 
-    toggleSideMenu() {
+    handleClick = (e) => {
         this.setState({
-            sideMenuOpen: !this.state.sideMenuOpen,
+            current: e.keyPath[0],
         });
+        if (e.key === 'logout') {
+            this.authService.logout();
+        }
+    };
+
+    toggleSideMenu() {
+        console.log(this.state.collapsed);
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+
     }
 
     render() {
         return (
-            <div>
-                <Navbar color="dark" dark expand="md" className={'fixed-top'}>
-                    <button className={(this.authService.loggedIn()) ? ('btn btn-link') : ('btn btn-link d-none')}
-                            onClick={this.toggleSideMenu} aria-pressed="false">
-                        <i className="fas fa-align-justify fa-3x"></i>
-                    </button>
-                    <NavbarBrand href="/">favourTrader</NavbarBrand>
-                    <NavbarToggler onClick={this.toggle}/>
+                <Layout style={{height:"100vh"}}>
                     {
-                        (!this.authService.loggedIn()) ? (
-                            <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <NavLink href="/create-account">Sign Up</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/login">Login</NavLink>
-                                </NavItem>
-                            </Nav>
-                        ) : (
-                            <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <NavLink href="/">Home</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/Profile">Profile</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink onClick={this.authService.logout} href="/">Signout</NavLink>
-                                </NavItem>
-                            </Nav>
-                        )
+                        (this.state.current === 'create-account' &&
+                            window.location.pathname !== '/create-account') ? (<Redirect to={'/create-account'}/>) : ('')
                     }
-                </Navbar>
+                    {
+                        (this.state.current === 'login' &&
+                            window.location.pathname !== '/login') ? (<Redirect to={'/login'}/>) : ('')
+                    }
+                    {
+                        (this.state.current === 'logout' &&
+                            window.location.pathname !== '/') ? (<Redirect to={'/'}/>) : ('')
+                    }
+                    <Header style={{ background: '#fff', padding: 0 }}>
 
-                <div className={'container app-body text-center'}>
-                    <div className={(this.state.sideMenuOpen) ? ('SideMenu-wrapper') : ('SideMenu-closed')}>
-                        <SidePanel isVisible={this.state.sideMenuOpen} authService={this.authService}/>
-                    </div>
-                    <RouteRenderer authService={this.authService}/>
-                </div>
-            </div>
+                        {
+                            (!this.authService.loggedIn()) ? (
+                                <Menu
+                                    onClick={this.handleClick}
+                                    selectedKeys={[this.state.current]}
+                                    mode="horizontal"
+                                    theme={'light'}
+                                >
+                                    <Menu.Item key="create-account" id={'create-account'}>
+                                        <Icon type="user-add"/>Sign Up
+                                    </Menu.Item>
+
+                                    <Menu.Item key="login" className={'login'}>
+                                        <Icon type="user"/>Sign In
+                                    </Menu.Item>
+                                </Menu>
+                            ) : (
+                                <Menu
+                                    onClick={this.handleClick}
+                                    selectedKeys={[this.state.current]}
+                                    mode="horizontal"
+                                    theme={'light'}
+                                >
+                                    <Menu.Item id={'menu-1'}>
+                                        <Icon className={'trigger'}
+                                              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                                              onClick={this.toggleSideMenu}/>
+                                    </Menu.Item>
+                                    <Menu.Item key="logout">
+                                        <Icon type="logout"/>Log out
+                                    </Menu.Item>
+                                </Menu>
+                            )
+                        }
+
+                    </Header>
+
+                    <Content style={{ padding: '50px 50px', height: '100vh'}}>
+                        <Layout style={{ padding: '24px 0', background: '#fffff' }}>
+                            <Sider
+                                trigger={null}
+                                collapsible
+                                collapsed={this.state.collapsed}
+                                style={{ background: '#fff', padding: 0 }}
+                            >
+                                <div className="logo"/>
+                                <Menu theme="light"
+                                      mode="inline"
+                                      defaultSelectedKeys={['1']}
+                                      style={{ height: '100%' }}>
+                                    <Menu.Item key="1">
+                                        <Icon type="user"/>
+                                        <span>nav 1</span>
+                                    </Menu.Item>
+                                    <Menu.Item key="2">
+                                        <Icon type="video-camera"/>
+                                        <span>nav 2</span>
+                                    </Menu.Item>
+                                    <Menu.Item key="3">
+                                        <Icon type="upload"/>
+                                        <span>nav 3</span>
+                                    </Menu.Item>
+                                </Menu>
+                            </Sider>
+                            <Content>
+                                <div className={'container app-body text-center'}>
+                                    <div className={(this.state.sideMenuOpen) ? ('SideMenu-wrapper') : ('SideMenu-closed')}>
+                                        <SidePanel isVisible={this.state.sideMenuOpen} authService={this.authService}/>
+                                    </div>
+                                    <RouteRenderer authService={this.authService}/>
+                                </div>
+                            </Content>
+                        </Layout>
+
+                    </Content>
+                    <Footer style={{textAlign: 'center'}}>
+                        Favor Trader ©2018 Created by Group 8
+                    </Footer>
+                </Layout>
+
+
+
+
         );
     }
 }
