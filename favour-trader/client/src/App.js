@@ -4,7 +4,10 @@ import SidePanel from './components/SidePanel.js';
 import AuthService from './components/AuthService.js';
 import {Redirect} from 'react-router-dom';
 import './App.css';
-import {Menu, Icon, Layout} from 'antd';
+import {Menu, Icon, Layout, Anchor} from 'antd';
+const { Link } = Anchor;
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 const {Header, Content, Sider, Footer} = Layout;
 
@@ -13,9 +16,10 @@ class App extends Component {
         super();
         this.state = {
             collapsed: true,
-            current: 'login'
+            current: 'login',
+            openKeys: [],
         };
-
+        this.rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
         this.toggleSideMenu = this.toggleSideMenu.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.authService = new AuthService();
@@ -37,6 +41,17 @@ class App extends Component {
         });
 
     }
+
+    onOpenChange = (openKeys) => {
+        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            this.setState({ openKeys });
+        } else {
+            this.setState({
+                openKeys: latestOpenKey ? [latestOpenKey] : [],
+            });
+        }
+    };
 
     render() {
         return (
@@ -68,7 +83,7 @@ class App extends Component {
                                     </Menu.Item>
 
                                     <Menu.Item key="login" className={'login'}>
-                                        <Icon type="user"/>Sign In
+                                        <Icon type="user"/> Log In
                                     </Menu.Item>
                                 </Menu>
                             ) : (
@@ -89,55 +104,37 @@ class App extends Component {
                                 </Menu>
                             )
                         }
-
                     </Header>
 
-                    <Content style={{ padding: '50px 50px', height: '100vh'}}>
-                        <Layout style={{ padding: '24px 0', background: '#fffff' }}>
-                            <Sider
-                                trigger={null}
-                                collapsible
-                                collapsed={this.state.collapsed}
-                                style={{ background: '#fff', padding: 0 }}
-                            >
-                                <div className="logo"/>
-                                <Menu theme="light"
-                                      mode="inline"
-                                      defaultSelectedKeys={['1']}
-                                      style={{ height: '100%' }}>
-                                    <Menu.Item key="1">
-                                        <Icon type="user"/>
-                                        <span>nav 1</span>
-                                    </Menu.Item>
-                                    <Menu.Item key="2">
-                                        <Icon type="video-camera"/>
-                                        <span>nav 2</span>
-                                    </Menu.Item>
-                                    <Menu.Item key="3">
-                                        <Icon type="upload"/>
-                                        <span>nav 3</span>
-                                    </Menu.Item>
-                                </Menu>
-                            </Sider>
-                            <Content>
-                                <div className={'container app-body text-center'}>
-                                    <div className={(this.state.sideMenuOpen) ? ('SideMenu-wrapper') : ('SideMenu-closed')}>
-                                        <SidePanel isVisible={this.state.sideMenuOpen} authService={this.authService}/>
-                                    </div>
-                                    <RouteRenderer authService={this.authService}/>
-                                </div>
-                            </Content>
-                        </Layout>
+                    <Layout>
 
-                    </Content>
-                    <Footer style={{textAlign: 'center'}}>
-                        Favor Trader ©2018 Created by Group 8
-                    </Footer>
+                        <Sider
+                            trigger={null}
+                            collapsible
+                            collapsed={this.state.collapsed}
+                            style={{ background: '#ffffff', padding: 0 }}
+
+                        >
+                            <Menu theme="light"
+                                  mode="inline"
+                                  openKeys={this.state.openKeys}
+                                  onOpenChange={this.onOpenChange}
+                                  style={{ height: '100%'}}>
+                                <SubMenu key="sub1" disabled={(this.authService.loggedIn()) ? (false) : (true)} title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
+                                        <Menu.Item key="1">Option 1</Menu.Item>
+                                        <Menu.Item key="2">Option 2</Menu.Item>
+                                </SubMenu>
+                                <SubMenu key="sub2" disabled={(this.authService.loggedIn()) ? (false) : (true)} title={<span><Icon type="appstore" /><span>Navigation Two</span></span>}>
+                                    <Menu.Item key="5">Option 5</Menu.Item>
+                                    <Menu.Item key="6">Option 6</Menu.Item>
+                                </SubMenu>
+                            </Menu>
+                        </Sider>
+                        <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+                                <RouteRenderer authService={this.authService}/>
+                        </Content>
+                    </Layout>
                 </Layout>
-
-
-
-
         );
     }
 }

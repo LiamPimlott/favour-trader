@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Fade } from "reactstrap";
-import { Row, Button, Col, Icon, Input } from 'react-materialize';
 import { Redirect } from 'react-router-dom';
+
+import {Card,  Form, Icon, Input, Button } from 'antd';
 import './Login.css';
+const FormItem = Form.Item;
 
 class Login extends Component {
     constructor() {
@@ -69,40 +71,39 @@ class Login extends Component {
                 {
                     (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
                 }
-                <Row>
-                    <div className={'z-depth-3 center'}>
-                        <div className={"login-header"}>
-                            <span className={'card-title text-white'}>Favor <Icon>swap_horiz</Icon> Trader</span>
-                        </div>
+                <Card title="Favor Trader" bordered={true} className={'login-form-card'}>
+                    <Form onSubmit={this.handleSubmit} className="login-form">
                         {
                             (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
                         }
-                        <div id={'login-form'}>
-                            <Col s={12}>
-                                <Input value={this.state.email}
-                                       onChange={this.handleChange}
-                                       type="email" name="email"
-                                       id="email"
-                                       placeholder="Email Address"/>
-                            </Col>
-                            <Col s={12}>
-                                <Input value={this.state.password}
+                        <FormItem>
+                                <Input
+                                    prefix={<Icon type="user"
+                                    style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                    placeholder="Email Address"
+                                    value={this.state.email}
+                                    onChange={this.handleChange}
+                                    type="email" name="email"
+                                    id="email" />
+                        </FormItem>
+                        <FormItem>
+                                <Input prefix={<Icon type="lock"
+                                       style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                       value={this.state.password}
                                        onChange={this.handleChange}
                                        type="password"
                                        name="password"
                                        id="password"
-                                       placeholder="Password"/>
-                            </Col>
-                            <Button className={'center blue-grey darken-3 z-depth-2'}
-                                    onClick={this.submit} waves={'light'} >Login</Button>
-                        </div>
-                        <br/> <br/>
-                        <div className={'signUp-redirect'}>
-                            <span>New to FavorTrader?</span>
-                            <a href={'/create-account'}> Sign up here</a>
-                        </div>
-                    </div>
-                </Row>
+                                       placeholder="Password" />
+                        </FormItem>
+                        <FormItem>
+                            <Button type="primary" htmlType="submit"  onClick={this.submit} className="login-form-button">
+                                Log in
+                            </Button>
+                            Or <a href="">register now!</a>
+                        </FormItem>
+                    </Form>
+                </Card>
             </div>
         );
     }
