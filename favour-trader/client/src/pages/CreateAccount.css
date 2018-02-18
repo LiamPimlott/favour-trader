@@ -1,13 +1,16 @@
-.Form-input {
-	width: 10
-}
+@import '~antd/dist/antd.css';
 
-.SkillList {
-	list-style-type: none;
-}
-
-.signup-center {
-	position: absolute;
+.signup-form-card {
+	max-width: 500px;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.signup-form {
+	max-width: 400px;
+}
+
+
+.signup-form-button {
+	width: 100%;
 }

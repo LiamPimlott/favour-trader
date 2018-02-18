@@ -13,7 +13,7 @@ class SidePanel extends Component {
     };
 
     return (
-      <Dock size={0.2} position='left' isVisible={isVisible} dimMode={'none'} dockStyle={dockStyle}>
+        <div>
       {
         (authService.loggedIn()) ? (
           <SidePanelContent authService={authService}/>
@@ -21,7 +21,7 @@ class SidePanel extends Component {
           ''
         )
       }
-      </Dock>
+        </div>
     );
   }
 }

@@ -1,20 +1,15 @@
 import React, {Component} from 'react';
 import {
-    Card, CardBody, Col,
-    CardTitle, CardSubtitle, Button
-} from 'reactstrap';
+    Card, Button, Col
+} from 'antd';
 
 class MatchCard extends Component {
     render() {
         const {user, reveal} = this.props;
         return (
-            <Col sm="4" className={'pb-3'}>
-                <Card>
-                    <CardBody>
-                        <CardTitle>{user.name.first + " " + user.name.last.charAt(0) + "."}</CardTitle>
-                        <CardSubtitle>{user.email}</CardSubtitle>
-                        <Button size={'sm'} color={'primary'} onClick={reveal}>View Profile</Button>
-                    </CardBody>
+            <Col span={8}>
+                <Card title={user.name.first + " " + user.name.last.charAt(0) + "."} style={{ width: 300 }}>
+                    <Button size={'sm'} color={'primary'} onClick={reveal}>View Profile</Button>
                 </Card>
             </Col>
         );

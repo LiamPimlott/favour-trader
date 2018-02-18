@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 import './SidePanelContent.css';
+import { Link } from 'react-router-dom';
+import {Menu, Icon} from 'antd';
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 class SidePanelContent extends Component {
     constructor() {
@@ -9,8 +13,21 @@ class SidePanelContent extends Component {
             allSkills: [],
             hasSkills: [],
             wantSkills: [],
+            openKeys: [],
         };
+        this.rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
     }
+
+    onOpenChange = (openKeys) => {
+        const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+        if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+            this.setState({ openKeys });
+        } else {
+            this.setState({
+                openKeys: latestOpenKey ? [latestOpenKey] : [],
+            });
+        }
+    };
 
     componentDidMount() {
         const { authService } = this.props;
@@ -68,31 +85,25 @@ class SidePanelContent extends Component {
 
     render() {
         return (
-            <div className={'SidePanelContent'}>
-                Skills I Have:
-                <div>
-                {
-                    this.renderSkills('hasSkills')
-                }
-                <button className={'SidePanelContent-btn'}>Add a new skill</button>
-                </div>
-                <hr/>
-                Skills I'm Looking for:
-                <div>
-                {
-                    this.renderSkills('wantSkills')
-                }
-                <button className={'SidePanelContent-btn'}>Add a new skill</button>
-                </div>
-                <hr/>
-                All Skills:
-                <ul>
-                {
-                    this.renderSkills('allSkills')
-                }
-                </ul>
-                <hr/>
-            </div>
+                <Menu theme="light"
+                      mode="inline"
+                      openKeys={this.state.openKeys}
+                      onOpenChange={this.onOpenChange}
+                      style={{ height: '100%'}}>
+                    <Menu.Item key="sub1">
+                        <Link to="/Profile">
+                            <Icon type="user"/> <span>My Profile</span>
+                        </Link>
+                    </Menu.Item>
+                    <SubMenu key="sub2" title={<span><Icon type="search" /><span>Find Matches</span></span>}>
+                        <Menu.Item key="5">What I Have</Menu.Item>
+                        <Menu.Item key="6">What I Want</Menu.Item>
+                    </SubMenu>
+                    <SubMenu key="sub3" title={<span><Icon type="book" /><span>Trades</span></span>}>
+                        <Menu.Item key="5">Active</Menu.Item>
+                        <Menu.Item key="6">Offers</Menu.Item>
+                    </SubMenu>
+                </Menu>
         );
     }
 }
