@@ -66,12 +66,13 @@ class Login extends Component {
     }
 
     render() {
+        const title = <h5>Favor <Icon type={'swap'}/> Trader</h5>;
         return (
             <div className={'container'}>
                 {
                     (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
                 }
-                <Card title="Favor Trader" bordered={true} className={'login-form-card'}>
+                <Card title={title} bordered={true} className={'login-form-card'}>
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         {
                             (this.state.failedAttempt) ? (this.renderErrorText()) : ('')

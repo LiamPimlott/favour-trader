@@ -46,7 +46,7 @@ class App extends Component {
                 <Layout style={{height:"100vh"}}>
 
                     <Header style={{ background: '#fff', padding: 0 }}>
-
+                        <h4 style={{float: 'right', marginRight: '1%', marginTop: '0.5%'}}>Favor <Icon type={'swap'}/> Trader</h4>
                         {
                             (!this.authService.loggedIn()) ? (
                                 <Menu
