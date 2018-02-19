@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="container"
+>
+  
+  <div
+    className="row"
+  >
+    <div
+      className="z-depth-3 center"
+    >
+      <div
+        className="login-header"
+      >
+        <span
+          className="card-title text-white"
+        >
+          Favor 
+          <i
+            className="material-icons"
+          >
+            swap_horiz
+          </i>
+           Trader
+        </span>
+      </div>
+      
+      <div
+        id="login-form"
+      >
+        <div
+          className="col s12"
+        >
+          <div
+            className="col input-field"
+          >
+            <input
+              checked={false}
+              className=""
+              defaultValue={undefined}
+              id="email"
+              name="email"
+              onChange={[Function]}
+              placeholder="Email Address"
+              type="email"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          className="col s12"
+        >
+          <div
+            className="col input-field"
+          >
+            <input
+              checked={false}
+              className=""
+              defaultValue={undefined}
+              id="password"
+              name="password"
+              onChange={[Function]}
+              placeholder="Password"
+              type="password"
+              value=""
+            />
+          </div>
+        </div>
+        <button
+          className="btn waves-effect waves-light center blue-grey darken-3 z-depth-2"
+          disabled={false}
+          onClick={[Function]}
+        >
+          Login
+        </button>
+      </div>
+      <br />
+       
+      <br />
+      <div
+        className="signUp-redirect"
+      >
+        <span>
+          New to FavorTrader?
+        </span>
+        <a
+          href="/create-account"
+        >
+           Sign up here
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

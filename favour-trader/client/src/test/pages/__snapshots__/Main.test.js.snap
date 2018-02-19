@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <header
+    className="d-flex justify-content-center"
+  >
+    <h1
+      className="center-helper"
+    >
+      Welcome to FavourTrader
+    </h1>
+  </header>
+  <div
+    className="center-helper"
+  >
+    <div>
+      <div
+        className="container"
+      >
+        <div
+          className="row"
+        />
+      </div>
+    </div>
+  </div>
+  <div>
+    
+  </div>
+</div>
+`;
