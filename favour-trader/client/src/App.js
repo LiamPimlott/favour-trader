@@ -7,7 +7,6 @@ import './App.css';
 import {Menu, Icon, Layout} from 'antd';
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
-
 const {Header, Content, Sider, Footer} = Layout;
 
 class App extends Component {
@@ -32,78 +31,86 @@ class App extends Component {
     };
 
     toggleSideMenu() {
-        console.log(this.state.collapsed);
         this.setState({
             collapsed: !this.state.collapsed,
         });
 
     }
 
+    renderNavToggler (loggedIn) {
+        if (loggedIn) {
+            return (
+                <Menu mode={'horizontal'}
+                      theme={'light'}
+                      style={{float: 'left'}}>
+                    <Menu.Item>
+                        <Icon className={'trigger'}
+                              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                              onClick={this.toggleSideMenu}/>
+                    </Menu.Item>
+                </Menu>
+            );
+        } else {
+            return ('');
+        }
+    }
 
+    renderMenuItems (loggedIn) {
+        if (loggedIn) {
+            return (
+                <Menu
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.current]}
+                    mode="horizontal"
+                    theme={'light'}
+                    style={{float: 'right'}}
+                >
+
+                    <Menu.Item key="logout">
+                        <Icon type="logout"/>Log out
+                    </Menu.Item>
+                </Menu>
+            );
+        } else {
+            return (
+                <Menu
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.current]}
+                    mode="horizontal"
+                    theme={'light'}
+                    style={{float: 'right'}}
+                >
+
+                    <Menu.Item key="create-account" id={'create-account'}>
+                        <Link to="/create-account" className="nav-text">
+                            <Icon type="user-add" /> <span>Sign Up</span>
+                        </Link>
+
+                    </Menu.Item>
+
+                    <Menu.Item key="login" className={'login'}>
+                        <Link to="/login">
+                            <Icon type="user"/> <span>Sign in</span>
+                        </Link>
+                    </Menu.Item>
+                </Menu>
+            );
+        }
+    }
 
     render() {
         return (
             <Layout style={{height:"100vh"}}>
-
                 <Header style={{ background: '#fff', padding: 0 }}>
                     {
-                        (this.authService.loggedIn()) ? (
-                            <Menu mode={'horizontal'}
-                                  theme={'light'}
-                                  style={{float: 'left'}}>
-                                <Menu.Item>
-                                    <Icon className={'trigger'}
-                                          type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                                          onClick={this.toggleSideMenu}/>
-                                </Menu.Item>
-                            </Menu>
-                        ) : ('')
+                        this.renderNavToggler(this.authService.loggedIn())
                     }
-
                     <h4 style={{float: 'left', marginLeft: '2%', marginTop: '0.5%'}}>Favor <Icon type={'swap'}/> Trader</h4>
-
                     {
-                        (!this.authService.loggedIn()) ? (
-                            <Menu
-                                onClick={this.handleClick}
-                                selectedKeys={[this.state.current]}
-                                mode="horizontal"
-                                theme={'light'}
-                                style={{float: 'right'}}
-                            >
-
-                                <Menu.Item key="create-account" id={'create-account'}>
-                                    <Link to="/create-account" className="nav-text">
-                                        <Icon type="user-add" /> <span>Sign Up</span>
-                                    </Link>
-
-                                </Menu.Item>
-
-                                <Menu.Item key="login" className={'login'}>
-                                    <Link to="/login">
-                                        <Icon type="user"/> <span>Sign in</span>
-                                    </Link>
-                                </Menu.Item>
-                            </Menu>
-                        ) : (
-                            <Menu
-                                onClick={this.handleClick}
-                                selectedKeys={[this.state.current]}
-                                mode="horizontal"
-                                theme={'light'}
-                                style={{float: 'right'}}
-                            >
-
-                                <Menu.Item key="logout">
-                                    <Icon type="logout"/>Log out
-                                </Menu.Item>
-                            </Menu>
-                        )
+                        this.renderMenuItems(this.authService.loggedIn())
                     }
                 </Header>
-
                 <Layout style={{background: '#fff'}}>
-
                     <Sider
                         trigger={null}
                         collapsible

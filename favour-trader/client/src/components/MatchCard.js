@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {
-    Card, Button, Col
-} from 'antd';
+import { Card, Button, Col } from 'antd';
 
 class MatchCard extends Component {
     render() {
