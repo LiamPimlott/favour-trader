@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  style={
+    Object {
+      "height": 0,
+      "left": 0,
+      "position": "fixed",
+      "top": 0,
+      "width": 0,
+      "zIndex": 99999999,
+    }
+  }
+>
+  <div
+    style={
+      Object {
+        "MozBoxShadow": "0 0 4px rgba(0, 0, 0, 0.3)",
+        "MozTransition": "left 0.2s ease-out,top 0.2s ease-out,width 0.2s ease-out,height 0.2s ease-out",
+        "OBoxShadow": "0 0 4px rgba(0, 0, 0, 0.3)",
+        "OTransition": "left 0.2s ease-out,top 0.2s ease-out,width 0.2s ease-out,height 0.2s ease-out",
+        "WebkitBoxShadow": "0 0 4px rgba(0, 0, 0, 0.3)",
+        "WebkitTransition": "left 0.2s ease-out,top 0.2s ease-out,width 0.2s ease-out,height 0.2s ease-out",
+        "background": "white",
+        "backgroundColor": "#9978C2",
+        "boxShadow": "0 0 4px rgba(0, 0, 0, 0.3)",
+        "height": "100%",
+        "left": 0,
+        "marginTop": "55px",
+        "msBoxShadow": "0 0 4px rgba(0, 0, 0, 0.3)",
+        "msTransition": "left 0.2s ease-out,top 0.2s ease-out,width 0.2s ease-out,height 0.2s ease-out",
+        "overflow": "hidden",
+        "position": "fixed",
+        "top": 0,
+        "transition": "left 0.2s ease-out,top 0.2s ease-out,width 0.2s ease-out,height 0.2s ease-out",
+        "width": "20%",
+        "zIndex": 1,
+      }
+    }
+  >
+    <div
+      onMouseDown={[Function]}
+      style={
+        Object {
+          "cursor": "col-resize",
+          "height": "100%",
+          "opacity": 0,
+          "position": "absolute",
+          "right": -5,
+          "top": 0,
+          "width": 10,
+          "zIndex": 2,
+        }
+      }
+    />
+    <div
+      style={
+        Object {
+          "height": "100%",
+          "overflow": "auto",
+          "width": "100%",
+        }
+      }
+    >
+      
+    </div>
+  </div>
+</div>
+`;

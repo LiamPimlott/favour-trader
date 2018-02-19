@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="pb-3 col col-sm-4"
+>
+  <div
+    className="card"
+  >
+    <div
+      className="card-body"
+    >
+      <h5
+        className="card-title"
+      >
+        Jane D.
+      </h5>
+      <h6
+        className="card-subtitle"
+      >
+        jane.doe@example.com
+      </h6>
+      <button
+        className="btn btn-primary btn-sm"
+        onClick={[Function]}
+        type="button"
+      >
+        View Profile
+      </button>
+    </div>
+  </div>
+</div>
+`;

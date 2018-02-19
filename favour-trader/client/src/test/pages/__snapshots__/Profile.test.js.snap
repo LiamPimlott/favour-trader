@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div>
+  <div
+    className="container-fluid"
+  >
+    <div
+      className="jumbotron"
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="col-6 col-sm-4"
+        >
+          <div
+            className="media"
+          >
+            <a
+              className="media-left"
+              href="#"
+            />
+            <div
+              className="media-body"
+            >
+              <h4
+                className="media-heading"
+              >
+                
+              </h4>
+              
+            </div>
+          </div>
+          <div
+            className="no-gutters row"
+          >
+            
+          </div>
+        </div>
+        <div
+          className="col"
+        >
+          <h3>
+            Has:
+          </h3>
+          <div
+            className="no-gutters row"
+          >
+            <ul
+              className="list-group"
+            >
+              <div>
+                <ul />
+              </div>
+            </ul>
+          </div>
+        </div>
+        <div
+          className="col"
+        >
+          <h3>
+            Wants:
+          </h3>
+          <div
+            className="row"
+          >
+            <ul
+              className="list-group"
+            >
+              <div>
+                <ul />
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

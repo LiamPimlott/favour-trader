@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="SidePanelContent"
+>
+  Skills I Have:
+  <div>
+    <div>
+      <ul />
+    </div>
+    <button
+      className="SidePanelContent-btn"
+    >
+      Add a new skill
+    </button>
+  </div>
+  <hr />
+  Skills I'm Looking for:
+  <div>
+    <div>
+      <ul />
+    </div>
+    <button
+      className="SidePanelContent-btn"
+    >
+      Add a new skill
+    </button>
+  </div>
+  <hr />
+  All Skills:
+  <ul>
+    <div>
+      <ul />
+    </div>
+  </ul>
+  <hr />
+</div>
+`;
