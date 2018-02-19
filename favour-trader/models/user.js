@@ -14,14 +14,13 @@ var NameSchema = new mongoose.Schema({
 
 var AddressSchema = new mongoose.Schema({
   number: {
-    type: Number,
+    type: Number
   },
   street: {
-    type: String,
+    type: String
   },
   postalCode: {
-    type: String,
-    required: true
+    type: String
   },
   city: {
     type: String
@@ -56,7 +55,6 @@ var UserSchema = new mongoose.Schema({
   },
   address: {
     type: AddressSchema,
-    required: [true, 'Address is required.']
   },
   about: {
     type: String
