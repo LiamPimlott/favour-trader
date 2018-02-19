@@ -13,7 +13,6 @@ export default class AuthService {
     signup(
         firstName,
         lastName,
-        postalCode,
         email,
         password,
     ){
@@ -22,7 +21,6 @@ export default class AuthService {
             "password": password,            
             "firstName": firstName,
             "lastName": lastName,
-            "postalCode": postalCode,
         },{
             'Accept': 'application/json',
             'Content-Type': 'application/json',
