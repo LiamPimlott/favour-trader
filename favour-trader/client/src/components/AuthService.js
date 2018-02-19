@@ -13,30 +13,16 @@ export default class AuthService {
     signup(
         firstName,
         lastName,
-        streetNumber,
-        streetName,
         postalCode,
-        country,
-        city,
-        state,
         email,
         password,
-        hasSkills,
-        wantSkills
     ){
         return this.fetch('/api/users/register',{
             "email": email,
             "password": password,            
             "firstName": firstName,
             "lastName": lastName,
-            "streetNumber": streetNumber,
-            "streetName": streetName,
             "postalCode": postalCode,
-            "country": country,
-            "city": city,
-            "state": state,
-            "has": hasSkills,
-            "wants": wantSkills,
         },{
             'Accept': 'application/json',
             'Content-Type': 'application/json',

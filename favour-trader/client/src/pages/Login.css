@@ -1,38 +1,23 @@
-.center {
-    margin-right: auto;
+@import '~antd/dist/antd.css';
+
+.login-form-card {
+    max-width: 500px;
     margin-left: auto;
+    margin-right: auto;
 }
 
-.login-header {
-    background: #343a40;
-    font-size: medium;
-    padding-bottom: 2.5%;
+.login-form {
+    max-width: 400px;
 }
 
-.login-header span {
-    font-size: large;
+#components-form-demo-normal-login .login-form-forgot {
+    float: right;
 }
 
-#login-form {
-    position: relative;
-    top: 8%;
+.login-form-button {
+    width: 100%;
 }
 
-
-.input-field input::placeholder, .materialize-textarea:focus:not([readonly]) + label {
-    color: #343a40 !important;
-}
-
-.input-field input:focus + label, .materialize-textarea:focus:not([readonly]) + label {
-    color: #343a40 !important;
-}
-
-/* label underline focus color */
-.input-field input:focus, .materialize-textarea:focus:not([readonly]) {
-    border-bottom: 1px solid #343a40 !important;
-    box-shadow: 0 1px 0 0 #343a40 !important;
-}
-
-.signUp-redirect {
-    margin-bottom: 5%;
+.ant-card-head-title {
+    text-align: center;
 }

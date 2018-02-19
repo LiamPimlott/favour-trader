@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import UserProfileModal from '../components/UserProfileModal.js';
 import axios from 'axios'
-import {Row} from 'reactstrap';
+import {Row} from 'antd';
 import MatchCard from "../components/MatchCard";
 
 class Main extends Component {
@@ -44,11 +44,12 @@ class Main extends Component {
 
     renderMatches(matches) {
         return (
-            <div>
+            <div style={{textAlign: "center"}}>
                 {
                     (matches) ? (
                         <div className={'container'}>
-                            <Row>
+                            <h1>Matched Traders</h1>
+                            <Row gutter={16}>
                                 {
                                     matches.map(function (match) {
                                         return (<MatchCard key={match._id} user={match}
@@ -68,9 +69,6 @@ class Main extends Component {
     render() {
         return (
             <div>
-                <header className={'d-flex justify-content-center'}>
-                    <h1 className={'center-helper'}>Welcome to FavourTrader</h1>
-                </header>
                 <div className={'center-helper'}>
                     { this.state.matchedUsers ?
                         this.renderMatches(this.state.matchedUsers) :

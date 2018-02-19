@@ -2,77 +2,129 @@ import React, {Component} from 'react';
 import RouteRenderer from './components/RouteRenderer.js';
 import SidePanel from './components/SidePanel.js';
 import AuthService from './components/AuthService.js';
+import { Link } from 'react-router-dom';
 import './App.css';
-import {
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-} from 'reactstrap';
-
+import {Menu, Icon, Layout} from 'antd';
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
+const {Header, Content, Sider, Footer} = Layout;
 
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            sideMenuOpen: false,
+            collapsed: true,
+            current: '',
         };
-
         this.toggleSideMenu = this.toggleSideMenu.bind(this);
+        this.handleClick = this.handleClick.bind(this);
         this.authService = new AuthService();
     }
 
+    handleClick = (e) => {
+        this.setState({
+            current: e.keyPath[0],
+        });
+        if (e.key === 'logout') {
+            this.authService.logout();
+        }
+    };
+
     toggleSideMenu() {
         this.setState({
-            sideMenuOpen: !this.state.sideMenuOpen,
+            collapsed: !this.state.collapsed,
         });
+
+    }
+
+    renderNavToggler (loggedIn) {
+        if (loggedIn) {
+            return (
+                <Menu mode={'horizontal'}
+                      theme={'light'}
+                      style={{float: 'left'}}>
+                    <Menu.Item>
+                        <Icon className={'trigger'}
+                              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                              onClick={this.toggleSideMenu}/>
+                    </Menu.Item>
+                </Menu>
+            );
+        } else {
+            return ('');
+        }
+    }
+
+    renderMenuItems (loggedIn) {
+        if (loggedIn) {
+            return (
+                <Menu
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.current]}
+                    mode="horizontal"
+                    theme={'light'}
+                    style={{float: 'right'}}
+                >
+
+                    <Menu.Item key="logout">
+                        <Icon type="logout"/>Log out
+                    </Menu.Item>
+                </Menu>
+            );
+        } else {
+            return (
+                <Menu
+                    onClick={this.handleClick}
+                    selectedKeys={[this.state.current]}
+                    mode="horizontal"
+                    theme={'light'}
+                    style={{float: 'right'}}
+                >
+
+                    <Menu.Item key="create-account" id={'create-account'}>
+                        <Link to="/create-account" className="nav-text">
+                            <Icon type="user-add" /> <span>Sign Up</span>
+                        </Link>
+
+                    </Menu.Item>
+
+                    <Menu.Item key="login" className={'login'}>
+                        <Link to="/login">
+                            <Icon type="user"/> <span>Sign in</span>
+                        </Link>
+                    </Menu.Item>
+                </Menu>
+            );
+        }
     }
 
     render() {
         return (
-            <div>
-                <Navbar color="dark" dark expand="md" className={'fixed-top'}>
-                    <button className={(this.authService.loggedIn()) ? ('btn btn-link') : ('btn btn-link d-none')}
-                            onClick={this.toggleSideMenu} aria-pressed="false">
-                        <i className="fas fa-align-justify fa-3x"></i>
-                    </button>
-                    <NavbarBrand href="/">favourTrader</NavbarBrand>
-                    <NavbarToggler onClick={this.toggle}/>
+            <Layout style={{height:"100vh"}}>
+                <Header style={{ background: '#fff', padding: 0 }}>
                     {
-                        (!this.authService.loggedIn()) ? (
-                            <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <NavLink href="/create-account">Sign Up</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/login">Login</NavLink>
-                                </NavItem>
-                            </Nav>
-                        ) : (
-                            <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <NavLink href="/">Home</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink href="/Profile">Profile</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink onClick={this.authService.logout} href="/">Signout</NavLink>
-                                </NavItem>
-                            </Nav>
-                        )
+                        this.renderNavToggler(this.authService.loggedIn())
                     }
-                </Navbar>
+                    <h4 style={{float: 'left', marginLeft: '2%', marginTop: '0.5%'}}>Favor <Icon type={'swap'}/> Trader</h4>
+                    {
+                        this.renderMenuItems(this.authService.loggedIn())
+                    }
+                </Header>
+                <Layout style={{background: '#fff'}}>
+                    <Sider
+                        trigger={null}
+                        collapsible
+                        collapsed={this.state.collapsed}
+                        style={{ background: '#ffffff', padding: 0 }}
 
-                <div className={'container app-body text-center'}>
-                    <div className={(this.state.sideMenuOpen) ? ('SideMenu-wrapper') : ('SideMenu-closed')}>
-                        <SidePanel isVisible={this.state.sideMenuOpen} authService={this.authService}/>
-                    </div>
-                    <RouteRenderer authService={this.authService}/>
-                </div>
-            </div>
+                    >
+                        <SidePanel isVisible={this.state.collapsed}  authService={this.authService}/>
+                    </Sider>
+                    <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+                        <RouteRenderer authService={this.authService}/>
+                    </Content>
+                </Layout>
+            </Layout>
         );
     }
 }
