@@ -58,6 +58,9 @@ var UserSchema = new mongoose.Schema({
     type: AddressSchema,
     required: [true, 'Address is required.']
   },
+  displayPicUrl: {
+    type: String
+  },
   about: {
     type: String
   },
