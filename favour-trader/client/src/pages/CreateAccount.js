@@ -12,10 +12,6 @@ class CreateAccount extends Component {
     constructor(){
         super();
         this.state = {
-            email: "",
-            password: "",
-            firstName: "",
-            lastName: "",
             redirect: false,
             failedAttempt: false,
         };
@@ -38,7 +34,6 @@ class CreateAccount extends Component {
         const { authService } = this.props;
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(values);
                 authService.signup(
                     values.firstName,
                     values.lastName,
@@ -80,7 +75,7 @@ class CreateAccount extends Component {
         return (
             <div className={'container'}>
                 {
-                    (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
+                    (this.state.redirect) ? (<Redirect to={'/Profile'}/>) : ('')
                 }
                 <Card bordered title={title} className={'signup-form-card'}>
                     <Form className={'signup-form'}>
