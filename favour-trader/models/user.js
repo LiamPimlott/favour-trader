@@ -21,16 +21,15 @@ var AddressSchema = new mongoose.Schema({
   },
   postalCode: {
     type: String,
-    required: true
   },
   city: {
-    type: String
+    type: String,
   },
   state: {
-    type: String
+    type: String,
   },
   country: {
-    type: String
+    type: String,
   }
 });
 
@@ -55,8 +54,7 @@ var UserSchema = new mongoose.Schema({
     required: [true, 'Name is required.'],
   },
   address: {
-    type: AddressSchema,
-    required: [true, 'Address is required.']
+    type: AddressSchema
   },
   displayPicUrl: {
     type: String
