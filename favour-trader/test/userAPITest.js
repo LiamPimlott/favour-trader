@@ -59,15 +59,15 @@ const users = [
     },
     {//user[6] is for the http requests. It has invalid name info,
         email: "test@test.ca",
-        password: "assword",
+        password: "password",
         firstName: "M",
         lastName: "Ripptoe",
         postalCode: "r3p1z2"
     },
     {//user[7] is for the http requests. It has invalid name info,
         email: "test@test.ca",
-        password: "assword",
-        firstName: "Mark",
+        password: "password",
+        firstName: "Ma",
         lastName: "R",
         postalCode: "r3p1z2"
     },
@@ -132,7 +132,7 @@ describe("User API Tests", function () {
     });
 
     describe("/REGISTER", function () {
-        it("it should make a user", function (done) {
+        it("it should register a user", function (done) {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[0])
@@ -143,7 +143,7 @@ describe("User API Tests", function () {
                 })
         });
 
-        it("it should not make dupe user", function (done) {
+        it("it should not register a duplicate user", function (done) {
             const newUser = new User(users[1]);
             const saveUser = new Promise((resolve) => {
                 newUser.save(() => {
@@ -156,7 +156,6 @@ describe("User API Tests", function () {
                     .post('/api/users/register')
                     .send(users[0])
                     .end((err, res) => {
-                        // console.log(JSON.stringify(res.body))
                         res.body.should.have.property("success").eql(false);
                         res.body.should.be.a('object');
                         done();

@@ -103,18 +103,7 @@ router.post('/register', function(req, res) {
 			name: {
 				first: req.body.firstName,
 				last: req.body.lastName
-			},
-			address: {
-				number: req.body.streetNumber,
-				street: req.body.streetName,
-				postalCode: req.body.postalCode,
-				city: req.body.city,
-				state: req.body.state,
-				country: req.body.country
-            },
-			about: req.body.about,
-			has: req.body.has,
-			wants: req.body.wants
+			}
 		});
 		// attempt to save the new user
 		newUser.save(function(err, user) {
