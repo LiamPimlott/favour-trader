@@ -5,19 +5,21 @@ var NameSchema = new mongoose.Schema({
   first: {
     type: String,
     minlength: 2,
+    required: [true, 'First name is required.'],
   },
   last: {
     type: String,
     minlength: 2,
+    required: [true, 'Last name is required.'],
   }
 });
 
 var AddressSchema = new mongoose.Schema({
   number: {
-    type: Number,
+    type: Number
   },
   street: {
-    type: String,
+    type: String
   },
   postalCode: {
     type: String,

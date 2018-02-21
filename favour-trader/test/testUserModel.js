@@ -12,11 +12,9 @@ describe('User Validation Error.', function () {
     it('should throw all required validation errors', function (done) {
         let user = new User();
         user.validate((err) => {
-            expect(err.errors.address.message).to.exist;
             expect(err.errors.name.message).to.exist;
             expect(err.errors.password.message).to.exist;
             expect(err.errors.email.message).to.exist;
-            err.errors.address.message.should.equal("Address is required.");
             err.errors.name.message.should.equal("Name is required.");
             err.errors.password.message.should.equal("Password is required.");
             err.errors.email.message.should.equal("Email Address is required.");
@@ -82,27 +80,6 @@ describe('User Validation Error.', function () {
         user.validate((err) => {
             expect(err.errors.address.message).to.exist;
             let thisError = "Validation failed: number: Cast to Number failed for value \"aa\" at path \"number\"";
-            err.errors.address.message.should.equal(thisError);
-            done();
-        })
-    });
-
-    it('should throw Postal code is Required', function (done) {
-        let user = new User();
-        user.name = {first: "Ism", last: "Kh"};
-        user.address = {
-            number: '10',
-            street: 'sample',
-            postalCode: null,
-            city: 'winnipeg',
-            state: 'manitoba',
-            country: 'canada'
-        };
-        user.password = 'password';
-        user.email = "example@example.com";
-        user.validate((err) => {
-            expect(err.errors.address.message).to.exist;
-            let thisError = "Validation failed: postalCode: Path `postalCode` is required.";
             err.errors.address.message.should.equal(thisError);
             done();
         })
