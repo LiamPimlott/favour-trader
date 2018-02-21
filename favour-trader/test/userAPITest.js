@@ -29,10 +29,17 @@ const users = [
             last: "Ripptoe"
         },
         address: {
-            postalCode: "r3p1z2"
+            postalCode: "r3p1z2",
+            street: "Fake St",
+            number: 55,
+            city: "Soykaf",
+            state: "Machine",
+            country: "Glorious Nihon"
         },
+        about: "I'm the testiest user there is!",
         email: "test@test.ca",
-        password: "assword"
+        password: "assword",
+        has: []
     },
     {//user[2] is for the http requests. It doesn't have all the required info.
         password: "assword",
@@ -192,7 +199,7 @@ describe("User API Tests", function () {
                 .post('/api/users/register')
                 .send(users[4])
                 .end((err, res) => {
-                    console.log(JSON.stringify(res.body))
+                    // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
                     res.body.should.be.a('object');
                     done();
@@ -204,7 +211,7 @@ describe("User API Tests", function () {
                 .post('/api/users/register')
                 .send(users[6])
                 .end((err, res) => {
-                    console.log(JSON.stringify(res.body))
+                    // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
                     res.body.should.be.a('object');
                     done();
@@ -215,18 +222,6 @@ describe("User API Tests", function () {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[7])
-                .end((err, res) => {
-                    console.log(JSON.stringify(res.body))
-                    res.body.should.have.property("success").eql(false);
-                    res.body.should.be.a('object');
-                    done();
-                });
-        });
-
-        it("it should not make a user without a postal code", function (done) {
-            chai.request(url)
-                .post('/api/users/register')
-                .send(users[5])
                 .end((err, res) => {
                     // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
@@ -245,7 +240,6 @@ describe("User API Tests", function () {
     });
 
     describe("/PROFILE", function () {
-        
     });
 
     describe("/ID/PROFILE", function () {
@@ -260,8 +254,73 @@ describe("User API Tests", function () {
 
     });
 
-    describe("/LOGIN", function () {
+    describe("/LOGIN", () => {
+        it("should log in for a valid email and password", function() {
+            const newUser = new User(users[1]);
+            const saveUser = new Promise((resolve) => {
+                newUser.save(() => {
+                    resolve('created');
+                })
+            });
 
+            saveUser.then(() => {
+                chai.request(url)
+                .post('api/users/login')
+                .send({
+                    email: "test@test.ca",
+                    password: "assword"
+                })
+                .end( (err,res) => {
+                    res.body.should.have.property("success").eql(true);
+                    res.body.should.have.property("message").eql("Login successful.");
+                    res.body.should.have.property("token");
+                })
+            })
+        });
+
+        it("should fail log in for a invalid email", function() {
+            const newUser = new User(users[1]);
+            const saveUser = new Promise((resolve) => {
+                newUser.save(() => {
+                    resolve('created');
+                })
+            });
+
+            saveUser.then(() => {
+                chai.request(url)
+                .post('api/users/login')
+                .send({
+                    email: "nestest@test.ca",
+                    password: "assword"
+                })
+                .end( (err,res) => {
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Incorrect password.");
+                })
+            })
+        });
+
+        it("should fail log in for a invalid password", function() {
+            const newUser = new User(users[1]);
+            const saveUser = new Promise((resolve) => {
+                newUser.save(() => {
+                    resolve('created');
+                })
+            });
+
+            saveUser.then(() => {
+                chai.request(url)
+                .post('api/users/login')
+                .send({
+                    email: "test@test.ca",
+                    password: "password"
+                })
+                .end( (err,res) => {
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Incorrect password.");
+                })
+            })
+        });
     });
 
     describe("/UPDATE", function () {
