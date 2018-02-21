@@ -4,9 +4,6 @@ import { Redirect } from 'react-router-dom';
 import { Card, Form, Icon, Input, Button, message } from 'antd';
 const FormItem = Form.Item;
 
-message.config({
-    duration: 5
-});
 
 class CreateAccount extends Component {
     constructor(){
@@ -63,12 +60,6 @@ class CreateAccount extends Component {
         })
     }
 
-    handleChange(e) {
-        this.setState({
-            [e.target.id]: e.target.value
-        });
-    }
-
     renderErrorText(err) {
         return (
             message.error(err, 2 , ()=> {
@@ -78,6 +69,7 @@ class CreateAccount extends Component {
             })
         );
     }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const title = <div><h5>Hone your Skills,</h5> <p>Get Started, its free!</p></div>;
@@ -94,10 +86,9 @@ class CreateAccount extends Component {
                                     rules: [{ required: true, message: 'Please input your first name!' },
                                             { min: 2, message: 'First name is too short!'}],
                                     validateTrigger: 'onBlur'
-                                    })
+                                })
                                 (
                                 <Input type="text"
-                                       onChange={this.handleChange}
                                        name="firstName"
                                        id="firstName"
                                        placeholder=" First Name"
@@ -115,7 +106,6 @@ class CreateAccount extends Component {
                                 })
                                 (
                                 <Input type="text"
-                                       onChange={this.handleChange}
                                        name="lastName"
                                        id="lastName"
                                        placeholder=" Last Name"
@@ -133,7 +123,6 @@ class CreateAccount extends Component {
                                 })
                                 (
                                 <Input type="email"
-                                       onChange={this.handleChange}
                                        name="email"
                                        id="email"
                                        placeholder=" Email Address"
@@ -150,7 +139,6 @@ class CreateAccount extends Component {
                                 })
                                 (
                                 <Input type="password"
-                                       onChange={this.handleChange}
                                        name="password"
                                        id="password"
                                        placeholder=" Password"
