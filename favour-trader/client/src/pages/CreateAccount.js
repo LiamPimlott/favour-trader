@@ -13,7 +13,6 @@ class CreateAccount extends Component {
             failedAttempt: false,
             iconLoading: false,
         };
-        this.handleChange = this.handleChange.bind(this);
         this.renderErrorText = this.renderErrorText.bind(this);
         this.submit = this.submit.bind(this);
     }
@@ -89,10 +88,10 @@ class CreateAccount extends Component {
                                 })
                                 (
                                 <Input type="text"
-                                       name="firstName"
-                                       id="firstName"
-                                       placeholder=" First Name"
-                                       prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                   name="firstName"
+                                   id="firstName"
+                                   placeholder=" First Name"
+                                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 />
                                 )
                             }
@@ -135,7 +134,7 @@ class CreateAccount extends Component {
                             {
                                 getFieldDecorator('password', {
                                     rules: [{ required: true, message: 'Please input your password!' }],
-                                    validateTrigger: 'onBlur'
+                                    validateTrigger: 'onBlur',
                                 })
                                 (
                                 <Input type="password"
