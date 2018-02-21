@@ -5,10 +5,12 @@ var NameSchema = new mongoose.Schema({
   first: {
     type: String,
     minlength: 2,
+    required: [true, 'First name is required.'],
   },
   last: {
     type: String,
     minlength: 2,
+    required: [true, 'Last name is required.'],
   }
 });
 
