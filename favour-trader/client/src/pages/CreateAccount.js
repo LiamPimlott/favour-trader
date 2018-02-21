@@ -14,6 +14,7 @@ class CreateAccount extends Component {
         this.state = {
             redirect: false,
             failedAttempt: false,
+            iconLoading: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.renderErrorText = this.renderErrorText.bind(this);
@@ -48,11 +49,15 @@ class CreateAccount extends Component {
                         } else {
                             this.setState({
                                 failedAttempt: true,
+                                iconLoading: true
                             });
+                            if(this.state.failedAttempt){
+                                this.renderErrorText(res.message);
+                            }
                         }
                     })
                     .catch(err => {
-                        message.error(err);
+                        message.error(err.message);
                     });
             }
         })
@@ -64,9 +69,13 @@ class CreateAccount extends Component {
         });
     }
 
-    renderErrorText() {
+    renderErrorText(err) {
         return (
-            message.error('The information you have entered is not valid.')
+            message.error(err, 2 , ()=> {
+                this.setState({
+                    iconLoading: false
+                });
+            })
         );
     }
     render() {
@@ -80,10 +89,13 @@ class CreateAccount extends Component {
                 <Card bordered title={title} className={'signup-form-card'}>
                     <Form className={'signup-form'}>
                         <FormItem>
-                            {getFieldDecorator('firstName', {
-                                rules: [{ required: true, message: 'Please input your first name!' },
-                                        { min: 2, message: 'First name is too short!'}],
-                            })(
+                            {
+                                getFieldDecorator('firstName', {
+                                    rules: [{ required: true, message: 'Please input your first name!' },
+                                            { min: 2, message: 'First name is too short!'}],
+                                    validateTrigger: 'onBlur'
+                                    })
+                                (
                                 <Input type="text"
                                        onChange={this.handleChange}
                                        name="firstName"
@@ -91,52 +103,62 @@ class CreateAccount extends Component {
                                        placeholder=" First Name"
                                        prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                 />
-                            )}
+                                )
+                            }
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('lastName', {
-                                rules: [{ required: true, message: 'Please input your last name!' },
-                                        { min: 2, message: 'Last name is too short!'}],
-                            })(
-                            <Input type="text"
-                                   onChange={this.handleChange}
-                                   name="lastName"
-                                   id="lastName"
-                                   placeholder=" Last Name"
-                                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            />
-                            )}
+                            {
+                                getFieldDecorator('lastName', {
+                                    rules: [{ required: true, message: 'Please input your last name!' },
+                                            { min: 2, message: 'Last name is too short!'}],
+                                    validateTrigger: 'onBlur'
+                                })
+                                (
+                                <Input type="text"
+                                       onChange={this.handleChange}
+                                       name="lastName"
+                                       id="lastName"
+                                       placeholder=" Last Name"
+                                       prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                />
+                                )
+                            }
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('emailAddress', {
-                                rules: [{ required: true, message: 'Please input your E-mail address!'},
-                                        {type: 'email', message: 'The input is not valid E-mail!'}]
-                            })(
-                            <Input type="email"
-                                   onChange={this.handleChange}
-                                   name="email"
-                                   id="email"
-                                   placeholder=" Email Address"
-                                   prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                            />
-                            )}
+                            {
+                                getFieldDecorator('emailAddress', {
+                                    rules: [{ required: true, message: 'Please input your E-mail address!'},
+                                        {type: 'email', message: 'The input is not valid E-mail!'}],
+                                    validateTrigger: 'onBlur'
+                                })
+                                (
+                                <Input type="email"
+                                       onChange={this.handleChange}
+                                       name="email"
+                                       id="email"
+                                       placeholder=" Email Address"
+                                       prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                />
+                                )
+                            }
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('password', {
-                                rules: [{ required: true, message: 'Please input your password!' }],
-                            })(
-                            <Input type="password"
-                                   onChange={this.handleChange}
-                                   name="password"
-                                   id="password"
-                                   placeholder=" Password"
-                                   prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>
-                            )}
+                            {
+                                getFieldDecorator('password', {
+                                    rules: [{ required: true, message: 'Please input your password!' }],
+                                    validateTrigger: 'onBlur'
+                                })
+                                (
+                                <Input type="password"
+                                       onChange={this.handleChange}
+                                       name="password"
+                                       id="password"
+                                       placeholder=" Password"
+                                       prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>
+                                )
+                            }
                         </FormItem>
-                        <Button type={'primary'} onClick={this.submit} className={'signup-form-button'} >Submit</Button>
-                        {
-                            (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
-                        }
+                        <Button type={'primary'} onClick={this.submit} loading={this.state.iconLoading} className={'signup-form-button'} >Submit</Button>
                         <p className={'user-agreement'}>By signing up, you agree to our <br/> <a href="#">User Agreement</a></p>
                     </Form>
                 </Card>
@@ -145,5 +167,4 @@ class CreateAccount extends Component {
     }
 }
 const WrappedRegistrationForm = Form.create()(CreateAccount);
-
 export default WrappedRegistrationForm;
