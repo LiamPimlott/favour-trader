@@ -22,7 +22,11 @@ class Main extends Component {
             const config = {
                 headers: {
                     Authorization: authService.getToken()
-                }
+                },
+				params: {
+					has: 'true',
+					wants: 'true'
+				}
             };
 
             axios.get('/api/users/matches', config)

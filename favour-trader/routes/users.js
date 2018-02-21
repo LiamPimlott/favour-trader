@@ -201,20 +201,52 @@ router.put('/update', passport.authenticate('jwt', { session: false }), function
 // GET - MATCHES - returns a json object containing all the users your has and wants line up with.
 router.get('/matches', passport.authenticate('jwt', { session: false }), function(req, res, next) {
 	User.findById(req.user.id, 'wants has', (err, user) => {
+		let hasFilter = req.query.has;
+		let wantsFilter = req.query.wants;
+		
 		if (err) {
 			devDebug(err);
 			next(err);
 		} else {
-			User.find({ 
-				$and: [
-					{has: { $elemMatch: { $in: user.wants } } },
-					{wants: { $elemMatch: { $in: user.has } } },
-				]
-			}).
-			select('name address email about has wants').
-			populate('has').
-			populate('wants').
-			exec( (err, matchedUsers) => {
+			
+			if(hasFilter == 'true' && wantsFilter == 'true')
+			{
+				matches = User.find({ 
+					$and: [
+						{has: { $elemMatch: { $in: user.wants } } },
+						{wants: { $elemMatch: { $in: user.has } } },
+					]
+				}).
+				select('name address email about has wants').
+				populate('has').
+				populate('wants');
+			}
+			else if(hasFilter == 'true' && wantsFilter == 'false')
+			{
+				matches = User.find({ 
+					$and: [
+						{wants: { $elemMatch: { $in: user.has } } },
+					]
+				}).
+				select('name address email about has wants').
+				populate('has').
+				populate('wants');
+			}
+			else if(wantsFilter == 'true' && hasFilter == 'false')
+			{
+				matches = User.find({ 
+					$and: [
+						{has: { $elemMatch: { $in: user.wants } } },
+					]
+				}).
+				select('name address email about has wants').
+				populate('has').
+				populate('wants');
+			}
+		
+		
+		
+			matches.exec( (err, matchedUsers) => {
 				if (err) {
 					devDebug(err);
 					next(err);
