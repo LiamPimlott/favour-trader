@@ -29,7 +29,7 @@ router.get('/auth', passport.authenticate('jwt', { session: false }), function(r
 // GET - USERS - returns the currently logged in user's profile.
 router.get('/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
-	select('name email about has wants').
+	select('name address email about has wants').
 	populate('has').
 	populate('wants'). 
 	exec( (err, foundUser) => {
@@ -47,7 +47,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), functio
 // GET - USERS/ID - returns a user's profile by their id.
 router.get('/:id/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.params.id).
-	select('name about has wants').
+	select('name address.city address.state address.country about has wants').
 	populate('has').
 	populate('wants'). 
 	exec( (err, foundUser) => {

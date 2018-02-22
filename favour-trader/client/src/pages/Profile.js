@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import {Media, Jumbotron, Container} from 'reactstrap';
-import { ListGroup, ListGroupItem } from 'reactstrap';
-import { Card, Icon, Row, Col, Divider, Button } from 'antd';
+import UserOverview from "../components/UserOverview";
+import { Card, Icon, Row, Col, Modal } from 'antd';
+import EditUserOverview from "../components/EditUserOverview";
 import axios from 'axios'
 import './Profile.css';
 
@@ -9,16 +9,62 @@ class Profile extends Component {
     constructor() {
         super();
         this.state = {
-            userName: '',
-            userEmail: '',
-            about: '',
-            has: [],
-            wants: []
+            overview: {
+                firstName: '',
+                lastName: '',
+                country: '',
+                state: '',
+                city: '',
+                postalCode: '',
+                about: '',
+            },
+            skills: {
+                has: [],
+                wants: [],
+            },
+            editUserVisible: false,
+            confirmEditUser: false,
         };
     }
 
+    showEditUser = () => {
+        this.setState({
+            editUserVisible: true
+        });
+    }
+
+    handleEditUserCancel = () => {
+        this.setState({ editUserVisible: false });
+    }
+
+    handleEditUserSave = () => {
+        const editUserForm = this.editUserForm;
+        const { authService, userId } = this.props;
+        editUserForm.validateFields((err, values) => {
+            if (err) {
+            return;
+            }
+
+            this.setState({ confirmEditUser: true });
+            setTimeout(() => {
+                console.log('Received values of form: ', values);
+                editUserForm.resetFields();
+                this.setState({
+                    overview: {...values},
+                    editUserVisible: false,
+                    confirmEditUser: false, 
+                });
+            }, 2000);
+    
+        });
+      }
+
+    saveEditUserFormRef = (form) => {
+        this.editUserForm = form;
+      }
+
     componentDidMount() {
-        const { authService } = this.props;
+        const { authService, userId } = this.props;
         if (authService.loggedIn()) {
             const config = {
                 headers: {
@@ -29,11 +75,19 @@ class Profile extends Component {
             axios.get('/api/users/profile', config)
                 .then(res => res.data.user)
                 .then(userData => this.setState({
-                    userName: userData.name.first + " " + userData.name.last,
-                    userEmail: userData.email,
-                    about: userData.about,
-                    has: userData.has,
-                    wants: userData.wants
+                    overview: {
+                        firstName: userData.name.first,
+                        lastName: userData.name.last,
+                        country: userData.address.country,
+                        state: userData.address.state,
+                        city: userData.address.city,
+                        postalCode: '',
+                        about: userData.about,
+                    },
+                    skills: {
+                        has: userData.has,
+                        wants: userData.wants,
+                    },
                 }))
                 .catch((err) => {
                     console.log(err);
@@ -42,7 +96,7 @@ class Profile extends Component {
     }
 
     renderSkills(skillSet) {
-        const skills = this.state[skillSet];
+        const skills = this.state.skills[skillSet];
         return (
             (skills !== [] ) ? (
                 skills.map(function (skill) {
@@ -60,21 +114,18 @@ class Profile extends Component {
     render() {
         return (
             <div>
-                <Card style={{marginBottom: '2%'}}>
-                    <img src="http://stylopics.com/wp-content/uploads/2013/08/Cool_Trendy_Attitude_Meaningful_fb_Timeline_Covers_Boys_Trendy_Attitude_Cover_Photos_for_Facebook_Timeline-16.jpg"
-                         style={{width: '70%'}}/>
-                    <Divider>Picture</Divider>
-                    <Row  type={'flex'} justify={'space-between'}>
-                        <Col span={8}>
-                            <h5>{this.state.userName}</h5>
-                            <p>{this.state.userEmail}</p>
-                            <p><strong>About me:</strong> {this.state.about}</p>
-                        </Col>
-                        <Col span={8}>
-                            <Button type={'primary'} style={{float: 'right'}}>Edit Profile</Button>
-                        </Col>
-                    </Row>
-                </Card>
+                <UserOverview 
+                    overview={this.state.overview}
+                    onEditUser={this.showEditUser}
+                />
+                <EditUserOverview
+                    ref={this.saveEditUserFormRef}
+                    overview={this.state.overview}
+                    visible={this.state.editUserVisible}
+                    onCancel={this.handleEditUserCancel}
+                    onSave={this.handleEditUserSave}
+                    confirmUpdate={this.state.confirmEditUser}
+                />
                 <Row type="flex" justify="space-around">
                     <Col span={8}>
                         <Card title={'Skills I Have'} extra={<a href="#"><Icon type={'plus'}/></a>}>
