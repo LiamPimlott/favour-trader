@@ -22,6 +22,7 @@ class Profile extends Component {
                 has: [],
                 wants: [],
             },
+            isCurrentUser: false,
             editUserVisible: false,
             confirmEditUser: false,
         };
@@ -93,6 +94,7 @@ class Profile extends Component {
                         has: userData.has,
                         wants: userData.wants,
                     },
+                    isCurrentUser: (userData._id === authService.getProfile().id) ? true : false,
                 }))
                 .catch((err) => {
                     console.log(err);
@@ -119,7 +121,9 @@ class Profile extends Component {
     render() {
         return (
             <div>
-                <UserOverview 
+                <UserOverview
+                    isCurrentUser= {this.state.isCurrentUser} 
+                    profileId={this.state.profileId}
                     overview={this.state.overview}
                     onEditUser={this.showEditUser}
                 />

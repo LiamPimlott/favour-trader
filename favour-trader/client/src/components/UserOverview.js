@@ -6,6 +6,7 @@ class UserOverview extends Component{
    
    render() {
        const { firstName, lastName, country, state, city, about} = this.props.overview;
+       const renderEdit = this.props.isCurrentUser;
        return (
             <Card style={{marginBottom: '2%'}}>
                 <Divider>
@@ -17,11 +18,14 @@ class UserOverview extends Component{
                         <p>{city + ", " + state + ", " + country}</p>
                     </Col>
                     <Col span={12}>
-                        <Button 
-                            type={'primary'}
-                            style={{float: 'right'}}
-                            onClick={this.props.onEditUser}
-                        >Edit Profile</Button>
+                        { renderEdit ? 
+                            (<Button 
+                                type={'primary'}
+                                style={{float: 'right'}}
+                                onClick={this.props.onEditUser}
+                            >Edit Profile</Button>) : 
+                            ''
+                        }
                     </Col>
                 </Row>
                 <Row>
