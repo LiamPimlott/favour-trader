@@ -64,15 +64,20 @@ class Profile extends Component {
       }
 
     componentDidMount() {
-        const { authService, userId } = this.props;
+        const { authService } = this.props;
+        const { match: { params } } = this.props;
+
         if (authService.loggedIn()) {
             const config = {
                 headers: {
                     Authorization: authService.getToken()
                 }
             };
+            const endpoint = params.userId ? 
+                `/api/users/${params.userId}/profile` :
+                `/api/users/profile`;
 
-            axios.get('/api/users/profile', config)
+            axios.get(endpoint, config)
                 .then(res => res.data.user)
                 .then(userData => this.setState({
                     overview: {

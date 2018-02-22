@@ -47,7 +47,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), functio
 // GET - USERS/ID - returns a user's profile by their id.
 router.get('/:id/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.params.id).
-	select('name address.city address.state address.country about has wants').
+	select('name address about has wants').
 	populate('has').
 	populate('wants'). 
 	exec( (err, foundUser) => {
