@@ -14,8 +14,8 @@ class FilterHas extends Main {
                     Authorization: authService.getToken()
                 },
 				params: {
-					has: 'true',
-					wants: 'false'
+					hasFilter: 'true',
+					wantsFilter: 'false'
 				}
             };
 

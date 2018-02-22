@@ -8,7 +8,7 @@ class MatchCard extends Component {
         return (
             <Col span={8}>
                 <Card title={user.name.first + " " + user.name.last.charAt(0) + "."} style={{ width: 300, marginTop: '10px' }}>
-					<Avatar style={{marginBottom: '20px'}}facebookId="768867659" size="100" round={true} />
+					<Avatar style={{marginBottom: '20px'}} src="http://lorempixel.com/400/200/" size="100" round={true} />
 					<textarea 
 						readOnly
 						style={{height: '100px', width: '225px', fontSize: '13px', overflow: "hidden"}}>

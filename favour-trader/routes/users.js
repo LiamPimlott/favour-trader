@@ -201,27 +201,24 @@ router.put('/update', passport.authenticate('jwt', { session: false }), function
 // GET - MATCHES - returns a json object containing all the users your has and wants line up with.
 router.get('/matches', passport.authenticate('jwt', { session: false }), function(req, res, next) {
 	User.findById(req.user.id, 'wants has', (err, user) => {
-		let hasFilter = req.query.has;
-		let wantsFilter = req.query.wants;
+		let hasFilter = req.query.hasFilter;
+		let wantsFilter = req.query.wantsFilter;
 		
 		if (err) {
 			devDebug(err);
 			next(err);
 		} else {
+			matches = User.find({ 
+				$and: [
+					{has: { $elemMatch: { $in: user.wants } } },
+					{wants: { $elemMatch: { $in: user.has } } },
+				]
+			}).
+			select('name address email about has wants').
+			populate('has').
+			populate('wants');
 			
-			if(hasFilter == 'true' && wantsFilter == 'true')
-			{
-				matches = User.find({ 
-					$and: [
-						{has: { $elemMatch: { $in: user.wants } } },
-						{wants: { $elemMatch: { $in: user.has } } },
-					]
-				}).
-				select('name address email about has wants').
-				populate('has').
-				populate('wants');
-			}
-			else if(hasFilter == 'true' && wantsFilter == 'false')
+			if(hasFilter == 'true' && wantsFilter == 'false')
 			{
 				matches = User.find({ 
 					$and: [
@@ -243,7 +240,6 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 				populate('has').
 				populate('wants');
 			}
-		
 		
 		
 			matches.exec( (err, matchedUsers) => {
