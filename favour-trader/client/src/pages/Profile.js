@@ -40,23 +40,52 @@ class Profile extends Component {
 
     handleEditUserSave = () => {
         const editUserForm = this.editUserForm;
-        const { authService, userId } = this.props;
+        const { authService } = this.props;
         editUserForm.validateFields((err, values) => {
             if (err) {
             return;
             }
 
+            const config = {
+                headers: {
+                    Authorization: authService.getToken()
+                }
+            };
+
             this.setState({ confirmEditUser: true });
-            setTimeout(() => {
-                console.log('Received values of form: ', values);
-                editUserForm.resetFields();
-                this.setState({
-                    overview: {...values},
-                    editUserVisible: false,
-                    confirmEditUser: false, 
-                });
-            }, 2000);
-    
+
+            axios.put('api/users/update',{
+                name: {
+                    first: values.firstName,
+                    last: values.lastName
+                },
+                address: {
+                    postalCode: values.postalCode,
+                    city: values.city,
+                    state: values.state,
+                    country: values.country
+                },
+                about: values.about
+            }, config)
+            .then(res => res.data.user)
+            .then(updatedUser => this.setState({
+                overview: {
+                    firstName: updatedUser.name.first,
+                    lastName: updatedUser.name.last,
+                    country: updatedUser.address.country,
+                    state: updatedUser.address.state,
+                    city: updatedUser.address.city,
+                    postalCode: updatedUser.address.postalCode,
+                    about: updatedUser.about,
+                },
+                confirmEditUser: false,
+                editUserVisible: false,
+            }))
+            .then(() => editUserForm.resetFields())
+            .catch((err) => {
+                this.setState({ confirmEditUser: false, editUserVisible: false });
+                console.log(err);
+            });   
         });
       }
 

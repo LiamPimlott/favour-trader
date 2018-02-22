@@ -171,8 +171,7 @@ router.post('/login', function(req, res) {
 
 // PUT - UPDATE - updates a user profile with provided fields
 router.put('/update', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-	//Check if provided skills are valid
-	User.findByIdAndUpdate(req.user.id, req.body, (err, updatedUser) => {
+	User.findByIdAndUpdate(req.user.id, req.body, {new: true}, (err, updatedUser) => {
 		if (err) {
 			devDebug(err);
 			next(err);
