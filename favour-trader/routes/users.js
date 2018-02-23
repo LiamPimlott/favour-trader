@@ -224,10 +224,7 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 					$and: [
 						{wants: { $elemMatch: { $in: user.has } } },
 					]
-				}).
-				select('name address email about has wants').
-				populate('has').
-				populate('wants');
+				});
 			}
 			else if(wantsFilter == 'true' && hasFilter == 'false')
 			{
@@ -235,13 +232,14 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 					$and: [
 						{has: { $elemMatch: { $in: user.wants } } },
 					]
-				}).
+				});
+			}
+		
+			matches.
 				select('name address email about has wants').
 				populate('has').
 				populate('wants');
-			}
-		
-		
+				
 			matches.exec( (err, matchedUsers) => {
 				if (err) {
 					devDebug(err);
