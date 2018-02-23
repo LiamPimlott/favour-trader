@@ -10,17 +10,15 @@ class MatchCard extends Component {
             <Col span={8}>
                 <Card title={user.name.first + " " + user.name.last.charAt(0) + "."} style={{ width: 300, marginTop: '10px' }}>
 					<Avatar style={{marginBottom: '20px'}} src="http://lorempixel.com/400/200/" size="125" round={true} />
+					<a class="active" style={ {position: 'absolute', top: '50%', color:'blue'} } onClick={reveal}>Review Skills</a>
 					<p
 						style={{height: '100px', width: '225px', fontSize: '13px'}}>
 							{user.about}
 					</p>
                     <Button type="primary" style={{marginTop: '10px'}}>
-						<Link to="/Profile/">
+						<Link to={'/Profile/'+user._id}>
 							View Profile
 						</Link>
-					</Button>
-					<Button onClick={reveal} style={{marginTop: '10px'}}>
-							Review Skills
 					</Button>
                 </Card>
             </Col>
