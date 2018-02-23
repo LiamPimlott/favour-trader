@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import UserProfileModal from '../components/UserProfileModal.js';
+import ReviewSkillsModal from '../components/ReviewSkillsModal.js';
 import axios from 'axios'
 import {Row} from 'antd';
 import MatchCard from "../components/MatchCard";
@@ -18,6 +18,8 @@ class Main extends Component {
 
     componentDidMount() {
         const { authService } = this.props;
+		const { match: { params } } = this.props;
+		
         if (authService.loggedIn()) {
             const config = {
                 headers: {
@@ -79,7 +81,7 @@ class Main extends Component {
                         "Sorry, No Matches :( Try updating the skills you are seeking."
                     }
                 </div>
-                <UserProfileModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}
+                <ReviewSkillsModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}
                                user={this.state.selectedUser}/>
             </div>
         );

@@ -103,13 +103,14 @@ class SidePanelContent extends Component {
 								Perfect Matches
 							</Link>
 						</Menu.Item>
-                        <Menu.Item key="5">
-							<Link to="/filterHas">
+                        <Menu.Item key="5"
+							onClick={ ()=>{this.props.params.filtertype} }>
+							<Link to="/hasFilter">
 								What I Have
 							</Link>
 						</Menu.Item>
                         <Menu.Item key="6">
-							<Link to="/filterWants">
+							<Link to="/wantsFilter">
 								What I Want
 							</Link>
 						</Menu.Item>
