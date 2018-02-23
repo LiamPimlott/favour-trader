@@ -9,12 +9,12 @@ class ReviewSkillsModal extends Component {
       return (
         <div>
         { 
-          (user) ? (
+          (user && user.address) ? (
             <div>
               <Modal isOpen={isOpen} toggle={toggle} backdrop={true}>
                 <ModalHeader toggle={toggle}>{user.name.first + " " + user.name.last}</ModalHeader>
                 <ModalBody>
-                  <h1 style={{fontWeight: 'bold'}}>Skilled at:</h6>
+                  <h6 style={{fontWeight: 'bold'}}>Skilled at:</h6>
                   <ul>
                     {
                       user.has.map( (skill) => {
@@ -22,7 +22,7 @@ class ReviewSkillsModal extends Component {
                                   }, this)
                     }
                   </ul> 
-                  <h2 style={{fontWeight: 'bold'}}>Interested in:</h6>
+                  <h6 style={{fontWeight: 'bold'}}>Interested in:</h6>
                   <ul>
                     {
                       user.wants.map( (skill) => {
