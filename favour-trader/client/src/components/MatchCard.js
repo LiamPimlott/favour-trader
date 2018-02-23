@@ -12,10 +12,10 @@ class MatchCard extends Component {
 					<Avatar style={{marginBottom: '20px'}} src="http://lorempixel.com/400/200/" size="125" round={true} />
 					<a class="active" style={ {position: 'absolute', top: '50%', color:'blue'} } onClick={reveal}>Review Skills</a>
 					<p
-						style={{overflow: 'hidden', marginTop: '25px', height: '120px', width: '225px', fontSize: '13px'}}>
+						style={{overflow: 'hidden', marginTop: '15px', height: '120px', width: '225px', fontSize: '13px'}}>
 							{user.about}
 					</p>
-                    <Button type="primary" style={{marginTop: '10px'}}>
+                    <Button type="primary" style={{marginTop: '0px'}}>
 						<Link to={'/Profile/'+user._id}>
 							View Profile
 						</Link>
