@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReviewSkillsModal from '../components/ReviewSkillsModal.js';
 import axios from 'axios'
-import {Row} from 'antd';
+import {Row, Col} from 'antd';
 import MatchCard from "../components/MatchCard";
 
 class Main extends Component {
@@ -58,8 +58,15 @@ class Main extends Component {
                             <Row gutter={16}>
                                 {
                                     matches.map(function (match) {
-                                        return (<MatchCard key={match._id} user={match}
-                                                           reveal={this.toggleModal.bind(this, match)}/>)
+                                        return (
+                                            <Col xs={24} sm={24} md={12} lg={8}>
+                                                <MatchCard 
+                                                    key={match._id}
+                                                    user={match}
+                                                    reveal={this.toggleModal.bind(this, match)}
+                                                />
+                                            </Col>
+                                        )
                                     }, this)
                                 }
                             </Row>
