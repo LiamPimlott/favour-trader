@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Icon, Row, Col, Divider, Button } from 'antd';
+import { Card, Row, Col, Divider, Button } from 'antd';
 import Avatar from 'react-avatar';
 
 class UserOverview extends Component{

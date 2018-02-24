@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Button, Modal, Form, Input, Radio } from 'antd';
+import { Modal, Form, Input } from 'antd';
 const FormItem = Form.Item;
 
 const EditUserOverview = Form.create()(

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import UserOverview from "../components/UserOverview";
-import { Card, Icon, Row, Col, Modal } from 'antd';
+import { Card, Icon, Row, Col } from 'antd';
 import EditUserOverview from "../components/EditUserOverview";
 import axios from 'axios'
 import './Profile.css';
@@ -29,9 +29,7 @@ class Profile extends Component {
     }
 
     showEditUser = () => {
-        this.setState({
-            editUserVisible: true
-        });
+        this.setState({ editUserVisible: true });
     }
 
     handleEditUserCancel = () => {
@@ -43,7 +41,7 @@ class Profile extends Component {
         const { authService } = this.props;
         editUserForm.validateFields((err, values) => {
             if (err) {
-            return;
+                return;
             }
 
             const config = {
@@ -53,7 +51,6 @@ class Profile extends Component {
             };
 
             this.setState({ confirmEditUser: true });
-
             axios.put('api/users/update',{
                 name: {
                     first: values.firstName,
@@ -87,7 +84,7 @@ class Profile extends Component {
                 console.log(err);
             });   
         });
-      }
+    }
 
     saveEditUserFormRef = (form) => {
         this.editUserForm = form;
@@ -103,6 +100,7 @@ class Profile extends Component {
                     Authorization: authService.getToken()
                 }
             };
+
             const endpoint = params.userId ? 
                 `/api/users/${params.userId}/profile` :
                 `/api/users/profile`;
@@ -123,7 +121,7 @@ class Profile extends Component {
                         has: userData.has,
                         wants: userData.wants,
                     },
-                    isCurrentUser: (userData._id === authService.getProfile().id) ? true : false,
+                    isCurrentUser: (userData._id === authService.getProfile().id)
                 }))
                 .catch((err) => {
                     console.log(err);
@@ -151,7 +149,7 @@ class Profile extends Component {
         return (
             <div>
                 <UserOverview
-                    isCurrentUser= {this.state.isCurrentUser} 
+                    isCurrentUser={this.state.isCurrentUser} 
                     profileId={this.state.profileId}
                     overview={this.state.overview}
                     onEditUser={this.showEditUser}
