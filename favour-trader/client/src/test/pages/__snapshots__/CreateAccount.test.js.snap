@@ -6,331 +6,466 @@ exports[`renders correctly 1`] = `
 >
   
   <div
-    className="row"
+    className="ant-card signup-form-card ant-card-bordered"
   >
     <div
-      className="col-md-6 signup-center card"
+      className="ant-card-head"
     >
-      <h5
-        className="p-2 card-title"
+      <div
+        className="ant-card-head-wrapper"
       >
-        Sign Up
-      </h5>
+        <div
+          className="ant-card-head-title"
+        >
+          <div>
+            <h5>
+              Hone your Skills,
+            </h5>
+             
+            <p>
+              Get Started, its free!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="ant-card-body"
+      style={undefined}
+    >
       <form
-        className="p-3"
+        className="ant-form ant-form-horizontal signup-form"
+        onSubmit={[Function]}
       >
         <div
-          className="row form-group"
+          className="ant-row ant-form-item"
+          style={undefined}
         >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="firstName"
-          >
-            First Name: 
-          </label>
           <div
-            className="col col-sm-8"
+            className="ant-form-item-control-wrapper"
           >
-            <input
-              className="form-control"
-              id="firstName"
-              name="firstName"
-              onChange={[Function]}
-              placeholder=" ex. Joe "
-              type="text"
-              value=""
-            />
+            <div
+              className="ant-form-item-control"
+            >
+              <span
+                className="ant-form-item-children"
+              >
+                <span
+                  className="ant-input-affix-wrapper"
+                  style={undefined}
+                >
+                  <span
+                    className="ant-input-prefix"
+                  >
+                    <i
+                      className="anticon anticon-user"
+                      style={
+                        Object {
+                          "color": "rgba(0,0,0,.25)",
+                        }
+                      }
+                    />
+                  </span>
+                  <input
+                    className="ant-input"
+                    data-__field={
+                      Object {
+                        "name": "firstName",
+                      }
+                    }
+                    data-__meta={
+                      Object {
+                        "name": "firstName",
+                        "originalProps": Object {
+                          "disabled": false,
+                          "id": "firstName",
+                          "name": "firstName",
+                          "placeholder": " First Name",
+                          "prefix": <Icon
+                            style={
+                                  Object {
+                                        "color": "rgba(0,0,0,.25)",
+                                      }
+                            }
+                            type="user"
+                      />,
+                          "prefixCls": "ant-input",
+                          "type": "text",
+                        },
+                        "ref": null,
+                        "rules": Array [
+                          Object {
+                            "message": "Please input your first name!",
+                            "required": true,
+                          },
+                          Object {
+                            "message": "First name is too short!",
+                            "min": 2,
+                          },
+                        ],
+                        "trigger": "onChange",
+                        "validate": Array [
+                          Object {
+                            "rules": Array [
+                              Object {
+                                "message": "Please input your first name!",
+                                "required": true,
+                              },
+                              Object {
+                                "message": "First name is too short!",
+                                "min": 2,
+                              },
+                            ],
+                            "trigger": Array [
+                              "onBlur",
+                            ],
+                          },
+                        ],
+                        "validateTrigger": "onBlur",
+                        "valuePropName": "value",
+                      }
+                    }
+                    disabled={false}
+                    id="firstName"
+                    name="firstName"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder=" First Name"
+                    style={null}
+                    type="text"
+                    value=""
+                  />
+                </span>
+              </span>
+            </div>
           </div>
         </div>
         <div
-          className="row form-group"
+          className="ant-row ant-form-item"
+          style={undefined}
         >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="lastName"
-          >
-            Last Name: 
-          </label>
           <div
-            className="col col-sm-8"
+            className="ant-form-item-control-wrapper"
           >
-            <input
-              className="form-control"
-              id="lastName"
-              name="lastName"
-              onChange={[Function]}
-              placeholder=" ex. Blow "
-              type="text"
-              value=""
-            />
+            <div
+              className="ant-form-item-control"
+            >
+              <span
+                className="ant-form-item-children"
+              >
+                <span
+                  className="ant-input-affix-wrapper"
+                  style={undefined}
+                >
+                  <span
+                    className="ant-input-prefix"
+                  >
+                    <i
+                      className="anticon anticon-user"
+                      style={
+                        Object {
+                          "color": "rgba(0,0,0,.25)",
+                        }
+                      }
+                    />
+                  </span>
+                  <input
+                    className="ant-input"
+                    data-__field={
+                      Object {
+                        "name": "lastName",
+                      }
+                    }
+                    data-__meta={
+                      Object {
+                        "name": "lastName",
+                        "originalProps": Object {
+                          "disabled": false,
+                          "id": "lastName",
+                          "name": "lastName",
+                          "placeholder": " Last Name",
+                          "prefix": <Icon
+                            style={
+                                  Object {
+                                        "color": "rgba(0,0,0,.25)",
+                                      }
+                            }
+                            type="user"
+                      />,
+                          "prefixCls": "ant-input",
+                          "type": "text",
+                        },
+                        "ref": null,
+                        "rules": Array [
+                          Object {
+                            "message": "Please input your last name!",
+                            "required": true,
+                          },
+                          Object {
+                            "message": "Last name is too short!",
+                            "min": 2,
+                          },
+                        ],
+                        "trigger": "onChange",
+                        "validate": Array [
+                          Object {
+                            "rules": Array [
+                              Object {
+                                "message": "Please input your last name!",
+                                "required": true,
+                              },
+                              Object {
+                                "message": "Last name is too short!",
+                                "min": 2,
+                              },
+                            ],
+                            "trigger": Array [
+                              "onBlur",
+                            ],
+                          },
+                        ],
+                        "validateTrigger": "onBlur",
+                        "valuePropName": "value",
+                      }
+                    }
+                    disabled={false}
+                    id="lastName"
+                    name="lastName"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder=" Last Name"
+                    style={null}
+                    type="text"
+                    value=""
+                  />
+                </span>
+              </span>
+            </div>
           </div>
         </div>
         <div
-          className="row form-group"
+          className="ant-row ant-form-item"
+          style={undefined}
         >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="streetNumber"
-          >
-            Street Number: 
-          </label>
           <div
-            className="col col-sm-8"
+            className="ant-form-item-control-wrapper"
           >
-            <input
-              className="form-control"
-              id="streetNumber"
-              name="streetNumber"
-              onChange={[Function]}
-              placeholder=" ex. 100 "
-              type="text"
-              value=""
-            />
+            <div
+              className="ant-form-item-control"
+            >
+              <span
+                className="ant-form-item-children"
+              >
+                <span
+                  className="ant-input-affix-wrapper"
+                  style={undefined}
+                >
+                  <span
+                    className="ant-input-prefix"
+                  >
+                    <i
+                      className="anticon anticon-mail"
+                      style={
+                        Object {
+                          "color": "rgba(0,0,0,.25)",
+                        }
+                      }
+                    />
+                  </span>
+                  <input
+                    className="ant-input"
+                    data-__field={
+                      Object {
+                        "name": "emailAddress",
+                      }
+                    }
+                    data-__meta={
+                      Object {
+                        "name": "emailAddress",
+                        "originalProps": Object {
+                          "disabled": false,
+                          "id": "email",
+                          "name": "email",
+                          "placeholder": " Email Address",
+                          "prefix": <Icon
+                            style={
+                                  Object {
+                                        "color": "rgba(0,0,0,.25)",
+                                      }
+                            }
+                            type="mail"
+                      />,
+                          "prefixCls": "ant-input",
+                          "type": "email",
+                        },
+                        "ref": null,
+                        "rules": Array [
+                          Object {
+                            "message": "Please input your E-mail address!",
+                            "required": true,
+                          },
+                          Object {
+                            "message": "The input is not valid E-mail!",
+                            "type": "email",
+                          },
+                        ],
+                        "trigger": "onChange",
+                        "validate": Array [
+                          Object {
+                            "rules": Array [
+                              Object {
+                                "message": "Please input your E-mail address!",
+                                "required": true,
+                              },
+                              Object {
+                                "message": "The input is not valid E-mail!",
+                                "type": "email",
+                              },
+                            ],
+                            "trigger": Array [
+                              "onBlur",
+                            ],
+                          },
+                        ],
+                        "validateTrigger": "onBlur",
+                        "valuePropName": "value",
+                      }
+                    }
+                    disabled={false}
+                    id="emailAddress"
+                    name="email"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder=" Email Address"
+                    style={null}
+                    type="email"
+                    value=""
+                  />
+                </span>
+              </span>
+            </div>
           </div>
         </div>
         <div
-          className="row form-group"
+          className="ant-row ant-form-item"
+          style={undefined}
         >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="street"
-          >
-            Street: 
-          </label>
           <div
-            className="col col-sm-8"
+            className="ant-form-item-control-wrapper"
           >
-            <input
-              className="form-control"
-              id="street"
-              name="street"
-              onChange={[Function]}
-              placeholder=" ex. Favour Street "
-              type="text"
-              value={undefined}
-            />
+            <div
+              className="ant-form-item-control"
+            >
+              <span
+                className="ant-form-item-children"
+              >
+                <span
+                  className="ant-input-affix-wrapper"
+                  style={undefined}
+                >
+                  <span
+                    className="ant-input-prefix"
+                  >
+                    <i
+                      className="anticon anticon-lock"
+                      style={
+                        Object {
+                          "color": "rgba(0,0,0,.25)",
+                        }
+                      }
+                    />
+                  </span>
+                  <input
+                    className="ant-input"
+                    data-__field={
+                      Object {
+                        "name": "password",
+                      }
+                    }
+                    data-__meta={
+                      Object {
+                        "name": "password",
+                        "originalProps": Object {
+                          "disabled": false,
+                          "id": "password",
+                          "name": "password",
+                          "placeholder": " Password",
+                          "prefix": <Icon
+                            style={
+                                  Object {
+                                        "color": "rgba(0,0,0,.25)",
+                                      }
+                            }
+                            type="lock"
+                      />,
+                          "prefixCls": "ant-input",
+                          "type": "password",
+                        },
+                        "ref": null,
+                        "rules": Array [
+                          Object {
+                            "message": "Please input your password!",
+                            "required": true,
+                          },
+                        ],
+                        "trigger": "onChange",
+                        "validate": Array [
+                          Object {
+                            "rules": Array [
+                              Object {
+                                "message": "Please input your password!",
+                                "required": true,
+                              },
+                            ],
+                            "trigger": Array [
+                              "onBlur",
+                            ],
+                          },
+                        ],
+                        "validateTrigger": "onBlur",
+                        "valuePropName": "value",
+                      }
+                    }
+                    disabled={false}
+                    id="password"
+                    name="password"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder=" Password"
+                    style={null}
+                    type="password"
+                    value=""
+                  />
+                </span>
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="postalCode"
-          >
-            Postal Code/ZIP: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              className="form-control"
-              id="postalCode"
-              name="postalCode"
-              onChange={[Function]}
-              placeholder=" ex. A1A 1A1 "
-              type="text"
-              value=""
-            />
-          </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="country"
-          >
-            Country: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              className="form-control"
-              id="country"
-              name="country"
-              onChange={[Function]}
-              placeholder=" ex. Canada "
-              type="text"
-              value=""
-            />
-          </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="city"
-          >
-            City: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              className="form-control"
-              id="city"
-              name="city"
-              onChange={[Function]}
-              placeholder=" ex. Winnipeg "
-              type="text"
-              value=""
-            />
-          </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="state"
-          >
-            State/Province: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              className="form-control"
-              id="state"
-              name="state"
-              onChange={[Function]}
-              placeholder=" ex. Manitoba "
-              type="text"
-              value=""
-            />
-          </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="email"
-          >
-            Email: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              className="form-control"
-              id="email"
-              name="email"
-              onChange={[Function]}
-              placeholder=" ex. favourtrader@gmail.com"
-              type="email"
-              value=""
-            />
-          </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="confirmEmail"
-          >
-            Confirm Email: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              className="form-control"
-              id="confirmEmail"
-              name="confirmEmail"
-              placeholder=" ex. favourtrader@gmail.com"
-              type="email"
-            />
-          </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="password"
-          >
-            Password: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              alue=""
-              className="form-control"
-              id="password"
-              name="password"
-              onChange={[Function]}
-              placeholder=" ex. Password"
-              type="password"
-            />
-          </div>
-        </div>
-        <div
-          className="row form-group"
-        >
-          <label
-            className="text-left col-sm-4 col-form-label"
-            htmlFor="confirmPassword"
-          >
-            Confirm Password: 
-          </label>
-          <div
-            className="col col-sm-8"
-          >
-            <input
-              className="form-control"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder=" ex. Password"
-              type="password"
-            />
-          </div>
-        </div>
-        <div
-          className="form-group"
-        >
-          <label
-            className=""
-            htmlFor="exampleSelectMulti"
-          >
-            Skills You Have
-          </label>
-          <ul
-            className="SkillList"
-            id="exampleSelectMulti"
-            multiple={true}
-            name="selectMulti"
-          />
-        </div>
-        <div
-          className="form-group"
-        >
-          <label
-            className=""
-            htmlFor="exampleSelectMulti"
-          >
-            Skills You Want
-          </label>
-          <ul
-            className="SkillList"
-            id="exampleSelectMulti"
-            multiple={true}
-            name="selectMulti"
-          />
         </div>
         <button
-          className="btn btn-secondary"
+          className="ant-btn signup-form-button ant-btn-primary"
           onClick={[Function]}
           type="button"
         >
-          Submit
+          <span>
+            Submit
+          </span>
         </button>
-        
+        <p
+          className="user-agreement"
+        >
+          By signing up, you agree to our 
+          <br />
+           
+          <a
+            href="#"
+          >
+            User Agreement
+          </a>
+        </p>
       </form>
     </div>
   </div>
