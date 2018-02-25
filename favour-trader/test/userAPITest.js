@@ -18,10 +18,33 @@ chai.use(chaiHttp);
 const users = [
     {
         email: "test@test.ca",
-        password: "assword",
-            firstName: "Mark",
-            lastName: "Ripptoe",
-            postalCode: "r3p1z2"
+        password: "password",
+        firstName: "Mark",
+        lastName: "Ripptoe",
+    },
+    {
+        email: "",
+        password: "password",
+        firstName: "Mark",
+        lastName: "Ripptoe",
+    },
+    {
+        email: "test@test.ca",
+        password: "",
+        firstName: "Mark",
+        lastName: "Ripptoe",
+    },
+    {
+        email: "test@test.ca",
+        password: "password",
+        firstName: "M",
+        lastName: "Ripptoe",
+    },
+    {
+        email: "test@test.ca",
+        password: "password",
+        firstName: "Ma",
+        lastName: "R",
     }
 ];
 
@@ -115,7 +138,8 @@ const users = [
             mongoose.disconnect();
             done();
         });
-        it("it should make a user", function (done) {
+
+        it("it should register a user", function (done) {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[0])
@@ -125,18 +149,15 @@ const users = [
                     done();
                 })
         });
-        it("it should not make dupe user", function (done) {
+
+        it("it should not register duplicate user", function (done) {
             const user = new User();
             user.name = {
                 "first": "Mark",
                 "last": "Ripptoe",
             };
-            user.address = {
-                "postalCode": "r0x0x0"
-            };
             user.email = "test@test.ca";
             user.password = "asdsad";
-
             const saveUser = new Promise( (resolve) => {
                 user.save(()=>{
                     resolve('created');
@@ -149,12 +170,54 @@ const users = [
                     .post('/api/users/register')
                     .send(users[0])
                     .end((err, res) => {
-                        // console.log(JSON.stringify(res.body))
                         res.body.should.have.property("success").eql(false);
                         res.body.should.be.a('object');
                         done();
                     })
             });
+        });
 
-        })
+        it("Cannot register user without email", function (done) {
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[1])
+                .end((err, res) => {
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.be.a('object');
+                    done();
+                })
+        });
+
+        it("Cannot register user without password", function (done) {
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[2])
+                .end((err, res) => {
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.be.a('object');
+                    done();
+                })
+        });
+
+        it("Cannot register user with invalid first name", function (done) {
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[3])
+                .end((err, res) => {
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.be.a('object');
+                    done();
+                })
+        });
+
+        it("Cannot register user with invalid last name", function (done) {
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[4])
+                .end((err, res) => {
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.be.a('object');
+                    done();
+                })
+        });
      });

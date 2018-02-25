@@ -22,7 +22,8 @@ class RouteRenderer extends Component {
           <Route exact path='/' render={(routeProps) => (<Main {...routeProps} {...this.props}/>)}/>
 		  <Route exact path='/filterHas' render={(routeProps) => (<FilterHas {...routeProps} {...this.props}/>)}/>
 		  <Route exact path='/filterWants' render={(routeProps) => (<FilterWants {...routeProps} {...this.props}/>)}/>
-          <Route exact path='/profile' render={(routeProps) => (<Profile {...routeProps} {...this.props}/>)}/>
+          <Route exact path='/profile' component={(routeProps) => (<Profile {...routeProps} {...this.props}/>)}/>
+          <Route path='/profile/:userId' component={(routeProps) => (<Profile {...routeProps} {...this.props}/>)}/>
           <Route path='/login' render={(routeProps) => (<Login {...routeProps} {...this.props} />)}/>
           <Route path='/create-account' render={(routeProps) => (<CreateAccount {...routeProps} {...this.props} />)}/>         
           <Route path='*' component={NotFound}/>

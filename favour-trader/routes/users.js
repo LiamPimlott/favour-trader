@@ -29,7 +29,7 @@ router.get('/auth', passport.authenticate('jwt', { session: false }), function(r
 // GET - USERS - returns the currently logged in user's profile.
 router.get('/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
-	select('name email about has wants').
+	select('name address email about has wants').
 	populate('has').
 	populate('wants'). 
 	exec( (err, foundUser) => {
@@ -47,7 +47,7 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), functio
 // GET - USERS/ID - returns a user's profile by their id.
 router.get('/:id/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.params.id).
-	select('name about has wants').
+	select('name address about has wants').
 	populate('has').
 	populate('wants'). 
 	exec( (err, foundUser) => {
@@ -103,18 +103,7 @@ router.post('/register', function(req, res) {
 			name: {
 				first: req.body.firstName,
 				last: req.body.lastName
-			},
-			address: {
-				number: req.body.streetNumber,
-				street: req.body.streetName,
-				postalCode: req.body.postalCode,
-				city: req.body.city,
-				state: req.body.state,
-				country: req.body.country
-            },
-			about: req.body.about,
-			has: req.body.has,
-			wants: req.body.wants
+			}
 		});
 		// attempt to save the new user
 		newUser.save(function(err, user) {
@@ -182,8 +171,7 @@ router.post('/login', function(req, res) {
 
 // PUT - UPDATE - updates a user profile with provided fields
 router.put('/update', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-	//Check if provided skills are valid
-	User.findByIdAndUpdate(req.user.id, req.body, (err, updatedUser) => {
+	User.findByIdAndUpdate(req.user.id, req.body, {new: true}, (err, updatedUser) => {
 		if (err) {
 			devDebug(err);
 			next(err);
