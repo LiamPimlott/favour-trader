@@ -164,12 +164,12 @@ class Profile extends Component {
                 />
                 <Row type="flex" justify="space-around">
                     <Col span={8}>
-                        <Card title={'Skills I Have'} extra={<a href="#"><Icon type={'plus'}/></a>}>
+                        <Card title={'Looking For'} extra={<a href="#"><Icon type={'plus'}/></a>}>
                             {this.renderSkills('wants')}
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card title={'Looking For'} extra={<a href="#"><Icon type={'plus'}/></a>}>
+                        <Card title={'Skills I Want'} extra={<a href="#"><Icon type={'plus'}/></a>}>
                             {this.renderSkills('has')}
                         </Card>
                     </Col>
