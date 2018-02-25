@@ -33,7 +33,7 @@ class ReviewSkillsModal extends Component {
                 </ModalBody>
                 <ModalFooter>
                   <Button type="primary" onClick={toggle}>
-						<Link to="/Profile/">
+						<Link to={'/Profile/'+user._id}>
 							View Profile
 						</Link>
 				  </Button>
