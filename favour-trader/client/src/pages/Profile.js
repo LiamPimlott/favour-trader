@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import UserOverview from "../components/UserOverview";
-import { Card, Icon, Row, Col } from 'antd';
 import EditUserOverview from "../components/EditUserOverview";
+import NewSkillModal from "../components/NewSkillModal";
+import { Card, Button, Icon, Row, Col } from 'antd';
 import axios from 'axios'
 import './Profile.css';
 
@@ -22,18 +23,21 @@ class Profile extends Component {
                 has: [],
                 wants: [],
             },
+            skillCategories: [],
             isCurrentUser: false,
             editUserVisible: false,
             confirmEditUser: false,
+            showNewSkillModal:false,
+            confirmNewSkill: false,
         };
     }
 
-    showEditUser = () => {
-        this.setState({ editUserVisible: true });
+    saveEditUserFormRef = (form) => {
+        this.editUserForm = form;
     }
 
-    handleEditUserCancel = () => {
-        this.setState({ editUserVisible: false });
+    toggleEditUserModal = () => {
+        this.setState({ editUserVisible: !this.state.editUserVisible });
     }
 
     handleEditUserSave = () => {
@@ -86,9 +90,48 @@ class Profile extends Component {
         });
     }
 
-    saveEditUserFormRef = (form) => {
-        this.editUserForm = form;
-      }
+    saveNewSkillFormRef = (form) => {
+        this.newSkillForm = form;
+    }
+
+    toggleNewSkillModal = () => {
+        this.setState({ showNewSkillModal: !this.state.showNewSkillModal });
+    }
+
+    handleNewSkillSave = () => {
+        const newSkillForm = this.newSkillForm;
+        newSkillForm.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            const { authService } = this.props;
+            const updatedSkills = [...this.state.skills[values.skillSet], {
+                category: values.skillCategory,
+                description: values.description,
+            }];
+            const config = {
+                headers: {
+                    Authorization: authService.getToken()
+                }
+            };
+            this.setState({ confirmingNewSkill: true });
+            axios.put('api/users/update', { [values.skillSet]: updatedSkills }, config)
+            .then(res => res.data.user)
+            .then(updatedUser => this.setState({
+                skills: {
+                    has: updatedUser.has,
+                    wants: updatedUser.wants,
+                },
+                confirmingNewSkill: false,
+                showNewSkillModal: false,
+            }))
+            .then(() => newSkillForm.resetFields())
+            .catch((err) => {
+                this.setState({ confirmingNewSkill: false, showNewSkillModal: false });
+                console.log(err);
+            });   
+        });
+    }
 
     componentDidMount() {
         const { authService } = this.props;
@@ -101,11 +144,11 @@ class Profile extends Component {
                 }
             };
 
-            const endpoint = params.userId ? 
+            const profileEndpoint = params.userId ? 
                 `/api/users/${params.userId}/profile` :
                 `/api/users/profile`;
 
-            axios.get(endpoint, config)
+            axios.get(profileEndpoint, config)
                 .then(res => res.data.user)
                 .then(userData => this.setState({
                     overview: {
@@ -123,9 +166,18 @@ class Profile extends Component {
                     },
                     isCurrentUser: (userData._id === authService.getProfile().id)
                 }))
-                .catch((err) => {
+                .catch( err => {
                     console.log(err);
                 });
+
+            axios.get("api/skills/all")
+                .then(res => res.data)
+                .then(categories => this.setState({
+                    skillCategories: categories,
+                }))
+                .catch( err => {
+                    console.log(err);
+                })
         }
     }
 
@@ -135,10 +187,8 @@ class Profile extends Component {
             (skills !== [] ) ? (
                 skills.map(function (skill) {
                     return (
-                        <Card key={skill._id} id={'skill'} title={skill.skill} extra={<a href="#"><Icon type={'delete'}/></a>}>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan interdum urna
-                                eu lacinia. Fusce sed lacus ultricies nunc laoreet ornare. Pellentesque aliquam tincidunt
-                                neque, sed fringilla mauris pharetra a.	</p>
+                        <Card key={skill._id} id={'skill'} title={skill.category.skill} extra={<a href="#"><Icon type={'delete'}/></a>}>
+                            <p>{skill.description}</p>
                         </Card> )
                 })
             ) : ('')
@@ -152,23 +202,38 @@ class Profile extends Component {
                     isCurrentUser={this.state.isCurrentUser} 
                     profileId={this.state.profileId}
                     overview={this.state.overview}
-                    onEditUser={this.showEditUser}
+                    onEditUser={this.toggleEditUserModal}
                 />
                 <EditUserOverview
                     ref={this.saveEditUserFormRef}
                     overview={this.state.overview}
                     visible={this.state.editUserVisible}
-                    onCancel={this.handleEditUserCancel}
+                    onCancel={this.toggleEditUserModal}
                     onSave={this.handleEditUserSave}
                     confirmUpdate={this.state.confirmEditUser}
                 />
+                <NewSkillModal
+                    ref={this.saveNewSkillFormRef}
+                    categories={this.state.skillCategories}
+                    visible={this.state.showNewSkillModal}
+                    onCancel={this.toggleNewSkillModal}
+                    onSave={this.handleNewSkillSave}
+                    confirmUpdate={this.state.confirmNewSkill}
+                />
                 <Row type="flex" justify="space-around">
-                    <Col span={8}>
-                        <Card title={'Looking For'} extra={<a href="#"><Icon type={'plus'}/></a>}>
+                    <Col span={12}>
+                        <Card title={'Looking For'} extra={
+                            <Button
+                                onClick={this.toggleNewSkillModal}
+                                type="primary"
+                                shape="circle"
+                                icon="plus" />
+                            }
+                        >
                             {this.renderSkills('wants')}
                         </Card>
                     </Col>
-                    <Col span={8}>
+                    <Col span={12}>
                         <Card title={'Skills I Want'} extra={<a href="#"><Icon type={'plus'}/></a>}>
                             {this.renderSkills('has')}
                         </Card>
