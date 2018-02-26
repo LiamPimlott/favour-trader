@@ -5,6 +5,7 @@ import { mount, shallow, configure } from 'enzyme';
 import CreateAccount from '../../pages/CreateAccount.js';
 import AuthServiceMock from '../components/AuthServiceMock.js';
 import Adapter from 'enzyme-adapter-react-16';
+import toJson from 'enzyme-to-json';
 
 beforeEach(function () {
     // import and pass your custom axios instance to this method
@@ -37,34 +38,80 @@ it('verify CreateAccount Page', function () {
     expect(wrapper.find('input#password').length).toEqual(1);
 });
 
-it('should fill the signup form', function () {
-    let formData = {firstName: 'FirstName', lastName: 'LastName', emailAddress: 'ex@ex.com', password: 'password'};
-    var authServiceMock = new AuthServiceMock();
+
+it('should verify error validation messages on Empty fields', function () {
+    let authServiceMock = new AuthServiceMock();
     const wrapper = mount(<CreateAccount authService={authServiceMock} />);
     //formElements
     const firstNameInput = wrapper.find('input#firstName');
     const lastNameInput = wrapper.find('input#lastName');
     const emailInput = wrapper.find('input#emailAddress');
     const passwordInput = wrapper.find('input#password');
-    //fill the form
-    firstNameInput.value = formData.firstName;
-    lastNameInput.value = formData.lastName;
-    emailInput.value = formData.emailAddress;
-    passwordInput.value = formData.password;
-    //verify the results
-    expect(firstNameInput.value).toBe('FirstName');
-    expect(lastNameInput.value).toBe('LastName');
-    expect(emailInput.value).toBe('ex@ex.com');
-    expect(passwordInput.value).toBe('password');
+
+    firstNameInput.simulate('blur');
+    lastNameInput.simulate('blur');
+    emailInput.simulate('blur');
+    passwordInput.simulate('blur');
+    expect(wrapper.find('.ant-form-explain').length).toBe(4);
+    expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe('Please input your first name!');
+    expect(wrapper.find('.ant-form-explain').get(1).props.children).toBe('Please input your last name!');
+    expect(wrapper.find('.ant-form-explain').get(2).props.children).toBe('Please input your E-mail address!');
+    expect(wrapper.find('.ant-form-explain').get(3).props.children).toBe('Please input your password!');
 });
 
-it('should verify error validation messages', function () {
-    var authServiceMock = new AuthServiceMock();
+describe('should verify error validation messages on invalidate fields', function () {
+    it('should throw first name is too short', function () {
+        let authServiceMock = new AuthServiceMock();
+        const wrapper = mount(<CreateAccount authService={authServiceMock} />);
+
+        const firstNameInput = wrapper.find('input#firstName');
+        firstNameInput.simulate('change', {target: {name: 'firstName', value: 'i'}});
+        firstNameInput.simulate('blur');
+
+        expect(wrapper.find('.ant-form-explain').length).toBe(1);
+        expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe("First name is too short!");
+    });
+
+    it('should throw last name is too short', function () {
+        let authServiceMock = new AuthServiceMock();
+        const wrapper = mount(<CreateAccount authService={authServiceMock} />);
+
+        const firstNameInput = wrapper.find('input#lastName');
+        firstNameInput.simulate('change', {target: {name: 'lastName', value: 'i'}});
+        firstNameInput.simulate('blur');
+
+        expect(wrapper.find('.ant-form-explain').length).toBe(1);
+        expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe("Last name is too short!");
+    });
+
+    it('should throw email is not valid', function () {
+        let authServiceMock = new AuthServiceMock();
+        const wrapper = mount(<CreateAccount authService={authServiceMock} />);
+
+        const firstNameInput = wrapper.find('input#emailAddress');
+        firstNameInput.simulate('change', {target: {name: 'email', value: 'i'}});
+        firstNameInput.simulate('blur');
+
+        expect(wrapper.find('.ant-form-explain').length).toBe(1);
+        expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe("The input is not valid E-mail!");
+    });
+
+
+});
+
+it.skip('should error on invalid submission', function () {
+    let authServiceMock = new AuthServiceMock();
     const wrapper = mount(<CreateAccount authService={authServiceMock} />);
     //formElements
     const firstNameInput = wrapper.find('input#firstName');
     const lastNameInput = wrapper.find('input#lastName');
-    firstNameInput.value = "";
-    lastNameInput.simulate('focus');
-    expect(wrapper.find('.ant-form-explain').length).toBe(1);
-});
+    const emailInput = wrapper.find('input#emailAddress');
+    const passwordInput = wrapper.find('input#password');
+    const submitBtn = wrapper.find('Button[type="primary"]');
+
+    firstNameInput.simulate('change', { target: {name: 'firstName', value: 'Ismail'}});
+    lastNameInput.simulate('change', { target: {name: 'lastName', value: 'ismail'}});
+    emailInput.simulate('change', { target: {name: 'email', value: 'example@gmail.com'}});
+    passwordInput.simulate('change', { target: {name: 'password', value: 'password'}});
+    submitBtn.simulate('click');
+}); 
