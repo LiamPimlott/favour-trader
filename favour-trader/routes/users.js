@@ -30,8 +30,8 @@ router.get('/auth', passport.authenticate('jwt', { session: false }), function(r
 router.get('/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
 	select('name address email about has wants').
-	populate('has').
-	populate('wants'). 
+	populate('has.category').
+	populate('wants.category'). 
 	exec( (err, foundUser) => {
 		if (err) {
 			devDebug(err);
@@ -171,7 +171,10 @@ router.post('/login', function(req, res) {
 
 // PUT - UPDATE - updates a user profile with provided fields
 router.put('/update', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-	User.findByIdAndUpdate(req.user.id, req.body, {new: true}, (err, updatedUser) => {
+	User.findByIdAndUpdate(req.user.id, req.body, {new: true})
+	.populate('has.category')
+	.populate('wants.category')
+	.exec( (err, updatedUser) => {
 		if (err) {
 			devDebug(err);
 			next(err);

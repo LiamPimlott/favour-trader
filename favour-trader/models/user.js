@@ -64,18 +64,24 @@ var UserSchema = new mongoose.Schema({
   about: {
     type: String
   },
-  has: {
-    type: [{
+  has: [{
+      category: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Skill"
+      },
+      description: {
+        type: String
+      }
+  }],
+  wants: [{
+    category: { 
       type: mongoose.Schema.Types.ObjectId,
       ref: "Skill"
-    }]
-  },
-  wants: {
-    type: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Skill"
-    }]
-  }
+    },
+    description: {
+      type: String
+    }
+  }],
 });
 
 // Save the user's hashed password
