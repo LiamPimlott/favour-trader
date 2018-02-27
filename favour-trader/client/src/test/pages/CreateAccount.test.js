@@ -5,21 +5,35 @@ import { mount, shallow, configure } from 'enzyme';
 import CreateAccount from '../../pages/CreateAccount.js';
 import AuthServiceMock from '../components/AuthServiceMock.js';
 import Adapter from 'enzyme-adapter-react-16';
-import toJson from 'enzyme-to-json';
+
+var authServiceMock, wrapper;
+//formElements
+var firstNameInput, lastNameInput, emailInput, passwordInput, submitBtn;
 
 beforeEach(function () {
-    // import and pass your custom axios instance to this method
     configure({ adapter: new Adapter() });
     moxios.install()
+    authServiceMock = new AuthServiceMock();
+    wrapper = mount(<CreateAccount authService={authServiceMock} />);
+    //formElements
+    firstNameInput = wrapper.find('input#firstName');
+    lastNameInput = wrapper.find('input#lastName');
+    emailInput = wrapper.find('input#emailAddress');
+    passwordInput = wrapper.find('input#password');
+    submitBtn = wrapper.find('Button[type="primary"]');
 })
 
 afterEach(function () {
-    // import and pass your custom axios instance to this method
     moxios.uninstall()
+    authServiceMock = null;
+    wrapper = null;
+    firstNameInput = null;
+    lastNameInput = null;
+    emailInput = null;
+    passwordInput = null;
 })
 
 it('renders correctly', () => {
-    var authServiceMock = new AuthServiceMock();
     const tree = renderer
         .create(<CreateAccount authService={authServiceMock} />)
         .toJSON();
@@ -27,27 +41,17 @@ it('renders correctly', () => {
 });
 
 it('verify CreateAccount Page', function () {
-    var authServiceMock = new AuthServiceMock();
-    const wrapper = mount(<CreateAccount authService={authServiceMock} />);
     expect(wrapper.contains([<h5>Hone your Skills,</h5>])).toEqual(true);
     expect(wrapper.contains([<p>Get Started, its free!</p>])).toEqual(true);
     expect(wrapper.contains([<span>Submit</span>])).toEqual(true);
-    expect(wrapper.find('input#firstName').length).toEqual(1);
-    expect(wrapper.find('input#lastName').length).toEqual(1);
-    expect(wrapper.find('input#emailAddress').length).toEqual(1);
-    expect(wrapper.find('input#password').length).toEqual(1);
+    expect(firstNameInput.length).toEqual(1);
+    expect(lastNameInput.length).toEqual(1);
+    expect(emailInput.length).toEqual(1);
+    expect(passwordInput.length).toEqual(1);
 });
 
 
 it('should verify error validation messages on Empty fields', function () {
-    let authServiceMock = new AuthServiceMock();
-    const wrapper = mount(<CreateAccount authService={authServiceMock} />);
-    //formElements
-    const firstNameInput = wrapper.find('input#firstName');
-    const lastNameInput = wrapper.find('input#lastName');
-    const emailInput = wrapper.find('input#emailAddress');
-    const passwordInput = wrapper.find('input#password');
-
     firstNameInput.simulate('blur');
     lastNameInput.simulate('blur');
     emailInput.simulate('blur');
@@ -59,56 +63,23 @@ it('should verify error validation messages on Empty fields', function () {
     expect(wrapper.find('.ant-form-explain').get(3).props.children).toBe('Please input your password!');
 });
 
-describe('should verify error validation messages on invalidate fields', function () {
-    it('should throw first name is too short', function () {
-        let authServiceMock = new AuthServiceMock();
-        const wrapper = mount(<CreateAccount authService={authServiceMock} />);
+it('should verify error validation messages on invalidate fields', function () {
+    firstNameInput.simulate('change', {target: {name: 'firstName', value: 'i'}});
+    firstNameInput.simulate('blur');
 
-        const firstNameInput = wrapper.find('input#firstName');
-        firstNameInput.simulate('change', {target: {name: 'firstName', value: 'i'}});
-        firstNameInput.simulate('blur');
+    lastNameInput.simulate('change', {target: {name: 'lastName', value: 'i'}});
+    lastNameInput.simulate('blur');
 
-        expect(wrapper.find('.ant-form-explain').length).toBe(1);
-        expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe("First name is too short!");
-    });
+    emailInput.simulate('change', {target: {name: 'email', value: 'i'}});
+    emailInput.simulate('blur');
 
-    it('should throw last name is too short', function () {
-        let authServiceMock = new AuthServiceMock();
-        const wrapper = mount(<CreateAccount authService={authServiceMock} />);
-
-        const firstNameInput = wrapper.find('input#lastName');
-        firstNameInput.simulate('change', {target: {name: 'lastName', value: 'i'}});
-        firstNameInput.simulate('blur');
-
-        expect(wrapper.find('.ant-form-explain').length).toBe(1);
-        expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe("Last name is too short!");
-    });
-
-    it('should throw email is not valid', function () {
-        let authServiceMock = new AuthServiceMock();
-        const wrapper = mount(<CreateAccount authService={authServiceMock} />);
-
-        const firstNameInput = wrapper.find('input#emailAddress');
-        firstNameInput.simulate('change', {target: {name: 'email', value: 'i'}});
-        firstNameInput.simulate('blur');
-
-        expect(wrapper.find('.ant-form-explain').length).toBe(1);
-        expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe("The input is not valid E-mail!");
-    });
-
-
+    expect(wrapper.find('.ant-form-explain').length).toBe(3);
+    expect(wrapper.find('.ant-form-explain').get(0).props.children).toBe("First name is too short!");
+    expect(wrapper.find('.ant-form-explain').get(1).props.children).toBe("Last name is too short!");
+    expect(wrapper.find('.ant-form-explain').get(2).props.children).toBe("The input is not valid E-mail!");
 });
 
 it.skip('should error on invalid submission', function () {
-    let authServiceMock = new AuthServiceMock();
-    const wrapper = mount(<CreateAccount authService={authServiceMock} />);
-    //formElements
-    const firstNameInput = wrapper.find('input#firstName');
-    const lastNameInput = wrapper.find('input#lastName');
-    const emailInput = wrapper.find('input#emailAddress');
-    const passwordInput = wrapper.find('input#password');
-    const submitBtn = wrapper.find('Button[type="primary"]');
-
     firstNameInput.simulate('change', { target: {name: 'firstName', value: 'Ismail'}});
     lastNameInput.simulate('change', { target: {name: 'lastName', value: 'ismail'}});
     emailInput.simulate('change', { target: {name: 'email', value: 'example@gmail.com'}});
