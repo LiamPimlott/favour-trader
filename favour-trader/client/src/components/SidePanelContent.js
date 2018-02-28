@@ -3,10 +3,8 @@ import axios from 'axios'
 import './SidePanelContent.css';
 import { Link } from 'react-router-dom';
 import {Menu, Icon} from 'antd';
-import Main from '../pages/Main.js';
 
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
 class SidePanelContent extends Component {
     constructor() {

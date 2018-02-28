@@ -5,9 +5,7 @@ import AuthService from './components/AuthService.js';
 import { Link } from 'react-router-dom';
 import './App.css';
 import {Menu, Icon, Layout} from 'antd';
-const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
-const {Header, Content, Sider, Footer} = Layout;
+const {Header, Content, Sider} = Layout;
 
 class App extends Component {
     constructor() {

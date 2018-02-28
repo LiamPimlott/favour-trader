@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Fade } from "reactstrap";
 import { Redirect } from 'react-router-dom';
 import {Card,  Form, Icon, Input, Button } from 'antd';
 import './Login.css';
@@ -118,7 +117,7 @@ class Login extends Component {
                                     onClick={this.submit} loading={this.state.iconLoading}  className="login-form-button">
                                 Log in
                             </Button>
-                            Or <a href="">register now!</a>
+                            Or <a href="/create-account">register now!</a>
                         </FormItem>
                     </Form>
                 </Card>
