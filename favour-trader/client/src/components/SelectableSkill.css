@@ -1,0 +1,27 @@
+.skillItem {
+    padding: 2px;
+    border-bottom-width: 1px;
+    border-bottom-style: inset;
+    border-bottom-left-radius: inherit;
+}
+
+.descriptionBox {
+    width: 100%;
+    border-radius: 2px;
+    border: none;
+}
+
+.expansionTD {
+    display: flex;
+    text-align: center;
+    position: fixed;
+}
+
+.checkboxTD {
+    display: flex;
+    text-align: center;
+}
+
+.checkbox {
+    margin-top: 4px;
+}

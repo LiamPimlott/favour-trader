@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import UserOverview from "../components/UserOverview";
-import { Card, Icon, Row, Col } from 'antd';
+import { Card, Icon, Row, Col, Button } from 'antd';
 import EditUserOverview from "../components/EditUserOverview";
+import CreateTradeModal from "../components/CreateTradeModal";
 import axios from 'axios'
 import './Profile.css';
 
@@ -22,9 +23,11 @@ class Profile extends Component {
                 has: [],
                 wants: [],
             },
+            userId: '',
             isCurrentUser: false,
             editUserVisible: false,
             confirmEditUser: false,
+            createTradeModalOpen: false,
         };
     }
 
@@ -121,12 +124,19 @@ class Profile extends Component {
                         has: userData.has,
                         wants: userData.wants,
                     },
+                    userId: userData._id,
                     isCurrentUser: (userData._id === authService.getProfile().id)
                 }))
                 .catch((err) => {
                     console.log(err);
                 });
         }
+    }
+
+    toggleCreateTradeModal = () => {
+        this.setState({
+            createTradeModalOpen: !this.state.createTradeModalOpen,
+        });
     }
 
     renderSkills(skillSet) {
@@ -146,6 +156,7 @@ class Profile extends Component {
     }
 
     render() {
+        const { authService } = this.props;
         return (
             <div>
                 <UserOverview
@@ -174,6 +185,21 @@ class Profile extends Component {
                         </Card>
                     </Col>
                 </Row>
+                {
+                    (!this.state.isCurrentUser) ? (
+                        <div className={'offerButtonWrapper'}>
+                            <Button onClick={this.toggleCreateTradeModal}>Offer Trade!</Button>
+                        </div>
+                    ) : (
+                        ''
+                    )
+                }
+                <CreateTradeModal requestableSkills={this.state.skills.wants}
+                    username={this.state.overview.firstName}
+                    authService={authService}
+                    offereeId={this.state.userId}
+                    isOpen={this.state.createTradeModalOpen}
+                    toggle={this.toggleCreateTradeModal}/>
             </div>
         );
     }

@@ -1,3 +1,9 @@
 #skill .ant-card-head-title {
     text-align: left;
 }
+
+.offerButtonWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+}
