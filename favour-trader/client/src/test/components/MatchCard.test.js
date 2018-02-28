@@ -1,6 +1,15 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import MatchCard from '../../components/MatchCard.js';
+import {mount, configure} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import moxios from "moxios";
+import {MemoryRouter} from 'react-router-dom'
+
+
+beforeEach(function () {
+    configure({ adapter: new Adapter() });
+    moxios.install();
+});
 
 it('renders correctly', () => {
   const user = {
@@ -10,8 +19,9 @@ it('renders correctly', () => {
     },
     email: 'jane.doe@example.com',
   };
-  const tree = renderer
-    .create(<MatchCard user={user} reveal={() => true} />)
-    .toJSON();
-  expect(tree).toMatchSnapshot();
+  mount (
+        <MemoryRouter>
+            <MatchCard user={user} reveal={() => true} />
+        </MemoryRouter>
+        )
 });

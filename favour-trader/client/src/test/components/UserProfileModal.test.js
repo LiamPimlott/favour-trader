@@ -13,5 +13,5 @@ it('renders correctly', () => {
   const tree = renderer
     .create(<UserProfileModal isOpen={true} user={user} toggle={() => true} />)
     .toJSON();
-  expect(tree).toMatchSnapshot();
+    expect(tree).toMatchSnapshot();
 });

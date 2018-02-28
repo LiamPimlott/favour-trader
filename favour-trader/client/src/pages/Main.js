@@ -18,7 +18,6 @@ class Main extends Component {
 
     componentDidMount() {
         const { authService } = this.props;
-		const { match: { params } } = this.props;
 		
         if (authService.loggedIn()) {
             const config = {
