@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Col } from 'antd';
+import { Card, Button, } from 'antd';
 import { Link } from 'react-router-dom';
 import Avatar from 'react-avatar';
 

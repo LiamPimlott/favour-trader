@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Fade } from 'reactstrap';
 import { Card, Icon, Button } from 'antd';
-import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import SelectableSkill from './SelectableSkill.js';
 import './CreateTradeModal.css';
@@ -309,7 +308,6 @@ class CreateTradeModal extends Component {
 
     render() {
         const { isOpen, toggle } = this.props;
-        const { redirect } = this.state;
         return (
             <Modal isOpen={isOpen} toggle={toggle} backdrop={true}>
                 <ModalHeader toggle={toggle}>Offer a trade</ModalHeader>
