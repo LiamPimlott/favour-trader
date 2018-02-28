@@ -103,6 +103,11 @@ router.post('/register', function(req, res) {
 			name: {
 				first: req.body.firstName,
 				last: req.body.lastName
+			},
+			address: {
+                country: '-',
+                state: '-',
+                city: '-',
 			}
 		});
 		// attempt to save the new user
