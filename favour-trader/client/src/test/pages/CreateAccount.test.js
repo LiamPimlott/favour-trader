@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import moxios from 'moxios';
-import { mount, shallow, configure } from 'enzyme';
+import { mount, configure } from 'enzyme';
 import CreateAccount from '../../pages/CreateAccount.js';
 import AuthServiceMock from '../components/AuthServiceMock.js';
 import Adapter from 'enzyme-adapter-react-16';

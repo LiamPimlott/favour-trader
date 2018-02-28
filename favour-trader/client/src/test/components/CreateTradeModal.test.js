@@ -1,23 +1,24 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import moxios from 'moxios';
 import CreateTradeModal from '../../components/CreateTradeModal.js';
 import AuthServiceMock from '../components/AuthServiceMock.js';
+import {shallow, configure} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import {MemoryRouter} from 'react-router-dom';
 
 beforeEach(function () {
-    // import and pass your custom axios instance to this method
-    moxios.install()
-})
+    configure({ adapter: new Adapter() });
+    moxios.install();
+});
 
 afterEach(function () {
-    // import and pass your custom axios instance to this method
-    moxios.uninstall()
-})
+    moxios.uninstall();
+});
 
 it('renders correctly', () => {
-    var authServiceMock = new AuthServiceMock();
-    const tree = renderer
-        .create(<CreateTradeModal authService={authServiceMock} />)
-        .toJSON();
-    expect(tree).toMatchSnapshot();
+    let authServiceMock = new AuthServiceMock();
+    const tree = shallow(
+        <MemoryRouter>
+            <CreateTradeModal authService={authServiceMock} />
+        </MemoryRouter>)
 });

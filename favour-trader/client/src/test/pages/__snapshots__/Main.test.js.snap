@@ -2,24 +2,30 @@
 
 exports[`renders correctly 1`] = `
 <div>
-  <header
-    className="d-flex justify-content-center"
-  >
-    <h1
-      className="center-helper"
-    >
-      Welcome to FavourTrader
-    </h1>
-  </header>
   <div
     className="center-helper"
   >
-    <div>
+    <div
+      style={
+        Object {
+          "textAlign": "center",
+        }
+      }
+    >
       <div
         className="container"
       >
+        <h1>
+          Matched Traders
+        </h1>
         <div
-          className="row"
+          className="ant-row"
+          style={
+            Object {
+              "marginLeft": -8,
+              "marginRight": -8,
+            }
+          }
         />
       </div>
     </div>
