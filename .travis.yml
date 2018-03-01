@@ -7,3 +7,5 @@ install:
 script:
   - cd favour-trader
   - npm test
+  - cd client
+  - npm test
