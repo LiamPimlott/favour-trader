@@ -36,20 +36,29 @@ class CreateTradeModal extends Component {
         const { authService } = this.props;
         const userProfile = this.props.authService.getProfile();
         const userEmail = userProfile.email;
+        this.mounted = true;
         const config = {
             headers: {
-             'Accept': 'application/json',
-             'Content-Type': 'application/json',
-             'Authorization': authService.getToken(),
-             }
-         };
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': authService.getToken(),
+            }
+        };
 
         axios.post('/api/users/has', {
             email: userEmail,
         }, config)
-        .then(res => res.data.user)
-        // This setState below causes a front end JS warning, any idea why?
-        .then(user => this.setState({ offerableSkills: user.has }));
+            .then(res => res.data.user)
+            // This setState below causes a front end JS warning, any idea why?
+            .then((user) => {
+                if (this.mounted) {
+                    this.setState({ offerableSkills: user.has });
+                }
+            })
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     reset() {
@@ -199,24 +208,24 @@ class CreateTradeModal extends Component {
                 return (
                     (skillSet === 'requestable') ? (
                         <SelectableSkill key={skill._id}
-                            skill={skill}
-                            checked={(requestedSkills.find(skill => skill.skillId === skill._id))}
-                            update={this.updateSkills}
-                            toggleSelection={this.toggleSelection} />
+                                         skill={skill}
+                                         checked={(requestedSkills.find(skill => skill.skillId === skill._id))}
+                                         update={this.updateSkills}
+                                         toggleSelection={this.toggleSelection} />
                     ) : (
                         <SelectableSkill key={skill._id}
-                            skill={skill}
-                            checked={offeredSkills.find(skill => skill.skillId === skill._id)}
-                            update={this.updateSkills}
-                            toggleSelection={this.toggleSelection} />
-                        )
+                                         skill={skill}
+                                         checked={offeredSkills.find(skill => skill.skillId === skill._id)}
+                                         update={this.updateSkills}
+                                         toggleSelection={this.toggleSelection} />
+                    )
                 );
             });
         }
         return (
             <table>
                 <tbody>
-                    {skillList || <tr></tr>}
+                {skillList || <tr></tr>}
                 </tbody>
             </table>
         );
@@ -257,9 +266,9 @@ class CreateTradeModal extends Component {
                         </div>
                         <Card>
                             <textarea className={'messageBox'}
-                                id={'message'}
-                                placeholder={'enter your message here'}
-                                onChange={this.handleChange} />
+                                      id={'message'}
+                                      placeholder={'enter your message here'}
+                                      onChange={this.handleChange} />
                         </Card>
                         {
                             (this.state.failedAttempt) ? (
@@ -267,8 +276,8 @@ class CreateTradeModal extends Component {
                                     An error occured while creating your contract, please try again later.
                                 </Fade>
                             ) : (
-                                    ''
-                                )
+                                ''
+                            )
                         }
                     </ModalBody>
                 );

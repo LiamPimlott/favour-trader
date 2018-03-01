@@ -461,7 +461,7 @@ exports[`renders correctly 1`] = `
           <br />
            
           <a
-            href="#"
+            href=""
           >
             User Agreement
           </a>

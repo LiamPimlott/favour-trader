@@ -259,7 +259,7 @@ exports[`renders correctly 1`] = `
                 </button>
                 Or 
                 <a
-                  href=""
+                  href="/create-account"
                 >
                   register now!
                 </a>
