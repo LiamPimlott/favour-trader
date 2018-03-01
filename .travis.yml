@@ -4,12 +4,11 @@ node_js:
 install:
   - npm --prefix ./favour-trader install ./favour-trader
   - npm --prefix ./favour-trader/client install ./favour-trader/client
-stage: test
-  - script: 
-    - cd favour-trader
-    - npm test
-    - npm run devServer
-    - cd client
-    - npm test
-    - npm start
-    - npm run e2etest
+script:
+  - cd favour-trader
+  - npm test
+  - npm run devServer
+  - cd client
+  - npm test
+  - npm start
+  - npm run e2etest
