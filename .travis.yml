@@ -7,8 +7,6 @@ install:
 script:
   - cd favour-trader
   - npm test
-  - npm run devServer
   - cd client
   - npm test
-  - npm start
-  - npm run e2etest
+  
