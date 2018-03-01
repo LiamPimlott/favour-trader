@@ -93,10 +93,10 @@ class Profile extends Component {
         this.editUserForm = form;
       }
 
-    componentDidMount() {
+    componentWillMount() {
         const { authService } = this.props;
         const { match: { params } } = this.props;
-
+        this.mounted = true;
         if (authService.loggedIn()) {
             const config = {
                 headers: {
@@ -110,27 +110,35 @@ class Profile extends Component {
 
             axios.get(endpoint, config)
                 .then(res => res.data.user)
-                .then(userData => this.setState({
-                    overview: {
-                        firstName: userData.name.first,
-                        lastName: userData.name.last,
-                        country: userData.address.country,
-                        state: userData.address.state,
-                        city: userData.address.city,
-                        postalCode: '',
-                        about: userData.about,
-                    },
-                    skills: {
-                        has: userData.has,
-                        wants: userData.wants,
-                    },
-                    userId: userData._id,
-                    isCurrentUser: (userData._id === authService.getProfile().id)
-                }))
+                .then((userData) => {
+                    if (this.mounted){
+                        this.setState({
+                            overview: {
+                                firstName: userData.name.first,
+                                lastName: userData.name.last,
+                                country: userData.address.country,
+                                state: userData.address.state,
+                                city: userData.address.city,
+                                postalCode: '',
+                                about: userData.about,
+                            },
+                            skills: {
+                                has: userData.has,
+                                wants: userData.wants,
+                            },
+                            userId: userData._id,
+                            isCurrentUser: (userData._id === authService.getProfile().id)
+                        })
+                    }
+                }
+                    )
                 .catch((err) => {
                     console.log(err);
                 });
         }
+    }
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     toggleCreateTradeModal = () => {
