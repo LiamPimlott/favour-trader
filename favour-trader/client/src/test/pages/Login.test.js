@@ -40,7 +40,7 @@ it('renders correctly', () => {
 it('verify Login Page', function () {
     let cardTitle = wrapper.find('h5');
     expect(cardTitle.length).toEqual(1);
-    expect(wrapper.contains([<a href="">register now!</a>])).toEqual(true);
+    expect(wrapper.contains([<a href="/create-account">register now!</a>])).toEqual(true);
     expect(wrapper.contains([<span>Log in</span>])).toEqual(true);
     expect(emailInput.length).toEqual(1);
     expect(passwordInput.length).toEqual(1);
