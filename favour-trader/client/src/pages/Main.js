@@ -58,7 +58,7 @@ class Main extends Component {
                                 {
                                     matches.map(function (match) {
                                         return (
-                                            <Col xs={24} sm={24} md={12} lg={8}>
+                                            <Col key={match._id} xs={24} sm={24} md={12} lg={8}>
                                                 <MatchCard 
                                                     key={match._id}
                                                     user={match}
