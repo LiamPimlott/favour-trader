@@ -114,8 +114,21 @@ class SidePanelContent extends Component {
 						</Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub3" title={<span><Icon type="book" /><span>Trades</span></span>}>
-                        <Menu.Item key="5">Active</Menu.Item>
-                        <Menu.Item key="6">Offers</Menu.Item>
+                        <Menu.Item key="5">
+                            <Link to="/trades/active">
+                                Active
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="6">
+                            <Link to="/trades/sent">
+                                Sent
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="7">
+                            <Link to="/trades/received">
+                                Received
+                            </Link>
+                        </Menu.Item>
                     </SubMenu>
                 </Menu>
         );

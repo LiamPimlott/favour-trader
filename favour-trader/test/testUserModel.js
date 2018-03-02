@@ -215,7 +215,6 @@ describe('User with Skills', function () {
             "skill": "Gardner"
         });
         skill.save((err, skill) => {
-            //console.log(err);
             expect(err).to.not.exist;
             let user = new User();
             user.name = {first: "Ism", last: "Kh"};

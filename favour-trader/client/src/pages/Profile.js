@@ -204,6 +204,7 @@ class Profile extends Component {
                 }
                 <CreateTradeModal requestableSkills={this.state.skills.wants}
                     username={this.state.overview.firstName}
+                    lastName={this.state.overview.lastName}
                     authService={authService}
                     offereeId={this.state.userId}
                     isOpen={this.state.createTradeModalOpen}
