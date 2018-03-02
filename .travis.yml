@@ -13,8 +13,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 10 # give xvfb some time to start
   - cd favour-trader
-  - npm run dev:
-     background: true
+  - npm run dev &
   - sleep 10 # give Web server some time to bind to sockets, etc
 script:
   - cd favour-trader
