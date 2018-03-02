@@ -15,6 +15,7 @@ before_script:
   - cd favour-trader
   - npm run dev &
   - sleep 10 # give Web server some time to bind to sockets, etc
+  - cd ..
 script:
   - cd favour-trader
   - npm test
