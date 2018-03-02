@@ -20,3 +20,6 @@ script:
   - npm test
   - cd client
   - npm test
+  - npm run e2etest
+after_script:
+  - killall node
