@@ -1,33 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-<div>
+<div
+  id="result-section"
+>
   <div
     className="center-helper"
+    style={
+      Object {
+        "textAlign": "center",
+      }
+    }
   >
     <div
-      style={
-        Object {
-          "textAlign": "center",
-        }
-      }
+      className="container"
     >
+      <h1>
+        Matched Traders
+      </h1>
       <div
-        className="container"
-      >
-        <h1>
-          Matched Traders
-        </h1>
-        <div
-          className="ant-row"
-          style={
-            Object {
-              "marginLeft": -8,
-              "marginRight": -8,
-            }
+        className="ant-row"
+        style={
+          Object {
+            "marginLeft": -8,
+            "marginRight": -8,
           }
-        />
-      </div>
+        }
+      />
     </div>
   </div>
   <div>

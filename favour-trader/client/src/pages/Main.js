@@ -49,7 +49,7 @@ class Main extends Component {
 
     renderMatches(matches) {
         return (
-            <div style={{textAlign: "center"}}>
+            <div style={{textAlign: "center"}} className={'center-helper'}>
                 {
                     (matches) ? (
                         <div className={'container'}>
@@ -80,13 +80,11 @@ class Main extends Component {
 
     render() {
         return (
-            <div>
-                <div className={'center-helper'}>
+            <div id={'result-section'}>
                     { this.state.matchedUsers ?
                         this.renderMatches(this.state.matchedUsers) :
                         "Sorry, No Matches :( Try updating the skills you are seeking."
                     }
-                </div>
                 <ReviewSkillsModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}
                                user={this.state.selectedUser}/>
             </div>
