@@ -55,5 +55,6 @@ cd favour-trader
 npm test
 
 Acceptance AKA E2E tests:
+cd favour-trader && npm run dev
 cd favour-trader/client
 npm run e2etest
