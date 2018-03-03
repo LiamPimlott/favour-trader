@@ -48,8 +48,8 @@ router.get('/profile', passport.authenticate('jwt', { session: false }), functio
 router.get('/:id/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.params.id).
 	select('name address about has wants').
-	populate('has').
-	populate('wants'). 
+	populate('has.category').
+	populate('wants.category'). 
 	exec( (err, foundUser) => {
 		if (err) {
 			devDebug(err);
