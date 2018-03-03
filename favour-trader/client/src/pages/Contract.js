@@ -51,9 +51,10 @@ class Contract extends Component {
 
 
         return (
-            <div className={'center-helper'}>
-                <p>hey</p>
+            <div >
+                <Col sm="12" md={{ size: 8, offset: 2 }}>
                 <TradeOverview overview={this.state.overview} />
+            	</Col>
             </div>
         );
     }
