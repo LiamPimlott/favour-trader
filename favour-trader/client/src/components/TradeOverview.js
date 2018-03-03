@@ -1,6 +1,5 @@
 import React, { Component} from "react";
 import { Card, Row, Col, Button, Icon, Popover } from 'antd';
-
 class UserOverview extends Component{
     render() {
         const {offererName, offereeName, tradeStatus, tradeMessage} = this.props.overview;
@@ -19,7 +18,6 @@ class UserOverview extends Component{
                             <p><strong>Message:</strong> {(tradeMessage === "") ? ('No message') : (tradeMessage)}</p>
                         </Col>
                     </Row>
-
             </Card>
         );
     }
