@@ -23,7 +23,7 @@ const NewSkillModal = Form.create()(
     return (
       <Modal
         visible={visible}
-        title="Post a new skill"
+        title="Add A New Skill To Your Profile"
         okText="Save"
         onCancel={onCancel}
         onOk={onSave}
@@ -35,8 +35,8 @@ const NewSkillModal = Form.create()(
                     rules: [{ required: true, message: 'You must choose where to add this skill!' }]
                 })(
                     <RadioGroup>
-                        <RadioButton value="has">My Skills</RadioButton>
-                        <RadioButton value="wants">What I Need</RadioButton>
+                        <RadioButton value="has">Skills I Have</RadioButton>
+                        <RadioButton value="wants">Skills I Need</RadioButton>
                     </RadioGroup>
                 )}
             </FormItem>
@@ -47,7 +47,7 @@ const NewSkillModal = Form.create()(
                     <Select
                         showSearch
                         style={{ width: 200 }}
-                        placeholder="Select a person"
+                        placeholder="Select a Category"
                         optionFilterProp="children"
                         onFocus={handleFocus}
                         onBlur={handleBlur}
@@ -56,14 +56,14 @@ const NewSkillModal = Form.create()(
                         {
                             (categories !== [] ) ? (
                                 categories.map( category => {
-                                    return (<Option value={category._id}>{category.skill}</Option>)
+                                    return (<Option key={category.skill} value={category._id}>{category.skill}</Option>)
                                 })
                             ) : ('')
                         }
                     </Select>
                 )}
             </FormItem>
-            <FormItem label="Description">
+            <FormItem label="Describe Your Skill In Greater Detail">
                 {getFieldDecorator('description')(<Input.TextArea rows={3} />)}
             </FormItem>
         </Form>
