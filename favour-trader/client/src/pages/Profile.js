@@ -120,7 +120,7 @@ class Profile extends Component {
                     Authorization: authService.getToken()
                 }
             };
-            this.setState({ confirmingNewSkill: true });
+            this.setState({ confirmNewSkill: true });
             axios.put('api/users/update', { [values.skillSet]: updatedSkills }, config)
             .then(res => res.data.user)
             .then(updatedUser => this.setState({
@@ -128,12 +128,12 @@ class Profile extends Component {
                     has: updatedUser.has,
                     wants: updatedUser.wants,
                 },
-                confirmingNewSkill: false,
+                confirmNewSkill: false,
                 showNewSkillModal: false,
             }))
             .then(() => newSkillForm.resetFields())
             .catch((err) => {
-                this.setState({ confirmingNewSkill: false, showNewSkillModal: false });
+                this.setState({ confirmNewSkill: false, showNewSkillModal: false });
                 console.log(err);
             });   
         });
@@ -274,7 +274,7 @@ class Profile extends Component {
                     visible={this.state.showNewSkillModal}
                     onCancel={this.toggleNewSkillModal}
                     onSave={this.handleNewSkillSave}
-                    confirmUpdate={this.state.confirmNewSkill}
+                    confirmNew={this.state.confirmNewSkill}
                 />
                 <CreateTradeModal requestableSkills={this.state.skills.wants}
                     username={this.state.overview.firstName}
