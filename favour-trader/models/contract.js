@@ -1,9 +1,14 @@
 var mongoose = require("mongoose");
 
 var FavourSchema = new mongoose.Schema({
-    terms: {
+    skillId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: 'Skill'
+    },
+    description: {
         type: String,
-        required: true,
+        required: false,
     },
     completed: {
         type: Boolean,
@@ -20,6 +25,16 @@ var ContractSchema = new mongoose.Schema({
             ref: 'User'
         },
         favours: [ FavourSchema ],
+        name: {
+            first: {
+                type: String,
+                required: true,
+            },
+            last: {
+                type: String,
+                required: true,
+            },
+        },
         requestTermination: {
             type: Boolean,
             required: true,
@@ -33,6 +48,16 @@ var ContractSchema = new mongoose.Schema({
             ref: 'User'
         },
         favours: [ FavourSchema ],
+        name: {
+            first: {
+                type: String,
+                required: true,
+            },
+            last: {
+                type: String,
+                required: true,
+            },
+        },
         requestTermination: {
             type: Boolean,
             required: true,
@@ -44,7 +69,11 @@ var ContractSchema = new mongoose.Schema({
         enum: ['Pending', 'Accepted', 'Declined'],
         required: true,
         default: 'Pending'
-    }
+    },
+    messages: {
+        type: [String],
+        required: false,
+    },
 });
 
 module.exports = mongoose.model("Contract", ContractSchema);

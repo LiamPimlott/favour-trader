@@ -9,6 +9,7 @@
     "jquery": "^3.3.1",
     "jwt-decode": "^2.2.0",
     "react": "^16.2.0",
+    "react-avatar": "^2.5.1",
     "react-dock": "^0.2.4",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
@@ -19,10 +20,18 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "codeceptinit": "codeceptjs init",
+    "makeTest": "codeceptjs gt",
+    "e2etest": "codeceptjs run --steps",
+    "makePageObject": "codeceptjs gpo"
   },
   "proxy": "http://localhost:3001/",
   "devDependencies": {
+    "codeceptjs-nightmare": "^1.1.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.1",
     "moxios": "^0.4.0",
     "react-test-renderer": "^16.2.0"
   }

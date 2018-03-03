@@ -1,39 +1,113 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders correctly 1`] = `
-<div
-  className="SidePanelContent"
+<ul
+  aria-activedescendant=""
+  className="ant-menu ant-menu-light ant-menu-root ant-menu-inline"
+  onKeyDown={[Function]}
+  role="menu"
+  style={
+    Object {
+      "height": "100%",
+    }
+  }
+  tabIndex="0"
 >
-  Skills I Have:
-  <div>
-    <div>
-      <ul />
-    </div>
-    <button
-      className="SidePanelContent-btn"
+  <li
+    aria-disabled={undefined}
+    aria-selected={false}
+    className="ant-menu-item"
+    onClick={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    role="menuitem"
+    style={
+      Object {
+        "paddingLeft": 24,
+      }
+    }
+    title={undefined}
+  >
+    <a
+      href="/Profile"
+      onClick={[Function]}
     >
-      Add a new skill
-    </button>
-  </div>
-  <hr />
-  Skills I'm Looking for:
-  <div>
-    <div>
-      <ul />
-    </div>
-    <button
-      className="SidePanelContent-btn"
+      <i
+        className="anticon anticon-user"
+      />
+       
+      <span>
+        My Profile
+      </span>
+    </a>
+  </li>
+  <li
+    className="ant-menu-submenu ant-menu-submenu-inline"
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    style={undefined}
+  >
+    <div
+      aria-expanded={false}
+      aria-haspopup="true"
+      aria-owns="sub2$Menu"
+      className="ant-menu-submenu-title"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "paddingLeft": 24,
+        }
+      }
+      title={undefined}
     >
-      Add a new skill
-    </button>
-  </div>
-  <hr />
-  All Skills:
-  <ul>
-    <div>
-      <ul />
+      <span>
+        <i
+          className="anticon anticon-search"
+        />
+        <span>
+          Find Matches
+        </span>
+      </span>
+      <i
+        className="ant-menu-submenu-arrow"
+      />
     </div>
-  </ul>
-  <hr />
-</div>
+  </li>
+  <li
+    className="ant-menu-submenu ant-menu-submenu-inline"
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    style={undefined}
+  >
+    <div
+      aria-expanded={false}
+      aria-haspopup="true"
+      aria-owns="sub3$Menu"
+      className="ant-menu-submenu-title"
+      onClick={[Function]}
+      onMouseEnter={[Function]}
+      onMouseLeave={[Function]}
+      style={
+        Object {
+          "paddingLeft": 24,
+        }
+      }
+      title={undefined}
+    >
+      <span>
+        <i
+          className="anticon anticon-book"
+        />
+        <span>
+          Trades
+        </span>
+      </span>
+      <i
+        className="ant-menu-submenu-arrow"
+      />
+    </div>
+  </li>
+</ul>
 `;

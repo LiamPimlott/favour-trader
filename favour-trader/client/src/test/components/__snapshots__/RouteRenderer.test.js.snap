@@ -6,91 +6,268 @@ exports[`renders correctly 1`] = `
 >
   
   <div
-    className="row"
+    className="ant-card login-form-card ant-card-bordered"
   >
     <div
-      className="z-depth-3 center"
+      className="ant-card-head"
     >
       <div
-        className="login-header"
-      >
-        <span
-          className="card-title text-white"
-        >
-          Favor 
-          <i
-            className="material-icons"
-          >
-            swap_horiz
-          </i>
-           Trader
-        </span>
-      </div>
-      
-      <div
-        id="login-form"
+        className="ant-card-head-wrapper"
       >
         <div
-          className="col s12"
+          className="ant-card-head-title"
+        >
+          <h5>
+            Favor 
+            <i
+              className="anticon anticon-swap"
+            />
+             Trader
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div
+      className="ant-card-body"
+      style={undefined}
+    >
+      <form
+        className="ant-form ant-form-horizontal login-form"
+        onSubmit={[Function]}
+      >
+        <div
+          className="ant-row ant-form-item"
+          style={undefined}
         >
           <div
-            className="col input-field"
+            className="ant-form-item-control-wrapper"
           >
-            <input
-              checked={false}
-              className=""
-              defaultValue={undefined}
-              id="email"
-              name="email"
-              onChange={[Function]}
-              placeholder="Email Address"
-              type="email"
-              value=""
-            />
+            <div
+              className="ant-form-item-control"
+            >
+              <span
+                className="ant-form-item-children"
+              >
+                <span
+                  className="ant-input-affix-wrapper"
+                  style={undefined}
+                >
+                  <span
+                    className="ant-input-prefix"
+                  >
+                    <i
+                      className="anticon anticon-mail"
+                      style={
+                        Object {
+                          "color": "rgba(0,0,0,.25)",
+                        }
+                      }
+                    />
+                  </span>
+                  <input
+                    className="ant-input"
+                    data-__field={
+                      Object {
+                        "name": "emailAddress",
+                      }
+                    }
+                    data-__meta={
+                      Object {
+                        "name": "emailAddress",
+                        "originalProps": Object {
+                          "disabled": false,
+                          "id": "email",
+                          "name": "email",
+                          "placeholder": "Email Address",
+                          "prefix": <Icon
+                            style={
+                                  Object {
+                                        "color": "rgba(0,0,0,.25)",
+                                      }
+                            }
+                            type="mail"
+                      />,
+                          "prefixCls": "ant-input",
+                          "type": "email",
+                        },
+                        "ref": null,
+                        "rules": Array [
+                          Object {
+                            "message": "Please input your E-mail address!",
+                            "required": true,
+                          },
+                          Object {
+                            "message": "The input is not valid E-mail!",
+                            "type": "email",
+                          },
+                        ],
+                        "trigger": "onChange",
+                        "validate": Array [
+                          Object {
+                            "rules": Array [
+                              Object {
+                                "message": "Please input your E-mail address!",
+                                "required": true,
+                              },
+                              Object {
+                                "message": "The input is not valid E-mail!",
+                                "type": "email",
+                              },
+                            ],
+                            "trigger": Array [
+                              "onBlur",
+                            ],
+                          },
+                        ],
+                        "validateTrigger": "onBlur",
+                        "valuePropName": "value",
+                      }
+                    }
+                    disabled={false}
+                    id="emailAddress"
+                    name="email"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder="Email Address"
+                    style={null}
+                    type="email"
+                    value=""
+                  />
+                </span>
+              </span>
+            </div>
           </div>
         </div>
         <div
-          className="col s12"
+          className="ant-row ant-form-item"
+          style={undefined}
         >
           <div
-            className="col input-field"
+            className="ant-form-item-control-wrapper"
           >
-            <input
-              checked={false}
-              className=""
-              defaultValue={undefined}
-              id="password"
-              name="password"
-              onChange={[Function]}
-              placeholder="Password"
-              type="password"
-              value=""
-            />
+            <div
+              className="ant-form-item-control"
+            >
+              <span
+                className="ant-form-item-children"
+              >
+                <span
+                  className="ant-input-affix-wrapper"
+                  style={undefined}
+                >
+                  <span
+                    className="ant-input-prefix"
+                  >
+                    <i
+                      className="anticon anticon-lock"
+                      style={
+                        Object {
+                          "color": "rgba(0,0,0,.25)",
+                        }
+                      }
+                    />
+                  </span>
+                  <input
+                    className="ant-input"
+                    data-__field={
+                      Object {
+                        "name": "password",
+                      }
+                    }
+                    data-__meta={
+                      Object {
+                        "name": "password",
+                        "originalProps": Object {
+                          "disabled": false,
+                          "id": "password",
+                          "name": "password",
+                          "placeholder": " Password",
+                          "prefix": <Icon
+                            style={
+                                  Object {
+                                        "color": "rgba(0,0,0,.25)",
+                                      }
+                            }
+                            type="lock"
+                      />,
+                          "prefixCls": "ant-input",
+                          "type": "password",
+                        },
+                        "ref": null,
+                        "rules": Array [
+                          Object {
+                            "message": "Please input your password!",
+                            "required": true,
+                          },
+                        ],
+                        "trigger": "onChange",
+                        "validate": Array [
+                          Object {
+                            "rules": Array [
+                              Object {
+                                "message": "Please input your password!",
+                                "required": true,
+                              },
+                            ],
+                            "trigger": Array [
+                              "onBlur",
+                            ],
+                          },
+                        ],
+                        "validateTrigger": "onBlur",
+                        "valuePropName": "value",
+                      }
+                    }
+                    disabled={false}
+                    id="password"
+                    name="password"
+                    onBlur={[Function]}
+                    onChange={[Function]}
+                    onKeyDown={[Function]}
+                    placeholder=" Password"
+                    style={null}
+                    type="password"
+                    value=""
+                  />
+                </span>
+              </span>
+            </div>
           </div>
         </div>
-        <button
-          className="btn waves-effect waves-light center blue-grey darken-3 z-depth-2"
-          disabled={false}
-          onClick={[Function]}
+        <div
+          className="ant-row ant-form-item"
+          style={undefined}
         >
-          Login
-        </button>
-      </div>
-      <br />
-       
-      <br />
-      <div
-        className="signUp-redirect"
-      >
-        <span>
-          New to FavorTrader?
-        </span>
-        <a
-          href="/create-account"
-        >
-           Sign up here
-        </a>
-      </div>
+          <div
+            className="ant-form-item-control-wrapper"
+          >
+            <div
+              className="ant-form-item-control"
+            >
+              <span
+                className="ant-form-item-children"
+              >
+                <button
+                  className="ant-btn login-form-button ant-btn-primary"
+                  onClick={[Function]}
+                  type="submit"
+                >
+                  <span>
+                    Log in
+                  </span>
+                </button>
+                Or 
+                <a
+                  href="/create-account"
+                >
+                  register now!
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>

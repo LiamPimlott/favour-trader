@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import UserProfileModal from '../components/UserProfileModal.js';
+import ReviewSkillsModal from '../components/ReviewSkillsModal.js';
 import axios from 'axios'
-import {Row} from 'antd';
+import {Row, Col} from 'antd';
 import MatchCard from "../components/MatchCard";
 
 class Main extends Component {
@@ -18,11 +18,16 @@ class Main extends Component {
 
     componentDidMount() {
         const { authService } = this.props;
+		
         if (authService.loggedIn()) {
             const config = {
                 headers: {
                     Authorization: authService.getToken()
-                }
+                },
+				params: {
+					has: 'true',
+					wants: 'true'
+				}
             };
 
             axios.get('/api/users/matches', config)
@@ -44,7 +49,7 @@ class Main extends Component {
 
     renderMatches(matches) {
         return (
-            <div style={{textAlign: "center"}}>
+            <div style={{textAlign: "center"}} className={'center-helper'}>
                 {
                     (matches) ? (
                         <div className={'container'}>
@@ -52,8 +57,15 @@ class Main extends Component {
                             <Row gutter={16}>
                                 {
                                     matches.map(function (match) {
-                                        return (<MatchCard key={match._id} user={match}
-                                                           reveal={this.toggleModal.bind(this, match)}/>)
+                                        return (
+                                            <Col key={match._id} xs={24} sm={24} md={12} lg={8}>
+                                                <MatchCard 
+                                                    key={match._id}
+                                                    user={match}
+                                                    reveal={this.toggleModal.bind(this, match)}
+                                                />
+                                            </Col>
+                                        )
                                     }, this)
                                 }
                             </Row>
@@ -68,14 +80,12 @@ class Main extends Component {
 
     render() {
         return (
-            <div>
-                <div className={'center-helper'}>
+            <div id={'result-section'}>
                     { this.state.matchedUsers ?
                         this.renderMatches(this.state.matchedUsers) :
                         "Sorry, No Matches :( Try updating the skills you are seeking."
                     }
-                </div>
-                <UserProfileModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}
+                <ReviewSkillsModal isOpen={this.state.modalOpen} toggle={this.toggleModal.bind(this, {})}
                                user={this.state.selectedUser}/>
             </div>
         );

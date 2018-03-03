@@ -6,7 +6,7 @@ let User = require("../models/user");
 let chai = require("chai");
 let chaiHttp = require('chai-http');
 
-url = "http://localhost:3001";
+url = "http://localhost:3002";
 
 let server;
 

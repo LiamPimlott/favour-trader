@@ -1,0 +1,25 @@
+language: node_js
+node_js:
+  - "node"
+addons:
+  apt:
+    packages:
+      - xvfb
+install:
+  - npm --prefix ./favour-trader install ./favour-trader
+  - npm --prefix ./favour-trader/client install ./favour-trader/client
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 10 # give xvfb some time to start
+  - cd favour-trader
+  - npm run dev &
+  - sleep 10 # give Web server some time to bind to sockets, etc
+  - cd ..
+script:
+  - cd favour-trader
+  - npm test
+  - cd client
+  - npm test
+  - npm run e2etest
+  - killall node

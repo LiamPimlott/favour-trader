@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<tr
+  className="skillItem"
+>
+  <td
+    className="checkboxTD"
+  >
+    <input
+      checked={true}
+      className="checkbox"
+      id={123}
+      onChange={[Function]}
+      type="checkbox"
+    />
+  </td>
+  <td>
+    plumber
+    <div>
+      <textarea
+        className="descriptionBox"
+        id={123}
+        onChange={[Function]}
+        placeholder="add a description (optional)"
+      />
+    </div>
+  </td>
+  <td
+    className="expansionTD"
+  >
+    <i
+      className="anticon anticon-up icon"
+      onClick={[Function]}
+    />
+  </td>
+</tr>
+`;

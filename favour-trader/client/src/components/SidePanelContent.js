@@ -3,8 +3,8 @@ import axios from 'axios'
 import './SidePanelContent.css';
 import { Link } from 'react-router-dom';
 import {Menu, Icon} from 'antd';
+
 const SubMenu = Menu.SubMenu;
-const MenuItemGroup = Menu.ItemGroup;
 
 class SidePanelContent extends Component {
     constructor() {
@@ -96,12 +96,39 @@ class SidePanelContent extends Component {
                         </Link>
                     </Menu.Item>
                     <SubMenu key="sub2" title={<span><Icon type="search" /><span>Find Matches</span></span>}>
-                        <Menu.Item key="5">What I Have</Menu.Item>
-                        <Menu.Item key="6">What I Want</Menu.Item>
+						<Menu.Item key="4">
+							<Link to="/">
+								Perfect Matches
+							</Link>
+						</Menu.Item>
+                        <Menu.Item key="5"
+							onClick={ ()=>{this.props.params.filtertype} }>
+							<Link to="/filterHas">
+								What I Have
+							</Link>
+						</Menu.Item>
+                        <Menu.Item key="6">
+							<Link to="/filterWants">
+								What I Want
+							</Link>
+						</Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub3" title={<span><Icon type="book" /><span>Trades</span></span>}>
-                        <Menu.Item key="5">Active</Menu.Item>
-                        <Menu.Item key="6">Offers</Menu.Item>
+                        <Menu.Item key="5">
+                            <Link to="/trades/active">
+                                Active
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="6">
+                            <Link to="/trades/sent">
+                                Sent
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item key="7">
+                            <Link to="/trades/received">
+                                Received
+                            </Link>
+                        </Menu.Item>
                     </SubMenu>
                 </Menu>
         );

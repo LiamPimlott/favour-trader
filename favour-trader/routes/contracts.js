@@ -19,15 +19,15 @@ router.get('/all', function (req, res, next) {
 });
 
 // GET - ROOT - get all of a users contracts
-router.get('/', 
+router.get('/',
     passport.authenticate('jwt', { session: false }),
-    function(req, res, next) 
+    function(req, res, next)
     {
         devDebug(req.user.id);
         Contract.find({ 
             $or: [
                 { 'offeror.id': req.user.id },
-                { 'offeree.id': req.user.id } 
+                { 'offeree.id': req.user.id }
             ]}, function (err, contracts) {
             if (err) {
                 devDebug(err);
@@ -44,23 +44,91 @@ router.post('/',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next)
     {
-        const newContract = new Contract({  
+        const newContract = new Contract({
             offeror: {
-                id: req.user.id,
-                favours: req.body.offeror.favours
+                id: req.body.offeror.id,
+                favours: req.body.offeror.favours,
+                name: {
+                    first: req.body.offeror.name.first,
+                    last: req.body.offeror.name.last,
+                },
             },
             offeree: {
                 id: req.body.offeree.id,
-                favours: req.body.offeree.favours
-            },  
+                favours: req.body.offeree.favours,
+                name: {
+                    first: req.body.offeree.name.first,
+                    last: req.body.offeree.name.last,
+                },
+            },
+            messages: req.body.messages
         });
-        devDebug(req.body.offeree.favours);
         newContract.save({}, function (err, contract) {
             if (err) {
                 devDebug(err);
-                res.json({ success: false, message: "Required fields are missing."})
+                res.status = 400;
+                res.json({success: false, message: "Required fields are missing."});
             } else {
                 res.json(contract);
+            }
+        });
+    }
+);
+
+// GET - RECEIVED - get all contracts for the user which are currently 'accepted'
+router.get('/active',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find({
+            $or: [
+                { 'offeror.id': req.user.id },
+                { 'offeree.id': req.user.id }
+            ],
+            $and: [
+                { 'status': 'accepted'},
+            ]}, function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - RECEIVED - get all contracts where user is the offeree
+router.get('/received',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find({
+            'offeree.id': req.user.id
+            }, function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - SENT - get all contracts where user is the offeror
+router.get('/sent',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find({
+            'offeror.id': req.user.id
+            }, function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
             }
         });
     }

@@ -42,8 +42,19 @@ Notes for working on this repository:
 
 Testing:
 
-The tests use Mocha and Chai. They connect to a totally different MongoDB instance as to not destroy the dev or prod dbs.
+The tests use Mocha, Codeceptjs and Chai. They connect to a totally different MongoDB instance as to not destroy the dev or prod dbs.
 They also run the server locally. At least they do in the api tests. ¯\_(ツ)_/¯
 Running the tests:
-- Do option 1a at least.
-- Run npm test
+
+Front-End unit tests:
+cd favour-trader/client
+npm test
+
+Back-End unit tests:
+cd favour-trader
+npm test
+
+Acceptance AKA E2E tests:
+cd favour-trader && npm run dev
+cd favour-trader/client
+npm run e2etest
