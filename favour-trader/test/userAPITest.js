@@ -231,101 +231,146 @@ describe("User API Tests", function () {
         });
     });
 
-    describe("/MATCH", function () {
+    // describe("/MATCH", function () {
 
-    });
+    // });
 
-    describe("/AUTH", function () {
+    // describe("/AUTH", function () {
 
-    });
+    // });
 
     describe("/PROFILE", function () {
-    });
+        var profileToken;
 
-    describe("/ID/PROFILE", function () {
-
-    });
-
-    describe("/HAS", function () {
-
-    });
-
-    describe("/WANTS", function () {
-
-    });
-
-    describe("/LOGIN", () => {
-        it("should log in for a valid email and password", function() {
-            const newUser = new User(users[1]);
-            const saveUser = new Promise((resolve) => {
-                newUser.save(() => {
-                    resolve('created');
-                })
-            });
-
-            saveUser.then(() => {
-                chai.request(url)
-                .post('api/users/login')
-                .send({
-                    email: "test@test.ca",
-                    password: "assword"
-                })
-                .end( (err,res) => {
-                    res.body.should.have.property("success").eql(true);
-                    res.body.should.have.property("message").eql("Login successful.");
-                    res.body.should.have.property("token");
-                })
-            })
+        beforeEach(function(done){
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[0])
+                .end((err, res) => {
+                    // console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
+                    profileToken = res.body.token;
+                    done();
+                });
         });
 
-        it("should fail log in for a invalid email", function() {
-            const newUser = new User(users[1]);
-            const saveUser = new Promise((resolve) => {
-                newUser.save(() => {
-                    resolve('created');
-                })
+        it("should return the current user's profile.", function (done){
+            chai.request(url)
+            .get("/api/users/profile")
+            .set('Authorization',profileToken)
+            .end((err,res) => {
+                should.not.exist(err);
+                should.exist(res.body);
+                res.body.user.name.first.should.eql("Mark");
+                res.body.user.name.last.should.eql("Ripptoe");
+                done();
             });
-
-            saveUser.then(() => {
-                chai.request(url)
-                .post('api/users/login')
-                .send({
-                    email: "nestest@test.ca",
-                    password: "assword"
-                })
-                .end( (err,res) => {
-                    res.body.should.have.property("success").eql(false);
-                    res.body.should.have.property("message").eql("Incorrect password.");
-                })
-            })
         });
 
-        it("should fail log in for a invalid password", function() {
-            const newUser = new User(users[1]);
-            const saveUser = new Promise((resolve) => {
-                newUser.save(() => {
-                    resolve('created');
-                })
+        it("should return nothing without a token.", function (done){
+            chai.request(url)
+            .get("/api/users/profile")
+            .end((err,res) => {
+                should.exist(err);
+                done();
             });
+        });
 
-            saveUser.then(() => {
-                chai.request(url)
-                .post('api/users/login')
-                .send({
-                    email: "test@test.ca",
-                    password: "password"
-                })
-                .end( (err,res) => {
-                    res.body.should.have.property("success").eql(false);
-                    res.body.should.have.property("message").eql("Incorrect password.");
-                })
-            })
+        it("should return nothing with an invalid token.", function (done){
+            chai.request(url)
+            .get("/api/users/profile")
+            .set('Authorization',"Bearer outlawtryingtodrawwithapenandapaddrawingjimwestwithapenandapad")
+            .end((err,res) => {
+                should.exist(err);
+                done();
+            });
         });
     });
 
-    describe("/UPDATE", function () {
+    // describe("/ID/PROFILE", function () {
 
-    });
+    // });
+
+    // describe("/HAS", function () {
+
+    // });
+
+    // describe("/WANTS", function () {
+
+    // });
+
+    // describe("/LOGIN", () => {
+    //     // beforeEach((done)=>{
+    //     //     newUser = new User(users[1]);
+    //     //     newUser.save((err, newUser)=>{
+    //     //         done();
+    //     //     });
+    //     // });
+
+    //     it("should log in for a valid email and password", function(done) {
+    //             chai.request(url)
+    //             .post('api/users/login')
+    //             .send({
+    //                 email: "test@test.ca",
+    //                 password: "assword"
+    //             })
+    //             .end( (err,res) => {
+    //                 should.not.exist(err);
+    //                 res.body.should.have.property("success").eql(true);
+    //                 res.body.should.have.property("message").eql("Login successful.");
+    //                 res.body.should.have.property("token");
+    //             });
+    //     });
+
+    //     it("should fail log in for a invalid email", function(done) {
+
+    //             chai.request(url)
+    //             .post('api/users/login')
+    //             .send({
+    //                 email: "nestest@test.ca",
+    //                 password: "assword"
+    //             })
+    //             .end( (err,res) => {
+    //                 should.not.exist(err);
+    //                 res.body.should.have.property("success").eql(false);
+    //                 res.body.should.have.property("message").eql("Incorrect password.");
+    //             })
+    //     });
+
+    //     it("should fail log in for a invalid password", function(done) {
+    //             chai.request(url)
+    //             .post('api/users/login')
+    //             .send({
+    //                 email: "test@test.ca",
+    //                 password: "password"
+    //             })
+    //             .end( (err,res) => {
+    //                 console.log("end called");
+    //                 should.not.exist(err);
+    //                 res.body.should.have.property("success").eql(false);
+    //                 res.body.should.have.property("message").eql("Incorrect password.");
+    //             });
+    //     });
+    // });
+
+    // describe("/UPDATE", function () {
+    //     //before each update, shove a user to update in the database.
+    //     var updateToken = null;
+
+    //     beforeEach(function(done){
+    //         chai.request(url)
+    //             .post('/api/users/register')
+    //             .send(users[0])
+    //             .end((err, res) => {
+    //                 console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
+    //                 updateToken = res.body.token;
+    //                 done();
+    //             });
+    //     });
+        
+    //     it("should create 'wants' in a user.", function(done){
+    //         done();
+    //     });
+    // });
 
     describe("/DELETE", function () {
 
