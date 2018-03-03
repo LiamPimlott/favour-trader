@@ -222,8 +222,7 @@ describe('User with Skills', function () {
 
     it('should Have Gardening', function (done) {
         let skill = new Skill({
-            "_id": new mongoose.Types.ObjectId(),
-            "skill": "Gardener"
+            skill: "Gardener"
         });
         skill.save((err, skill) => {
             //console.log(err);
@@ -251,6 +250,7 @@ describe('User with Skills', function () {
                     .select('has')
                     .populate('has')
                     .exec((err, user) => {
+                        expect(user).to.exist;
                         expect(user.has[0].category.skill).to.equal("Gardener");
                         done();
                     });
