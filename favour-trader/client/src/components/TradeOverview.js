@@ -4,7 +4,6 @@ import { Card, Row, Col, Button, Icon, Popover } from 'antd';
 class UserOverview extends Component{
     render() {
         const {offererName, offereeName, tradeStatus, tradeMessage} = this.props.overview;
-        console.log(this.props.overview);
         const title = <h5>{offereeName} <Icon type={'swap'}/>{offererName}</h5>;
         return (
             <Card style={{marginBottom: '2%'}} title={title}>
