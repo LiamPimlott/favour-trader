@@ -213,19 +213,26 @@ router.get('/matches', passport.authenticate('jwt', { session: false }), functio
 			if(hasFilter == 'true' && wantsFilter == 'false')
 			{
 				matches = User.find({ 
-					"wants.category": { $in: userHasArray }
-				});
+					$and: [
+						{ "has.category": { $in: userWantsArray } },
+						{ _id: { $ne: user._id } },
+					]
+				})
 			}
 			else if(wantsFilter == 'true' && hasFilter == 'false')
 			{
 				matches = User.find({ 
-					"has.category": { $in: userWantsArray }
-				});
+					$and: [
+						{ "wants.category": { $in: userHasArray } },
+						{ _id: { $ne: user._id } },
+					]
+				})
 			} else {
 				matches = User.find({ 
 					$and: [
 						{ "has.category": { $in: userWantsArray } },
 						{ "wants.category": { $in: userHasArray } },
+						{ _id: { $ne: user._id } },
 					]
 				})
 			}
