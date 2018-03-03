@@ -65,13 +65,13 @@ var UserSchema = new mongoose.Schema({
     type: String
   },
   has: [{
-      category: { 
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Skill"
-      },
-      description: {
-        type: String
-      }
+    category: { 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Skill"
+    },
+    description: {
+      type: String
+    }
   }],
   wants: [{
     category: { 
