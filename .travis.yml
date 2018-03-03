@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "node"
+install:
+  - npm --prefix ./favour-trader install ./favour-trader
+  - npm --prefix ./favour-trader/client install ./favour-trader/client
+script:
+  - cd favour-trader
+  - npm test
+  - cd client
+  - npm test

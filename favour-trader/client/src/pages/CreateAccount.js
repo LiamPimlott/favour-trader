@@ -146,7 +146,7 @@ class CreateAccount extends Component {
                             }
                         </FormItem>
                         <Button type={'primary'} onClick={this.submit} loading={this.state.iconLoading} className={'signup-form-button'} >Submit</Button>
-                        <p className={'user-agreement'}>By signing up, you agree to our <br/> <a href="#">User Agreement</a></p>
+                        <p className={'user-agreement'}>By signing up, you agree to our <br/> <a href="">User Agreement</a></p>
                     </Form>
                 </Card>
             </div>

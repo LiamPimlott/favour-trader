@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Fade } from "reactstrap";
 import { Redirect } from 'react-router-dom';
 import {Card,  Form, Icon, Input, Button } from 'antd';
 import './Login.css';
+import {message} from "antd/lib/index";
 const FormItem = Form.Item;
 
 class Login extends Component {
@@ -13,9 +13,9 @@ class Login extends Component {
             password: "",
             redirect: false,
             failedAttempt: false,
+            iconLoading: false,
         };
 
-        this.handleChange = this.handleChange.bind(this);
         this.renderErrorText = this.renderErrorText.bind(this);
         this.submit = this.submit.bind(this);
     }
@@ -31,40 +31,47 @@ class Login extends Component {
 
     submit() {
         const {authService} = this.props;
-        authService.login(this.state.email, this.state.password)
-            .then(res => {
-                if (res.success && res.token) {
-                    this.setState({
-                        redirect: true,
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                authService.login(
+                    values.emailAddress,
+                    values.password,
+                    )
+                    .then(res => {
+                        if (res.success && res.token) {
+                            this.setState({
+                                redirect: true,
+                            });
+                        } else {
+                            this.setState({
+                                failedAttempt: true,
+                                iconLoading: true
+                            });
+                            if(this.state.failedAttempt){
+                                this.renderErrorText(res.message);
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        alert(err);
                     });
-                } else {
-                    this.setState({
-                        failedAttempt: true,
-                    });
-                }
-            })
-            .catch(err => {
-                alert(err);
-            });
+            }
+        })
+
     }
 
-    handleChange(e) {
-        this.setState({
-            [e.target.id]: e.target.value
-        });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-    }
-
-    renderErrorText() {
+    renderErrorText(err) {
         return (
-            <Fade className={'center'}>You have entered an invalid email address or password.</Fade>
+            message.error(err, 2 , ()=> {
+                this.setState({
+                    iconLoading: false
+                });
+            })
         );
     }
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         const title = <h5>Favor <Icon type={'swap'}/> Trader</h5>;
         return (
             <div className={'container'}>
@@ -72,35 +79,45 @@ class Login extends Component {
                     (this.state.redirect) ? (<Redirect to={'/'}/>) : ('')
                 }
                 <Card title={title} bordered={true} className={'login-form-card'}>
-                    <Form onSubmit={this.handleSubmit} className="login-form">
-                        {
-                            (this.state.failedAttempt) ? (this.renderErrorText()) : ('')
-                        }
+                    <Form className="login-form">
                         <FormItem>
+                            {
+                                getFieldDecorator('emailAddress', {
+                                    rules: [{ required: true, message: 'Please input your E-mail address!' },
+                                            {type: 'email', message: 'The input is not valid E-mail!'}],
+                                    validateTrigger: 'onBlur'
+                                })
+                                (
                                 <Input
-                                    prefix={<Icon type="user"
-                                    style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                    prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                     placeholder="Email Address"
-                                    value={this.state.email}
-                                    onChange={this.handleChange}
-                                    type="email" name="email"
+                                    type="email"
+                                    name="email"
                                     id="email" />
+                                )
+                            }
                         </FormItem>
                         <FormItem>
-                                <Input prefix={<Icon type="lock"
-                                       style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                       value={this.state.password}
-                                       onChange={this.handleChange}
-                                       type="password"
-                                       name="password"
-                                       id="password"
-                                       placeholder="Password" />
+                            {
+                                getFieldDecorator('password', {
+                                    rules: [{ required: true, message: 'Please input your password!' }],
+                                    validateTrigger: 'onBlur',
+                                })
+                                (
+                                    <Input type="password"
+                                           name="password"
+                                           id="password"
+                                           placeholder=" Password"
+                                           prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}/>
+                                )
+                            }
                         </FormItem>
                         <FormItem>
-                            <Button type="primary" htmlType="submit"  onClick={this.submit} className="login-form-button">
+                            <Button type="primary" htmlType="submit"
+                                    onClick={this.submit} loading={this.state.iconLoading}  className="login-form-button">
                                 Log in
                             </Button>
-                            Or <a href="">register now!</a>
+                            Or <a href="/create-account">register now!</a>
                         </FormItem>
                     </Form>
                 </Card>
@@ -109,4 +126,5 @@ class Login extends Component {
     }
 }
 
-export default Login;
+const WrappedLoginForm = Form.create()(Login);
+export default WrappedLoginForm;

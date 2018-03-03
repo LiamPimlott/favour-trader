@@ -1,8 +1,4 @@
-import React, {Component} from 'react';
-import UserProfileModal from '../components/UserProfileModal.js';
 import axios from 'axios'
-import {Row} from 'antd';
-import MatchCard from "../components/MatchCard";
 import Main from "./Main"
 
 class FilterHas extends Main {
@@ -26,7 +22,6 @@ class FilterHas extends Main {
                 console.log(err);
             });
         }
-        // else should redirect to login page
     }
 }
 

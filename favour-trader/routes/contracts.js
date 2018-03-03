@@ -46,19 +46,19 @@ router.post('/',
     {
         const newContract = new Contract({  
             offeror: {
-                id: req.user.id,
+                id: req.body.offeror.id,
                 favours: req.body.offeror.favours
             },
             offeree: {
                 id: req.body.offeree.id,
                 favours: req.body.offeree.favours
-            },  
+            },
+            messages: req.body.messages
         });
-        devDebug(req.body.offeree.favours);
         newContract.save({}, function (err, contract) {
             if (err) {
                 devDebug(err);
-                res.json({ success: false, message: "Required fields are missing."})
+                res.json({success: false, message: "Required fields are missing."})
             } else {
                 res.json(contract);
             }
