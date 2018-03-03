@@ -49,7 +49,7 @@ class Contract extends Component {
         const { match: { params } } = this.props;
         return (
             <div >
-                <Col sm="12" md={{ size: 8, offset: 2 }}>
+                <Col >
                 <TradeOverview overview={this.state.overview} />
             	</Col>
             </div>
