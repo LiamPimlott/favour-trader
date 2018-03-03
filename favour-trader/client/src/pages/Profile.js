@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import UserOverview from "../components/UserOverview";
 import EditUserOverview from "../components/EditUserOverview";
 import NewSkillModal from "../components/NewSkillModal";
-import { Card, Button, Icon, Row, Col } from 'antd';
+import { Card, Modal, Button, Icon, Row, Col } from 'antd';
 import axios from 'axios'
 import './Profile.css';
+import UserSkills from '../components/UserSkills';
+import SkillsList from '../components/SkillsList';
 
 class Profile extends Component {
     constructor() {
@@ -96,6 +98,7 @@ class Profile extends Component {
 
     toggleNewSkillModal = () => {
         this.setState({ showNewSkillModal: !this.state.showNewSkillModal });
+        this.newSkillForm.resetFields();
     }
 
     handleNewSkillSave = () => {
@@ -131,6 +134,39 @@ class Profile extends Component {
                 console.log(err);
             });   
         });
+    }
+
+    handleSkillDelete = (skillSet, toDeleteId) => {
+        const { authService } = this.props;
+        const config = {
+            headers: {
+                Authorization: authService.getToken()
+            }
+        };
+        const updatedSkills = this.state.skills[skillSet].filter( skill => skill._id !== toDeleteId );
+        return axios.put('api/users/update', { [skillSet]: updatedSkills }, config)
+        .then(res => res.data.user)
+        .then(updatedUser => this.setState({
+            skills: {
+                has: updatedUser.has,
+                wants: updatedUser.wants,
+            }
+        }))
+        .catch((err) => {
+            console.log(err);
+        });   
+    }
+
+    confirmDeleteSkill = (skillSet, toDeleteId) => {
+        const handleDelete = () => this.handleSkillDelete(skillSet, toDeleteId);
+        const settings = {
+            title: 'Are you sure?',
+            content: 'This Skill will be deleted permanently.',
+            okText: 'Delete',
+            okType: 'danger',
+            onOk: handleDelete
+        };
+        Modal.confirm(settings);
     }
 
     componentDidMount() {
@@ -187,7 +223,9 @@ class Profile extends Component {
             (skills !== [] ) ? (
                 skills.map(function (skill) {
                     return (
-                        <Card key={skill._id} id={'skill'} title={skill.category.skill} extra={<a href="#"><Icon type={'delete'}/></a>}>
+                        <Card key={skill._id} id={'skill'} title={skill.category.skill} extra={
+                            <Button type="danger" icon="delete" onClick={this.confirmDeleteSkill} />
+                        }>
                             <p>{skill.description}</p>
                         </Card> )
                 })
@@ -197,13 +235,33 @@ class Profile extends Component {
 
     render() {
         return (
-            <div>
-                <UserOverview
-                    isCurrentUser={this.state.isCurrentUser} 
-                    profileId={this.state.profileId}
-                    overview={this.state.overview}
-                    onEditUser={this.toggleEditUserModal}
-                />
+            <div id='user-profile-page'>
+                <Row>
+                    <UserOverview
+                        isCurrentUser={this.state.isCurrentUser} 
+                        profileId={this.state.profileId}
+                        overview={this.state.overview}
+                        onEditUser={this.toggleEditUserModal}
+                    />
+                </Row>
+                <Row>
+                    <UserSkills 
+                        isCurrentUser={this.state.isCurrentUser}
+                        skills={this.state.skills} 
+                        toggleNewSkillModal={this.toggleNewSkillModal}
+                        toggleDeleteSkillConfirm={this.confirmDeleteSkill}
+                    />
+                </Row>
+                <Row type='flex' justify='space-around' align='middle'>
+                    <Button
+                        type='primary'
+                        size='large'
+                        icon='swap'
+                        style={{marginTop: '50px'}}
+                    >
+                        Offer a Trade!
+                    </Button>
+                </Row>
                 <EditUserOverview
                     ref={this.saveEditUserFormRef}
                     overview={this.state.overview}
@@ -220,25 +278,6 @@ class Profile extends Component {
                     onSave={this.handleNewSkillSave}
                     confirmUpdate={this.state.confirmNewSkill}
                 />
-                <Row type="flex" justify="space-around">
-                    <Col span={12}>
-                        <Card title={'Looking For'} extra={
-                            <Button
-                                onClick={this.toggleNewSkillModal}
-                                type="primary"
-                                shape="circle"
-                                icon="plus" />
-                            }
-                        >
-                            {this.renderSkills('wants')}
-                        </Card>
-                    </Col>
-                    <Col span={12}>
-                        <Card title={'Skills I Want'} extra={<a href="#"><Icon type={'plus'}/></a>}>
-                            {this.renderSkills('has')}
-                        </Card>
-                    </Col>
-                </Row>
             </div>
         );
     }
