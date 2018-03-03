@@ -26,7 +26,7 @@ class ReviewSkillsModal extends Component {
                   <ul>
                     {
                       user.wants.map( (skill) => {
-                                      return (<li key={skill._id}> {skill.skill} </li>)
+                                      return (<li key={skill._id}> {skill.category.skill} </li>)
                                   }, this)
                     }
                   </ul> 
