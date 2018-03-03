@@ -42,7 +42,7 @@ router.get('/',
 // GET - USERS/ID - returns a user's profile by their id.
 router.get('/contract/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
     Contract.findById(req.params.id).
-    exec( (err, foundTrade) => {
+    exec((err, foundTrade) => {
         if (err) {
             devDebug(err);
             next(err);
