@@ -247,7 +247,7 @@ describe('User with Skills', function () {
             user.save((err, person) => {
                 expect(person).to.exist;
                 expect(err).to.not.exist;
-                User.findOne({})
+                User.findById(person._id)
                     .select('has')
                     .populate('has')
                     .exec((err, user) => {
