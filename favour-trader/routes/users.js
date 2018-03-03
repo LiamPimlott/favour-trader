@@ -179,7 +179,7 @@ router.put('/update', passport.authenticate('jwt', { session: false }), function
 	User.findByIdAndUpdate(req.user.id, req.body, {new: true})
 	.populate('has.category')
 	.populate('wants.category')
-	.exec( (err, updatedUser) => {
+	.exec((err, updatedUser) => {
 		if (err) {
 			devDebug(err);
 			next(err);

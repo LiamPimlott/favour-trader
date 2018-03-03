@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { List, Tabs, Button, Card } from 'antd';
 const TabPane = Tabs.TabPane;
 
-
 class SkillsList extends Component {
     render() {
         return (
@@ -27,7 +26,7 @@ class SkillsList extends Component {
                 )}
             />
             
-        )
+        );
     }
 }
 

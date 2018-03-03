@@ -100,8 +100,10 @@ class Profile extends Component {
     }
 
     toggleNewSkillModal = () => {
-        this.setState({ showNewSkillModal: !this.state.showNewSkillModal });
-        this.newSkillForm.resetFields();
+        this.setState(
+            { showNewSkillModal: !this.state.showNewSkillModal },
+            () => this.newSkillForm.resetFields()
+        );
     }
 
     handleNewSkillSave = () => {
@@ -111,10 +113,13 @@ class Profile extends Component {
                 return;
             }
             const { authService } = this.props;
-            const updatedSkills = [...this.state.skills[values.skillSet], {
-                category: values.skillCategory,
-                description: values.description,
-            }];
+            const updatedSkills = [
+                ...this.state.skills[values.skillSet],
+                {
+                    category: values.skillCategory,
+                    description: values.description,
+                }
+            ];
             const config = {
                 headers: {
                     Authorization: authService.getToken()
@@ -231,11 +236,12 @@ class Profile extends Component {
 
     render() {
         const { authService } = this.props;
+        const { isCurrentUser } = this.state;
         return (
             <div id='user-profile-page'>
                 <Row>
                     <UserOverview
-                        isCurrentUser={this.state.isCurrentUser} 
+                        isCurrentUser={isCurrentUser} 
                         profileId={this.state.profileId}
                         overview={this.state.overview}
                         onEditUser={this.toggleEditUserModal}
@@ -243,13 +249,15 @@ class Profile extends Component {
                 </Row>
                 <Row>
                     <UserSkills 
-                        isCurrentUser={this.state.isCurrentUser}
+                        isCurrentUser={isCurrentUser}
                         skills={this.state.skills} 
                         toggleNewSkillModal={this.toggleNewSkillModal}
                         toggleDeleteSkillConfirm={this.confirmDeleteSkill}
                     />
                 </Row>
-                { this.state.isCurrentUser ? '' : (
+                { isCurrentUser 
+                    ? '' 
+                    : (
                         <Row type='flex' justify='space-around' align='middle'>
                             <Button
                                 type='primary'

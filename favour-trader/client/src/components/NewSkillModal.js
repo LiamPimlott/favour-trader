@@ -12,14 +12,6 @@ const NewSkillModal = Form.create()(
     const { visible, confirmNew, onCancel, onSave, form } = props;
     const { getFieldDecorator } = form;
 
-    function handleBlur() {
-        console.log('blur');
-    }
-      
-    function handleFocus() {
-        console.log('focus');
-    }
-
     return (
       <Modal
         visible={visible}
@@ -49,12 +41,10 @@ const NewSkillModal = Form.create()(
                         style={{ width: 200 }}
                         placeholder="Select a Category"
                         optionFilterProp="children"
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     >
                         {
-                            (categories !== [] ) ? (
+                            (categories !== null && categories !== []) ? (
                                 categories.map( category => {
                                     return (<Option key={category.skill} value={category._id}>{category.skill}</Option>)
                                 })

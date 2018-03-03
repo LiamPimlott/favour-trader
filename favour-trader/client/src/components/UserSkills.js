@@ -3,7 +3,6 @@ import { Button, Tabs, List, Card } from 'antd';
 import SkillsList from "./SkillsList";
 const TabPane = Tabs.TabPane;
 
-
 class UserSkills extends Component {
     
     render() {
@@ -12,14 +11,17 @@ class UserSkills extends Component {
                 <Tabs 
                     size="large" 
                     tabBarStyle={{margin: '15px 0px 0px 0px'}}
-                    tabBarExtraContent={ this.props.isCurrentUser ? (<Button
-                        onClick={this.props.toggleNewSkillModal}
-                        type="primary"
-                        icon="plus" 
-                        style={{marginRight: "15px"}}
-                    >
-                        New Skill
-                    </Button>) : ''}
+                    tabBarExtraContent={ this.props.isCurrentUser 
+                        ? (<Button
+                                onClick={this.props.toggleNewSkillModal}
+                                type="primary"
+                                icon="plus" 
+                                style={{marginRight: "15px"}}
+                            >
+                                New Skill
+                            </Button>) 
+                        : ''
+                    }
                 >
                     <TabPane tab="Skills I Have" key="has">
                         <SkillsList
@@ -39,7 +41,7 @@ class UserSkills extends Component {
                     </TabPane>
                 </Tabs>
             </Card>
-        )
+        );
     }
 }
 
