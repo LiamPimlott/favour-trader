@@ -54,7 +54,6 @@ router.get('/contract/:id', passport.authenticate('jwt', { session: false }), fu
     });
 });
 
-
 // POST - ROOT - create a contract
 router.post('/',
     passport.authenticate('jwt', { session: false }),
