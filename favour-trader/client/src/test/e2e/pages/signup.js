@@ -1,4 +1,3 @@
-
 'use strict';
 
 let I;
@@ -24,7 +23,6 @@ module.exports = {
         I.fillField(this.fields.lastName, lastName);
         I.fillField(this.fields.email, emailAddress);
         I.fillField(this.fields.password, password);
-
     },
 
     submitForm() {

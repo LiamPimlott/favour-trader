@@ -1,4 +1,3 @@
-
 Feature('register');
 
 Scenario('User already exist', (I, signupPage) => {
