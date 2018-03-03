@@ -3,7 +3,6 @@ import TradeOverview from '../components/TradeOverview.js';
 import axios from 'axios'
 import {Row, Col} from 'antd';
 
-
 class Contract extends Component {
     constructor() {
         super();
@@ -48,8 +47,6 @@ class Contract extends Component {
 
     render() {
         const { match: { params } } = this.props;
-
-
         return (
             <div >
                 <Col sm="12" md={{ size: 8, offset: 2 }}>

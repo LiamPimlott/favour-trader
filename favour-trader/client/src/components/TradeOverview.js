@@ -14,14 +14,12 @@ class UserOverview extends Component{
                                 <Button size ="large" type="primary" >{tradeStatus}</Button>
                             </Popover>
                         </Col>
-
                     </Row>
-
-                <Row type="flex" justify="space-between">
-                    <Col span={12}>
-                        <p><strong>Message:</strong> {(tradeMessage === "") ? ('No message') : (tradeMessage)}</p>
-                    </Col>
-                </Row>
+                    <Row type="flex" justify="space-between">
+                        <Col span={12}>
+                            <p><strong>Message:</strong> {(tradeMessage === "") ? ('No message') : (tradeMessage)}</p>
+                        </Col>
+                    </Row>
 
             </Card>
         );
