@@ -7,7 +7,7 @@ class UserOverview extends Component{
         console.log(this.props.overview);
         const title = <h5>{offereeName} <Icon type={'swap'}/>{offererName}</h5>;
         return (
-            <Card style={{marginBottom: '2%', width :'40%'}} title={title}>
+            <Card style={{marginBottom: '2%'}} title={title}>
                     <Row type="flex" justify="center">
                         <Col span={12} id={'trade-status'} style={{textAlign: 'center'}}>
                             <Popover content="Current Status" trigger="hover">
