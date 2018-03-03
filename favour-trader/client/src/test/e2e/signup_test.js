@@ -5,12 +5,12 @@ Scenario('User already exist', (I, signupPage) => {
     I.amOnPage('/');
     I.click("//a[@href='/create-account']");
     signupPage.fillsignUpForm('ismail', 'acceptance', 'acceptance@test.com', 'password');
-    signupPage.submit();
+    signupPage.submitForm();
     I.waitForText('Email already exists or required fields missing.');
     I.see('Email already exists or required fields missing.')
 });
 
-Scenario('Sign up validation @signupValidation', (I, signupPage) => {
+Scenario('Sign up validation', (I, signupPage) => {
     I.amOnPage('/');
     I.click("//a[@href='/create-account']");
     signupPage.fillsignUpForm('', '', '', '');
