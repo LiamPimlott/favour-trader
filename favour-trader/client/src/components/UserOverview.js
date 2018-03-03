@@ -21,6 +21,7 @@ class UserOverview extends Component{
                         { renderEdit ? 
                             (<Button 
                                 type={'primary'}
+                                icon='edit'
                                 style={{float: 'right'}}
                                 onClick={this.props.onEditUser}
                             >Edit Profile</Button>) : 
