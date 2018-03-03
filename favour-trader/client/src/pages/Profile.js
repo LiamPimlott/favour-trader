@@ -249,17 +249,20 @@ class Profile extends Component {
                         toggleDeleteSkillConfirm={this.confirmDeleteSkill}
                     />
                 </Row>
-                <Row type='flex' justify='space-around' align='middle'>
-                    <Button
-                        type='primary'
-                        size='large'
-                        icon='swap'
-                        style={{marginTop: '50px'}}
-                        onClick={this.toggleCreateTradeModal}
-                    >
-                        Offer a Trade!
-                    </Button>
-                </Row>
+                { this.state.isCurrentUser ? '' : (
+                        <Row type='flex' justify='space-around' align='middle'>
+                            <Button
+                                type='primary'
+                                size='large'
+                                icon='swap'
+                                style={{marginTop: '50px'}}
+                                onClick={this.toggleCreateTradeModal}
+                            >
+                                Offer a Trade!
+                            </Button>
+                        </Row>
+                    )
+                }
                 <EditUserOverview
                     ref={this.saveEditUserFormRef}
                     overview={this.state.overview}
