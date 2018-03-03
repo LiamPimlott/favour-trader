@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
+import axios from 'axios'
+import { Card, Modal, Button, Icon, Row, Col } from 'antd';
 import UserOverview from "../components/UserOverview";
 import EditUserOverview from "../components/EditUserOverview";
 import NewSkillModal from "../components/NewSkillModal";
-import { Card, Modal, Button, Icon, Row, Col } from 'antd';
-import axios from 'axios'
-import './Profile.css';
+import CreateTradeModal from "../components/CreateTradeModal";
 import UserSkills from '../components/UserSkills';
 import SkillsList from '../components/SkillsList';
+import './Profile.css';
 
 class Profile extends Component {
     constructor() {
         super();
         this.state = {
+            userId: '',
             overview: {
                 firstName: '',
                 lastName: '',
@@ -31,6 +33,7 @@ class Profile extends Component {
             confirmEditUser: false,
             showNewSkillModal:false,
             confirmNewSkill: false,
+            createTradeModalOpen: false,
         };
     }
 
@@ -172,7 +175,7 @@ class Profile extends Component {
     componentDidMount() {
         const { authService } = this.props;
         const { match: { params } } = this.props;
-
+        this.mounted = true;
         if (authService.loggedIn()) {
             const config = {
                 headers: {
@@ -216,24 +219,18 @@ class Profile extends Component {
                 })
         }
     }
+    componentWillUnmount() {
+        this.mounted = false;
+    }
 
-    renderSkills(skillSet) {
-        const skills = this.state.skills[skillSet];
-        return (
-            (skills !== [] ) ? (
-                skills.map(function (skill) {
-                    return (
-                        <Card key={skill._id} id={'skill'} title={skill.category.skill} extra={
-                            <Button type="danger" icon="delete" onClick={this.confirmDeleteSkill} />
-                        }>
-                            <p>{skill.description}</p>
-                        </Card> )
-                })
-            ) : ('')
-        );
+    toggleCreateTradeModal = () => {
+        this.setState({
+            createTradeModalOpen: !this.state.createTradeModalOpen,
+        });
     }
 
     render() {
+        const { authService } = this.props;
         return (
             <div id='user-profile-page'>
                 <Row>
@@ -258,6 +255,7 @@ class Profile extends Component {
                         size='large'
                         icon='swap'
                         style={{marginTop: '50px'}}
+                        onClick={this.toggleCreateTradeModal}
                     >
                         Offer a Trade!
                     </Button>
@@ -278,6 +276,12 @@ class Profile extends Component {
                     onSave={this.handleNewSkillSave}
                     confirmUpdate={this.state.confirmNewSkill}
                 />
+                <CreateTradeModal requestableSkills={this.state.skills.wants}
+                    username={this.state.overview.firstName}
+                    authService={authService}
+                    offereeId={this.state.userId}
+                    isOpen={this.state.createTradeModalOpen}
+                    toggle={this.toggleCreateTradeModal}/>
             </div>
         );
     }
