@@ -22,6 +22,39 @@
     }
 }
 
+.ant-layout-header {
+    background: #283593;
+    color: white;
+    padding: 0 15px;
+}
+
+
+.ant-layout-header .ant-menu  {
+    background: #283593;
+    margin-top: 1%;
+    font-size: medium;
+}
+
+.ant-layout-header h4  {
+    margin-top: 1%;
+    float: left;
+    margin-left: 2%;
+}
+
+.ant-layout-header .ant-menu a {
+    color: white;
+}
+
+.ant-layout-header .ant-menu li {
+    color: white;
+}
+
+.ant-layout-header .ant-menu i {
+    font-size: medium;
+    color: white;
+}
+
+
 .center-helper {
     margin-right: auto;
     margin-left: auto;
@@ -63,4 +96,16 @@
 
 .create-account {
     float: right;
+}
+
+#match-card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    width: 300px;
+    margin-top: 10px;
+}
+
+
+#match-card:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 5px 5px rgba(0,0,0,0.22);
 }

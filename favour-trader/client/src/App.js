@@ -99,11 +99,11 @@ class App extends Component {
     render() {
         return (
             <Layout style={{height:"100vh"}}>
-                <Header style={{ background: '#fff', padding: 0 }}>
+                <Header>
                     {
                         this.renderNavToggler(this.authService.loggedIn())
                     }
-                    <h4 style={{float: 'left', marginLeft: '2%', marginTop: '0.5%'}}>Favor <Icon type={'swap'}/> Trader</h4>
+                    <h4>Favor <Icon type={'swap'}/> Trader</h4>
                     {
                         this.renderMenuItems(this.authService.loggedIn())
                     }
