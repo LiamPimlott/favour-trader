@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import UserOverview from "../components/UserOverview";
-import { Card, Icon, Row, Col, Button } from 'antd';
-import EditUserOverview from "../components/EditUserOverview";
-import CreateTradeModal from "../components/CreateTradeModal";
 import axios from 'axios'
+import { Card, Modal, Button, Icon, Row, Col } from 'antd';
+import UserOverview from "../components/UserOverview";
+import EditUserOverview from "../components/EditUserOverview";
+import NewSkillModal from "../components/NewSkillModal";
+import CreateTradeModal from "../components/CreateTradeModal";
+import UserSkills from '../components/UserSkills';
+import SkillsList from '../components/SkillsList';
 import './Profile.css';
 
 class Profile extends Component {
     constructor() {
         super();
         this.state = {
+            userId: '',
             overview: {
                 firstName: '',
                 lastName: '',
@@ -23,20 +27,22 @@ class Profile extends Component {
                 has: [],
                 wants: [],
             },
-            userId: '',
+            skillCategories: [],
             isCurrentUser: false,
             editUserVisible: false,
             confirmEditUser: false,
+            showNewSkillModal:false,
+            confirmNewSkill: false,
             createTradeModalOpen: false,
         };
     }
 
-    showEditUser = () => {
-        this.setState({ editUserVisible: true });
+    saveEditUserFormRef = (form) => {
+        this.editUserForm = form;
     }
 
-    handleEditUserCancel = () => {
-        this.setState({ editUserVisible: false });
+    toggleEditUserModal = () => {
+        this.setState({ editUserVisible: !this.state.editUserVisible });
     }
 
     handleEditUserSave = () => {
@@ -89,11 +95,89 @@ class Profile extends Component {
         });
     }
 
-    saveEditUserFormRef = (form) => {
-        this.editUserForm = form;
-      }
+    saveNewSkillFormRef = (form) => {
+        this.newSkillForm = form;
+    }
 
-    componentWillMount() {
+    toggleNewSkillModal = () => {
+        this.setState(
+            { showNewSkillModal: !this.state.showNewSkillModal },
+            () => this.newSkillForm.resetFields()
+        );
+    }
+
+    handleNewSkillSave = () => {
+        const newSkillForm = this.newSkillForm;
+        newSkillForm.validateFields((err, values) => {
+            if (err) {
+                return;
+            }
+            const { authService } = this.props;
+            const updatedSkills = [
+                ...this.state.skills[values.skillSet],
+                {
+                    category: values.skillCategory,
+                    description: values.description,
+                }
+            ];
+            const config = {
+                headers: {
+                    Authorization: authService.getToken()
+                }
+            };
+            this.setState({ confirmNewSkill: true });
+            axios.put('api/users/update', { [values.skillSet]: updatedSkills }, config)
+            .then(res => res.data.user)
+            .then(updatedUser => this.setState({
+                skills: {
+                    has: updatedUser.has,
+                    wants: updatedUser.wants,
+                },
+                confirmNewSkill: false,
+                showNewSkillModal: false,
+            }))
+            .then(() => newSkillForm.resetFields())
+            .catch((err) => {
+                this.setState({ confirmNewSkill: false, showNewSkillModal: false });
+                console.log(err);
+            });   
+        });
+    }
+
+    handleSkillDelete = (skillSet, toDeleteId) => {
+        const { authService } = this.props;
+        const config = {
+            headers: {
+                Authorization: authService.getToken()
+            }
+        };
+        const updatedSkills = this.state.skills[skillSet].filter( skill => skill._id !== toDeleteId );
+        return axios.put('api/users/update', { [skillSet]: updatedSkills }, config)
+        .then(res => res.data.user)
+        .then(updatedUser => this.setState({
+            skills: {
+                has: updatedUser.has,
+                wants: updatedUser.wants,
+            }
+        }))
+        .catch((err) => {
+            console.log(err);
+        });   
+    }
+
+    confirmDeleteSkill = (skillSet, toDeleteId) => {
+        const handleDelete = () => this.handleSkillDelete(skillSet, toDeleteId);
+        const settings = {
+            title: 'Are you sure?',
+            content: 'This Skill will be deleted permanently.',
+            okText: 'Delete',
+            okType: 'danger',
+            onOk: handleDelete
+        };
+        Modal.confirm(settings);
+    }
+
+    componentDidMount() {
         const { authService } = this.props;
         const { match: { params } } = this.props;
         this.mounted = true;
@@ -104,37 +188,40 @@ class Profile extends Component {
                 }
             };
 
-            const endpoint = params.userId ? 
+            const profileEndpoint = params.userId ? 
                 `/api/users/${params.userId}/profile` :
                 `/api/users/profile`;
 
-            axios.get(endpoint, config)
+            axios.get(profileEndpoint, config)
                 .then(res => res.data.user)
-                .then((userData) => {
-                    if (this.mounted){
-                        this.setState({
-                            overview: {
-                                firstName: userData.name.first,
-                                lastName: userData.name.last,
-                                country: userData.address.country,
-                                state: userData.address.state,
-                                city: userData.address.city,
-                                postalCode: '',
-                                about: userData.about,
-                            },
-                            skills: {
-                                has: userData.has,
-                                wants: userData.wants,
-                            },
-                            userId: userData._id,
-                            isCurrentUser: (userData._id === authService.getProfile().id)
-                        })
-                    }
-                }
-                    )
-                .catch((err) => {
+                .then(userData => this.setState({
+                    overview: {
+                        firstName: userData.name.first,
+                        lastName: userData.name.last,
+                        country: userData.address.country,
+                        state: userData.address.state,
+                        city: userData.address.city,
+                        postalCode: '',
+                        about: userData.about,
+                    },
+                    skills: {
+                        has: userData.has,
+                        wants: userData.wants,
+                    },
+                    isCurrentUser: (userData._id === authService.getProfile().id)
+                }))
+                .catch( err => {
                     console.log(err);
                 });
+
+            axios.get("api/skills/all")
+                .then(res => res.data)
+                .then(categories => this.setState({
+                    skillCategories: categories,
+                }))
+                .catch( err => {
+                    console.log(err);
+                })
         }
     }
     componentWillUnmount() {
@@ -147,61 +234,59 @@ class Profile extends Component {
         });
     }
 
-    renderSkills(skillSet) {
-        const skills = this.state.skills[skillSet];
-        return (
-            (skills !== [] ) ? (
-                skills.map(function (skill) {
-                    return (
-                        <Card key={skill._id} id={'skill'} title={skill.skill} extra={<a href=""><Icon type={'delete'}/></a>}>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris accumsan interdum urna
-                                eu lacinia. Fusce sed lacus ultricies nunc laoreet ornare. Pellentesque aliquam tincidunt
-                                neque, sed fringilla mauris pharetra a.	</p>
-                        </Card> )
-                })
-            ) : ('')
-        );
-    }
-
     render() {
         const { authService } = this.props;
+        const { isCurrentUser } = this.state;
         return (
-            <div>
-                <UserOverview
-                    isCurrentUser={this.state.isCurrentUser} 
-                    profileId={this.state.profileId}
-                    overview={this.state.overview}
-                    onEditUser={this.showEditUser}
-                />
+            <div id='user-profile-page'>
+                <Row>
+                    <UserOverview
+                        isCurrentUser={isCurrentUser} 
+                        profileId={this.state.profileId}
+                        overview={this.state.overview}
+                        onEditUser={this.toggleEditUserModal}
+                    />
+                </Row>
+                <Row>
+                    <UserSkills 
+                        isCurrentUser={isCurrentUser}
+                        skills={this.state.skills} 
+                        toggleNewSkillModal={this.toggleNewSkillModal}
+                        toggleDeleteSkillConfirm={this.confirmDeleteSkill}
+                    />
+                </Row>
+                { isCurrentUser 
+                    ? '' 
+                    : (
+                        <Row type='flex' justify='space-around' align='middle'>
+                            <Button
+                                type='primary'
+                                size='large'
+                                icon='swap'
+                                style={{marginTop: '50px'}}
+                                onClick={this.toggleCreateTradeModal}
+                            >
+                                Offer a Trade!
+                            </Button>
+                        </Row>
+                    )
+                }
                 <EditUserOverview
                     ref={this.saveEditUserFormRef}
                     overview={this.state.overview}
                     visible={this.state.editUserVisible}
-                    onCancel={this.handleEditUserCancel}
+                    onCancel={this.toggleEditUserModal}
                     onSave={this.handleEditUserSave}
                     confirmUpdate={this.state.confirmEditUser}
                 />
-                <Row type="flex" justify="space-around">
-                    <Col span={8}>
-                        <Card title={'Looking For'} extra={<a href=""><Icon type={'plus'}/></a>}>
-                            {this.renderSkills('wants')}
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card title={'Skills I Want'} extra={<a href=""><Icon type={'plus'}/></a>}>
-                            {this.renderSkills('has')}
-                        </Card>
-                    </Col>
-                </Row>
-                {
-                    (!this.state.isCurrentUser) ? (
-                        <div className={'offerButtonWrapper'}>
-                            <Button onClick={this.toggleCreateTradeModal}>Offer Trade!</Button>
-                        </div>
-                    ) : (
-                        ''
-                    )
-                }
+                <NewSkillModal
+                    ref={this.saveNewSkillFormRef}
+                    categories={this.state.skillCategories}
+                    visible={this.state.showNewSkillModal}
+                    onCancel={this.toggleNewSkillModal}
+                    onSave={this.handleNewSkillSave}
+                    confirmNew={this.state.confirmNewSkill}
+                />
                 <CreateTradeModal requestableSkills={this.state.skills.wants}
                     username={this.state.overview.firstName}
                     lastName={this.state.overview.lastName}
