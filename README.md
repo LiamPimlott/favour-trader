@@ -22,18 +22,18 @@ Beom-Jin Park
 Option 1 - Running server or client individually:
 a) Running the server / api
 - Navigate to /favour-trader/
-- Run npm install to install required packages (only once)
-- Run npm run prodServer or npm run devServer to spin up the server locally with either prod or dev environment flags.
+- Run `npm install` to install required packages (only once)
+- Run `npm run prodServer` or `npm run devServer` to spin up the server locally with either prod or dev environment flags.
 
 b) Running the web client
 - Navigate to /favour-trader/client
-- Run npm install to install required packages (only once)
-- Run npm start to spin up a local instance of the client (this will automatically try to connect to local back-end intance)
+- Run `npm install` to install required packages (only once)
+- Run `npm start` to spin up a local instance of the client (this will automatically try to connect to local back-end intance)
 
 Option 2 - Running server and web client concurrently:
 - Navigate to /favour-trader/
-- Run npm install to install required packages (only once)
-- Run npm run dev to run the dev server and dev client concurrently in one shell
+- Run `npm install` to install required packages (only once)
+- Run `npm run dev` to run the dev server and dev client concurrently in one shell
 
 Running Mobile Client:
 - TBD
@@ -48,4 +48,4 @@ The tests use Mocha and Chai. They connect to a totally different MongoDB instan
 They also run the server locally. At least they do in the api tests. ¯\_(ツ)_/¯
 Running the tests:
 - Do option 1a at least.
-- Run npm test
+- Run `npm test`
