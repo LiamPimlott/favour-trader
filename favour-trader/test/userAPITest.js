@@ -114,18 +114,20 @@ const users = [
         password: "blastword",
         has: []
     },
-        {//user[0] is for the http requests.
-            email: "west@guest.ca",
-            password: "wowwowwow",
-            firstName: "Stan",
-            lastName: "Man",
-            postalCode: "r3p1z2"
-        },
+    {//user[0] is for the http requests.
+        email: "west@guest.ca",
+        password: "wowwowwow",
+        firstName: "Stan",
+        lastName: "Man",
+        postalCode: "r3p1z2"
+    },
 ];
 
-describe("User API Tests", function () {
-    beforeEach(function (done) {
-        const setting = new Promise(function (resolve) {
+
+
+describe("User API Tests", () => {
+    beforeEach((done) => {
+        const setting = new Promise((resolve) => {
             require('dotenv').config({ path: __dirname + '/../.env' });
             process.env.NODE_ENV = 'test';
             server = require('../server');
@@ -138,18 +140,18 @@ describe("User API Tests", function () {
             User.remove(done);
         }
 
-        setting.then(function (result) {
+        setting.then((result) => {
             clearDB();
         });
     });
 
-    afterEach(function (done) {
+    afterEach((done) => {
         mongoose.disconnect();
         done();
     });
 
-    describe("/ALL", function () {
-        it("it should return nothing when db is empty.", function (done) {
+    describe("/ALL", () => {
+        it("it should return nothing when db is empty.", (done) => {
             chai.request(url)
                 .get('/api/users/all')
                 .end((err, res) => {
@@ -160,7 +162,7 @@ describe("User API Tests", function () {
                 })
         });
 
-        it("it should return one user.", function (done) {
+        it("it should return one user.", (done) => {
             const newUser = new User(users[1]);
             const saveUser = new Promise((resolve) => {
                 newUser.save(() => {
@@ -181,8 +183,8 @@ describe("User API Tests", function () {
         });
     });
 
-    describe("/REGISTER", function () {
-        it("it should register a user", function (done) {
+    describe("/REGISTER", () => {
+        it("it should register a user", (done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[0])
@@ -193,7 +195,7 @@ describe("User API Tests", function () {
                 })
         });
 
-        it("it should not register a duplicate user", function (done) {
+        it("it should not register a duplicate user", (done) => {
             const newUser = new User(users[1]);
             const saveUser = new Promise((resolve) => {
                 newUser.save(() => {
@@ -213,7 +215,7 @@ describe("User API Tests", function () {
             });
         });
 
-        it("it should not make a user without an email", function (done) {
+        it("it should not make a user without an email", (done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[2])
@@ -225,7 +227,7 @@ describe("User API Tests", function () {
                 });
         });
 
-        it("it should not make a user without a password", function (done) {
+        it("it should not make a user without a password", (done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[3])
@@ -237,7 +239,7 @@ describe("User API Tests", function () {
                 });
         });
 
-        it("it should not make a user without a name", function (done) {
+        it("it should not make a user without a name", (done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[4])
@@ -249,7 +251,7 @@ describe("User API Tests", function () {
                 });
         });
 
-        it("it should not make a user without a valid first name", function (done) {
+        it("it should not make a user without a valid first name", (done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[6])
@@ -261,7 +263,7 @@ describe("User API Tests", function () {
                 });
         });
 
-        it("it should not make a user without a valid last name", function (done) {
+        it("it should not make a user without a valid last name", (done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[7])
@@ -274,18 +276,18 @@ describe("User API Tests", function () {
         });
     });
 
-    // describe("/MATCH", function () {
+    // describe("/MATCH", () =>  {
 
     // });
 
-    // describe("/AUTH", function () {
+    // describe("/AUTH", () =>  {
 
     // });
 
-    describe("/PROFILE", function () {
+    describe("/PROFILE", () => {
         var profileToken;
 
-        beforeEach(function(done){
+        beforeEach((done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[0])
@@ -295,51 +297,51 @@ describe("User API Tests", function () {
                 });
         });
 
-        it("should return the current user's profile.", function (done){
+        it("should return the current user's profile.", (done) => {
             chai.request(url)
-            .get("/api/users/profile")
-            .set('Authorization',profileToken)
-            .end((err,res) => {
-                should.not.exist(err);
-                should.exist(res.body);
-                res.body.user.name.first.should.eql("Mark");
-                res.body.user.name.last.should.eql("Ripptoe");
-                done();
-            });
+                .get("/api/users/profile")
+                .set('Authorization', profileToken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    should.exist(res.body);
+                    res.body.user.name.first.should.eql("Mark");
+                    res.body.user.name.last.should.eql("Ripptoe");
+                    done();
+                });
         });
 
-        it("should return nothing without a token.", function (done){
+        it("should return nothing without a token.", (done) => {
             chai.request(url)
-            .get("/api/users/profile")
-            .end((err,res) => {
-                should.exist(err);
-                done();
-            });
+                .get("/api/users/profile")
+                .end((err, res) => {
+                    should.exist(err);
+                    done();
+                });
         });
 
-        it("should return nothing with an invalid token.", function (done){
+        it("should return nothing with an invalid token.", (done) => {
             chai.request(url)
-            .get("/api/users/profile")
-            .set('Authorization',"Bearer outlawtryingtodrawwithapenandapaddrawingjimwestwithapenandapad")
-            .end((err,res) => {
-                should.exist(err);
-                done();
-            });
+                .get("/api/users/profile")
+                .set('Authorization', "Bearer outlawtryingtodrawwithapenandapaddrawingjimwestwithapenandapad")
+                .end((err, res) => {
+                    should.exist(err);
+                    done();
+                });
         });
     });
 
 
-    describe("/ID/PROFILE", function () {
+    describe("/ID/PROFILE", () => {
         var ids = [];
         var dummyId = "0a9ad73e15db46c552c24d45";
         var idProfiletoken;
 
-        beforeEach(function(done){//user[1,8,9]
-            var addUsers = new Promise((resolve)=>{
-                var newUsers = [users[1],users[8], users[9]];
+        beforeEach((done) => {//user[1,8,9]
+            var addUsers = new Promise((resolve) => {
+                var newUsers = [users[1], users[8], users[9]];
                 User.insertMany(newUsers, () => {
-                    User.find({},{_id: true},(err,res)=>{
-                        for(var i = 0;i<res.length;i++){
+                    User.find({}, { _id: true }, (err, res) => {
+                        for (var i = 0; i < res.length; i++) {
                             ids.push(res[i]._id);
                         }
                         resolve();
@@ -348,97 +350,109 @@ describe("User API Tests", function () {
             });
 
             addUsers.then((result) => {
-                    chai.request(url)
-                        .post('/api/users/register')
-                        .send(users[10])
-                        .end((err, res) => {
-                            idProfiletoken = res.body.token;
-                            done();
-                        });
-                });
+                chai.request(url)
+                    .post('/api/users/register')
+                    .send(users[10])
+                    .end((err, res) => {
+                        idProfiletoken = res.body.token;
+                        done();
+                    });
+            });
         });
 
-        afterEach(()=>{
+        afterEach(() => {
             ids = [];
         })
 
         it("Should return accurate profile information 1/2", (done) => {
             chai.request(url)
-            .get("/api/users/"+ids[0]+"/profile")
-            .set("Authorization",idProfiletoken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                res.body.should.have.property("success").eql(true);
-                res.body.should.have.property("message").eql("User profile retrieved.");
-                res.body.should.have.property("user");
-                res.body.user.name.first.should.eql("Mark");
-                res.body.user.name.last.should.eql("Ripptoe");
-                done();
-            })
+                .get("/api/users/" + ids[0] + "/profile")
+                .set("Authorization", idProfiletoken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.should.have.property("success").eql(true);
+                    res.body.should.have.property("message").eql("User profile retrieved.");
+                    res.body.should.have.property("user");
+                    res.body.user.should.have.property("has");
+                    res.body.user.should.have.property("wants");
+                    res.body.user.should.have.property("name");
+                    res.body.user.should.have.property("address");
+                    res.body.user.should.have.property("about");
+
+                    res.body.user.name.first.should.eql("Mark");
+                    res.body.user.name.last.should.eql("Ripptoe");
+                    done();
+                })
         });
 
         it("Should return accurate profile information 2/2", (done) => {
             chai.request(url)
-            .get("/api/users/"+ids[1]+"/profile")
-            .set("Authorization",idProfiletoken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                res.body.should.have.property("success").eql(true);
-                res.body.should.have.property("message").eql("User profile retrieved.");
-                res.body.should.have.property("user");
-                res.body.user.name.first.should.eql("Jaguar");
-                res.body.user.name.last.should.eql("Forest");
-                done();
-            })
+                .get("/api/users/" + ids[1] + "/profile")
+                .set("Authorization", idProfiletoken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.should.have.property("success").eql(true);
+                    res.body.should.have.property("message").eql("User profile retrieved.");
+                    res.body.should.have.property("user");
+                    res.body.user.should.have.property("has");
+                    res.body.user.should.have.property("wants");
+                    res.body.user.should.have.property("name");
+                    res.body.user.should.have.property("address");
+                    res.body.user.should.have.property("about");
+
+                    res.body.user.name.first.should.eql("Jaguar");
+                    res.body.user.name.last.should.eql("Forest");
+                    done();
+                })
         });
 
         it("Should return an error saying the profile wasn't found", (done) => {
             chai.request(url)
-            .get("/api/users/"+dummyId+"/profile")
-            .set("Authorization",idProfiletoken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                res.body.should.have.property("success").eql(false);
-                res.body.should.have.property("message").eql("User does not exist.");
-                done();
-            });
+                .get("/api/users/" + dummyId + "/profile")
+                .set("Authorization", idProfiletoken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("User does not exist.");
+                    done();
+                });
         });
 
         it("Should return an error saying the request wasn't authorized", (done) => {
             chai.request(url)
-            .get("/api/users/"+ids[0]+"/profile")
-            .end((err,res)=>{
-                should.exist(err);
-                done();
-            });
+                .get("/api/users/" + ids[0] + "/profile")
+                .end((err, res) => {
+                    should.exist(err);
+                    done();
+                });
         });
     });
 
-    // describe("/HAS", function () {
+    // describe("/HAS", () =>  {
 
     // });
 
-    // describe("/WANTS", function () {
+    // describe("/WANTS", () =>  {
 
     // });
 
 
     describe("/LOGIN", () => {
-        beforeEach((done)=>{
+        beforeEach((done) => {
             newUser = new User(users[1]);
-            newUser.save((err, newUser)=>{
+            newUser.save((err, newUser) => {
                 done();
             });
         });
 
-        it("should log in for a valid email and password", function(done) {
-                chai.request(url)
+        it("should log in for a valid email and password", (done) => {
+            chai.request(url)
                 .post('/api/users/login')
                 .send({
                     email: "test@test.ca",
                     password: "assword"
                 })
-                .end( (err,res) => {
+                .end((err, res) => {
                     should.not.exist(err);
                     res.body.should.have.property("success").eql(true);
                     res.body.should.have.property("message").eql("Login successful.");
@@ -447,14 +461,14 @@ describe("User API Tests", function () {
                 });
         });
 
-        it("should fail log in for a invalid email", function(done) {
-                chai.request(url)
+        it("should fail log in for a invalid email", (done) => {
+            chai.request(url)
                 .post('/api/users/login')
                 .send({
                     email: "nestest@test.ca",
                     password: "assword"
                 })
-                .end( (err,res) => {
+                .end((err, res) => {
                     should.not.exist(err);
                     res.body.should.have.property("success").eql(false);
                     res.body.should.have.property("message").eql("User not found.");
@@ -462,14 +476,14 @@ describe("User API Tests", function () {
                 })
         });
 
-        it("should fail log in for a invalid password", function(done) {
-                chai.request(url)
+        it("should fail log in for a invalid password", (done) => {
+            chai.request(url)
                 .post('/api/users/login')
                 .send({
                     email: "test@test.ca",
                     password: "password"
                 })
-                .end( (err,res) => {
+                .end((err, res) => {
                     console.log("end called");
                     should.not.exist(err);
                     res.body.should.have.property("success").eql(false);
@@ -480,29 +494,31 @@ describe("User API Tests", function () {
     });
 
 
-/*
-    describe("/UPDATE", function () {
-        //before each update, shove a user to update in the database.
-        var updateToken = null;
-
-        beforeEach(function(done){
-            chai.request(url)
-                .post('/api/users/register')
-                .send(users[0])
-                .end((err, res) => {
-                    console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
-                    updateToken = res.body.token;
-                    done();
-                });
+    /*
+        describe("/UPDATE", () =>  {
+            //before each update, shove a user to update in the database.
+            var updateToken = null;
+    
+            beforeEach((done) => {
+                chai.request(url)
+                    .post('/api/users/register')
+                    .send(users[0])
+                    .end((err, res) => {
+                        console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
+                        updateToken = res.body.token;
+                        done();
+                    });
+            });
+            
+            it("should create 'wants' in a user.", (done) => {
+                done();
+            });
         });
-        
-        it("should create 'wants' in a user.", function(done){
-            done();
-        });
-    });
-*/
+    */
 
-    describe("/DELETE", function () {
+    describe("/DELETE", () => {
+        it("Shouldn't perform a delete without authorization.", () => {
 
+        })
     });
 });
