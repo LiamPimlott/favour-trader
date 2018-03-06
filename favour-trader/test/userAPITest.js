@@ -494,29 +494,80 @@ describe("User API Tests", () => {
                 });
         });
     });
+    
 
-
-    /*
         describe("/UPDATE", () =>  {
             //before each update, shove a user to update in the database.
-            var updateToken = null;
+            var updateToken;
+            var dummyIds = ["0a9ad73e15db46c552c24d45","0a9ad73e88ed46c552c24d45","0a9ad73e15db46c552c24d23"];
     
             beforeEach((done) => {
                 chai.request(url)
                     .post('/api/users/register')
                     .send(users[0])
                     .end((err, res) => {
-                        console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
                         updateToken = res.body.token;
                         done();
                     });
             });
+
+            it("should add some wants.", (done) => {
+                chai.request(url)
+                    .put('/api/users/update')
+                    .set("Authorization",updateToken)
+                    .send({wants:dummyIds})
+                    .end((err,res)=>{
+                        should.not.exist(err);
+                        User.find({},(err,res)=>{
+                            res[0].has.should.have.length(0);
+                            res[0].wants.should.have.length(3);
+                            done();
+                        });
+                    });
+            });
+
+            it("should add some has.", (done) => {
+                chai.request(url)
+                    .put('/api/users/update')
+                    .set("Authorization",updateToken)
+                    .send({has:dummyIds})
+                    .end((err,res)=>{
+                        should.not.exist(err);
+                        User.find({},(err,res)=>{
+                            res[0].has.should.have.length(3);
+                            res[0].wants.should.have.length(0);
+                            done();
+                        });
+                    });
+            });
+
+            it("should change an about and add some has.", (done) => {
+                chai.request(url)
+                    .put('/api/users/update')
+                    .set("Authorization",updateToken)
+                    .send({has:dummyIds, about: "AAAAAAAAAAAAAAAAAAAAA"})
+                    .end((err,res)=>{
+                        should.not.exist(err);
+                        User.find({},(err,res)=>{
+                            res[0].has.should.have.length(3);
+                            res[0].wants.should.have.length(0);
+                            res[0].about.should.equal("AAAAAAAAAAAAAAAAAAAAA");
+                            done();
+                        });
+                    });
+            });
             
-            it("should create 'wants' in a user.", (done) => {
-                done();
+            it("should not do anything to a user without authorization.", (done) => {
+                chai.request(url)
+                    .put('/api/users/update')
+                    .send(users[1])
+                    .end((err,res)=>{
+                        should.exist(err);
+                        done();
+                    });
             });
         });
-    */
+    
 
     describe("/DELETE", () => {
         var deleteToken;
@@ -539,9 +590,9 @@ describe("User API Tests", () => {
             .end((err,res)=>{
                 should.not.exist(err);
                 User.find({},(err,res)=>{
-                    res.should.have.length(0)
+                    res.should.have.length(0);
                     done();
-                })
+                });
             });
         });
 
@@ -555,4 +606,5 @@ describe("User API Tests", () => {
             });
         });
     });
+    
 });
