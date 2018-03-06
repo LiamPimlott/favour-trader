@@ -78,6 +78,49 @@ const users = [
         lastName: "R",
         postalCode: "r3p1z2"
     },
+    {//user[8] is one for the direct database insertions.\
+        name: {
+            first: "Jaguar",
+            last: "Forest"
+        },
+        address: {
+            postalCode: "123456",
+            street: "Fake St",
+            number: 7890,
+            city: "ABCD",
+            state: "EF",
+            country: "Free Country USE"
+        },
+        about: "I'm the not testiest user there is :c",
+        email: "best@best.ca",
+        password: "crassword",
+        has: []
+    },
+    {//user[9] is one for the direct database insertions.
+        name: {
+            first: "Shark",
+            last: "Hamil"
+        },
+        address: {
+            postalCode: "x0x0xA",
+            street: "Last Jedi Road",
+            number: 8,
+            city: "Ultra ultra ultra",
+            state: "Decay",
+            country: "Alderode"
+        },
+        about: "I'm the testiest teacher there is!",
+        email: "jebi@theforke.rom",
+        password: "blastword",
+        has: []
+    },
+        {//user[0] is for the http requests.
+            email: "west@guest.ca",
+            password: "wowwowwow",
+            firstName: "Stan",
+            lastName: "Man",
+            postalCode: "r3p1z2"
+        },
 ];
 
 describe("User API Tests", function () {
@@ -247,7 +290,6 @@ describe("User API Tests", function () {
                 .post('/api/users/register')
                 .send(users[0])
                 .end((err, res) => {
-                    // console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
                     profileToken = res.body.token;
                     done();
                 });
@@ -286,9 +328,91 @@ describe("User API Tests", function () {
         });
     });
 
-    // describe("/ID/PROFILE", function () {
 
-    // });
+    describe("/ID/PROFILE", function () {
+        var ids = [];
+        var dummyId = "0a9ad73e15db46c552c24d45";
+        var idProfiletoken;
+
+        beforeEach(function(done){//user[1,8,9]
+            var addUsers = new Promise((resolve)=>{
+                var newUsers = [users[1],users[8], users[9]];
+                User.insertMany(newUsers, () => {
+                    User.find({},{_id: true},(err,res)=>{
+                        for(var i = 0;i<res.length;i++){
+                            ids.push(res[i]._id);
+                        }
+                        resolve();
+                    })
+                });
+            });
+
+            addUsers.then((result) => {
+                    chai.request(url)
+                        .post('/api/users/register')
+                        .send(users[10])
+                        .end((err, res) => {
+                            idProfiletoken = res.body.token;
+                            done();
+                        });
+                });
+        });
+
+        afterEach(()=>{
+            ids = [];
+        })
+
+        it("Should return accurate profile information 1/2", (done) => {
+            chai.request(url)
+            .get("/api/users/"+ids[0]+"/profile")
+            .set("Authorization",idProfiletoken)
+            .end((err,res)=>{
+                should.not.exist(err);
+                res.body.should.have.property("success").eql(true);
+                res.body.should.have.property("message").eql("User profile retrieved.");
+                res.body.should.have.property("user");
+                res.body.user.name.first.should.eql("Mark");
+                res.body.user.name.last.should.eql("Ripptoe");
+                done();
+            })
+        });
+
+        it("Should return accurate profile information 2/2", (done) => {
+            chai.request(url)
+            .get("/api/users/"+ids[1]+"/profile")
+            .set("Authorization",idProfiletoken)
+            .end((err,res)=>{
+                should.not.exist(err);
+                res.body.should.have.property("success").eql(true);
+                res.body.should.have.property("message").eql("User profile retrieved.");
+                res.body.should.have.property("user");
+                res.body.user.name.first.should.eql("Jaguar");
+                res.body.user.name.last.should.eql("Forest");
+                done();
+            })
+        });
+
+        it("Should return an error saying the profile wasn't found", (done) => {
+            chai.request(url)
+            .get("/api/users/"+dummyId+"/profile")
+            .set("Authorization",idProfiletoken)
+            .end((err,res)=>{
+                should.not.exist(err);
+                res.body.should.have.property("success").eql(false);
+                res.body.should.have.property("message").eql("User does not exist.");
+                done();
+            });
+        });
+
+        it("Should return an error saying the request wasn't authorized", (done) => {
+            chai.request(url)
+            .get("/api/users/"+ids[0]+"/profile")
+            .end((err,res)=>{
+                should.exist(err);
+                done();
+            });
+        });
+    });
 
     // describe("/HAS", function () {
 
@@ -298,79 +422,85 @@ describe("User API Tests", function () {
 
     // });
 
-    // describe("/LOGIN", () => {
-    //     // beforeEach((done)=>{
-    //     //     newUser = new User(users[1]);
-    //     //     newUser.save((err, newUser)=>{
-    //     //         done();
-    //     //     });
-    //     // });
 
-    //     it("should log in for a valid email and password", function(done) {
-    //             chai.request(url)
-    //             .post('api/users/login')
-    //             .send({
-    //                 email: "test@test.ca",
-    //                 password: "assword"
-    //             })
-    //             .end( (err,res) => {
-    //                 should.not.exist(err);
-    //                 res.body.should.have.property("success").eql(true);
-    //                 res.body.should.have.property("message").eql("Login successful.");
-    //                 res.body.should.have.property("token");
-    //             });
-    //     });
+    describe("/LOGIN", () => {
+        beforeEach((done)=>{
+            newUser = new User(users[1]);
+            newUser.save((err, newUser)=>{
+                done();
+            });
+        });
 
-    //     it("should fail log in for a invalid email", function(done) {
+        it("should log in for a valid email and password", function(done) {
+                chai.request(url)
+                .post('/api/users/login')
+                .send({
+                    email: "test@test.ca",
+                    password: "assword"
+                })
+                .end( (err,res) => {
+                    should.not.exist(err);
+                    res.body.should.have.property("success").eql(true);
+                    res.body.should.have.property("message").eql("Login successful.");
+                    res.body.should.have.property("token");
+                    done();
+                });
+        });
 
-    //             chai.request(url)
-    //             .post('api/users/login')
-    //             .send({
-    //                 email: "nestest@test.ca",
-    //                 password: "assword"
-    //             })
-    //             .end( (err,res) => {
-    //                 should.not.exist(err);
-    //                 res.body.should.have.property("success").eql(false);
-    //                 res.body.should.have.property("message").eql("Incorrect password.");
-    //             })
-    //     });
+        it("should fail log in for a invalid email", function(done) {
+                chai.request(url)
+                .post('/api/users/login')
+                .send({
+                    email: "nestest@test.ca",
+                    password: "assword"
+                })
+                .end( (err,res) => {
+                    should.not.exist(err);
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("User not found.");
+                    done();
+                })
+        });
 
-    //     it("should fail log in for a invalid password", function(done) {
-    //             chai.request(url)
-    //             .post('api/users/login')
-    //             .send({
-    //                 email: "test@test.ca",
-    //                 password: "password"
-    //             })
-    //             .end( (err,res) => {
-    //                 console.log("end called");
-    //                 should.not.exist(err);
-    //                 res.body.should.have.property("success").eql(false);
-    //                 res.body.should.have.property("message").eql("Incorrect password.");
-    //             });
-    //     });
-    // });
+        it("should fail log in for a invalid password", function(done) {
+                chai.request(url)
+                .post('/api/users/login')
+                .send({
+                    email: "test@test.ca",
+                    password: "password"
+                })
+                .end( (err,res) => {
+                    console.log("end called");
+                    should.not.exist(err);
+                    res.body.should.have.property("success").eql(false);
+                    res.body.should.have.property("message").eql("Incorrect password.");
+                    done();
+                });
+        });
+    });
 
-    // describe("/UPDATE", function () {
-    //     //before each update, shove a user to update in the database.
-    //     var updateToken = null;
 
-    //     beforeEach(function(done){
-    //         chai.request(url)
-    //             .post('/api/users/register')
-    //             .send(users[0])
-    //             .end((err, res) => {
-    //                 console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
-    //                 updateToken = res.body.token;
-    //                 done();
-    //             });
-    //     });
+/*
+    describe("/UPDATE", function () {
+        //before each update, shove a user to update in the database.
+        var updateToken = null;
+
+        beforeEach(function(done){
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[0])
+                .end((err, res) => {
+                    console.log("err:"+JSON.stringify(err)+"\nres:"+JSON.stringify(res));
+                    updateToken = res.body.token;
+                    done();
+                });
+        });
         
-    //     it("should create 'wants' in a user.", function(done){
-    //         done();
-    //     });
-    // });
+        it("should create 'wants' in a user.", function(done){
+            done();
+        });
+    });
+*/
 
     describe("/DELETE", function () {
 
