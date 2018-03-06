@@ -150,6 +150,7 @@ describe("User API Tests", () => {
         done();
     });
 
+    
     describe("/ALL", () => {
         it("it should return nothing when db is empty.", (done) => {
             chai.request(url)
@@ -423,6 +424,7 @@ describe("User API Tests", () => {
                 .get("/api/users/" + ids[0] + "/profile")
                 .end((err, res) => {
                     should.exist(err);
+                    err.status.should.eql(401);//check
                     done();
                 });
         });
@@ -517,8 +519,40 @@ describe("User API Tests", () => {
     */
 
     describe("/DELETE", () => {
-        it("Shouldn't perform a delete without authorization.", () => {
+        var deleteToken;
 
-        })
+        //currently causing a timeout. Why?
+            beforeEach((done) => {
+                chai.request(url)
+                    .post('/api/users/register')
+                    .send(users[0])
+                    .end((err, res) => {
+                        deleteToken = res.body.token;
+                        done();
+                    });
+            });
+
+        it("Should perform a delete with proper authorization",(done) => {
+            chai.request(url)
+            .delete("/api/users/delete")
+            .set("Authorization",deleteToken)
+            .end((err,res)=>{
+                should.not.exist(err);
+                User.find({},(err,res)=>{
+                    res.should.have.length(0)
+                    done();
+                })
+            });
+        });
+
+        it("Shouldn't perform a delete without authorization.", (done) => {
+            chai.request(url)
+            .delete("/api/users/delete")
+            .end((err,res) => {
+                should.exist(err);
+                err.status.should.eql(401);
+                done();
+            });
+        });
     });
 });
