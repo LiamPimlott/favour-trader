@@ -147,7 +147,10 @@ describe('User with Number of Skills', function () {
         };
         user.password = 'password';
         user.email = "example@example.com";
-        user.has = "5a7cede7dc655c2b50e7147f";
+        user.has = [{
+            category: '5a7cede7dc655c2b50e7147f',
+            description: 'Test skill'
+        }];
         user.save((err, user) => {
             if (err) {
                 return done(err);
@@ -170,7 +173,15 @@ describe('User with Number of Skills', function () {
         };
         user.password = 'password';
         user.email = "example@example.com";
-        user.has = ["5a7cede7dc655c2b50e7147f", "5a7cede7dc655c2b50e71482"];
+        user.has = [
+            {
+                category: '5a7cede7dc655c2b50e7147f',
+                description: 'Test skill'
+            },
+            {
+                category: '5a7cede7dc655c2b50e71482',
+                description: 'Test skill 2'
+            }];
         user.save((err, user) => {
             if (err) {
                 return done(err);
@@ -211,11 +222,9 @@ describe('User with Skills', function () {
 
     it('should Have Gardening', function (done) {
         let skill = new Skill({
-            "_id": new mongoose.Types.ObjectId(),
-            "skill": "Gardner"
+            skill: "Gardener"
         });
         skill.save((err, skill) => {
-            //console.log(err);
             expect(err).to.not.exist;
             let user = new User();
             user.name = {first: "Ism", last: "Kh"};
@@ -229,15 +238,19 @@ describe('User with Skills', function () {
             };
             user.password = 'password';
             user.email = "example@example.com";
-            user.has = skill._id;
+            user.has = [{
+                category: skill._id,
+                description: 'Im a Gardener.'
+            }];
             user.save((err, person) => {
                 expect(person).to.exist;
                 expect(err).to.not.exist;
-                User.findOne({})
+                User.findById(person._id)
                     .select('has')
                     .populate('has')
                     .exec((err, user) => {
-                        expect(user.has[0].skill).to.equal("Gardner");
+                        expect(user).to.exist;
+                        expect(user.has[0]).to.exist;
                         done();
                     });
             });

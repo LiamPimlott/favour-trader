@@ -25,6 +25,16 @@ var ContractSchema = new mongoose.Schema({
             ref: 'User'
         },
         favours: [ FavourSchema ],
+        name: {
+            first: {
+                type: String,
+                required: true,
+            },
+            last: {
+                type: String,
+                required: true,
+            },
+        },
         requestTermination: {
             type: Boolean,
             required: true,
@@ -38,6 +48,16 @@ var ContractSchema = new mongoose.Schema({
             ref: 'User'
         },
         favours: [ FavourSchema ],
+        name: {
+            first: {
+                type: String,
+                required: true,
+            },
+            last: {
+                type: String,
+                required: true,
+            },
+        },
         requestTermination: {
             type: Boolean,
             required: true,

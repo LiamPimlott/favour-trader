@@ -1,0 +1,21 @@
+{
+  "output": "./output",
+  "helpers": {
+    "Nightmare": {
+      "url": "http://localhost:3000",
+      "show": true
+    }
+  },
+  "include": {
+    "I": "./src/test/e2e/steps_file.js",
+    "loginPage": "./src/test/e2e/pages/Login.js",
+    "signupPage": "./src/test/e2e/pages/signup.js"
+  },
+  "mocha": {},
+  "bootstrap": false,
+  "teardown": null,
+  "hooks": [],
+  "tests": "./src/test/e2e/*_test.js",
+  "timeout": 10000,
+  "name": "client"
+}

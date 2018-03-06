@@ -14,7 +14,7 @@ class MatchCard extends Component {
                         {
                             (user.about) ?
                                 ( 
-                                    (user.about.length > 100) ? 
+                                    (user.about.length > 100) ?
                                         (user.about.substring(0, 99) + " ...Read more on Profile") : 
                                         (user.about)
                                 ) :

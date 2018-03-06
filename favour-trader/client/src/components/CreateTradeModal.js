@@ -162,7 +162,7 @@ class CreateTradeModal extends Component {
     }
 
     submit() {
-        const { authService, offereeId } = this.props;
+        const { authService, offereeId, username, lastName } = this.props;
         const { requestedSkills, offeredSkills, message } = this.state;
         const user = authService.getProfile();
         const url = '/api/contracts/';
@@ -170,12 +170,20 @@ class CreateTradeModal extends Component {
             offeror: {
                 id: user.id,
                 favours: offeredSkills,
+                name: {
+                    first: user.name.first,
+                    last: user.name.last,
+                },
             },
             offeree: {
                 id: offereeId,
                 favours: requestedSkills,
+                name: {
+                    first: username,
+                    last: lastName,
+                },
             },
-            messages: message
+            messages: message,
         };
         const headers = {
             'Accept': 'application/json',
