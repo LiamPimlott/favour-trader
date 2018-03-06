@@ -13,16 +13,26 @@ Group 8 (Team 8x8):
 
 ## Live Branch for Snapshots: 'master'
 
-Please note: This project requires a .env file to run, please ask for a copy :)
+PLEASE NOTE: This project requires a .env file to run, please ask for a copy :)
 
 Trello Board: https://trello.com/b/14MpAe9b
+
+## Deployment
+
+Our current deployed version of the app is NOT our most up to date release.
+It is currently more a testing ground while we work to seamlessly intregrate our 
+continuous integration platform, Travis CI with our Google Compute Engine hosting service.
+
+You can still create an account and poke around but there is less features than our most recent release.
+
+View it here: https://favour-trader-test.appspot.com/login
 
 ## Installation / Running Locally:
 ** In order to run this project locally, please ensure you have the latest version of Node (https://nodejs.org/en/).
 
 Option 1 - Running server or client individually:
 
-a) Running the server / api
+a) Running the server / api (note: This option (1a) alone is enough to see full functionality and is how the app is deployed)
 - Navigate to /favour-trader
 - Run `npm install` to install required packages (only once)
 - Navigate to /favour-trader/client
@@ -31,13 +41,13 @@ a) Running the server / api
 - Ensure there is a valid .env file in /favour-trader
 - Run`npm run devServer` to spin up the server on localhost//:3001
 
-b) Running the web client (note: with no server to talk to the front end is essentially useless)
+b) Running the web client (note: this is intended to be a front end developement server and is useless with no backend to talk to)
 - Navigate to /favour-trader/client
 - Run `npm install` to install required packages (only once)
 - Navigate back to /favour-trader
 - Run `npm run devClient` to spin up a local webpack server on localhost//:3000
 
-Option 2 - Running server and web client concurrently:
+Option 2 - Running server and web client concurrently: (note: this option is more meant to make developing locally simpler)
 - Navigate to /favour-trader
 - Run `npm install` to install required packages (only once)
 - Navigate to /favour-trader/client
