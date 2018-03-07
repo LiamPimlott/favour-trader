@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 
 const NewSkillModal = Form.create()(
   (props) => {
-    const skillset = props.skillset;
+    //const skillset = props.skillset;      // Not used
     const categories = props.categories;  
     const { visible, confirmNew, onCancel, onSave, form } = props;
     const { getFieldDecorator } = form;

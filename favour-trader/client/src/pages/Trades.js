@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ReviewSkillsModal from '../components/ReviewSkillsModal.js';
+// import ReviewSkillsModal from '../components/ReviewSkillsModal.js'; Unused import
 import axios from 'axios'
 import {Row, Col} from 'antd';
 import TradeCard from '../components/TradeCard';
@@ -131,8 +131,8 @@ class Trades extends Component {
     }
 
     render() {
-        const { match: { params } } = this.props;
-        const source = params.source;
+        //const { match: { params } } = this.props;    // Not used
+        //const source = params.source;     // Not used
 
         return (
             <div className={'center-helper'}>

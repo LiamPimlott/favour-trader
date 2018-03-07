@@ -85,8 +85,7 @@ class CreateAccount extends Component {
                                     rules: [{ required: true, message: 'Please input your first name!' },
                                             { min: 2, message: 'First name is too short!'}],
                                     validateTrigger: 'onBlur'
-                                })
-                                (
+                                })(
                                 <Input type="text"
                                    name="firstName"
                                    id="firstName"
@@ -102,8 +101,7 @@ class CreateAccount extends Component {
                                     rules: [{ required: true, message: 'Please input your last name!' },
                                             { min: 2, message: 'Last name is too short!'}],
                                     validateTrigger: 'onBlur'
-                                })
-                                (
+                                })(
                                 <Input type="text"
                                        name="lastName"
                                        id="lastName"
@@ -119,8 +117,7 @@ class CreateAccount extends Component {
                                     rules: [{ required: true, message: 'Please input your E-mail address!'},
                                         {type: 'email', message: 'The input is not valid E-mail!'}],
                                     validateTrigger: 'onBlur'
-                                })
-                                (
+                                })(
                                 <Input type="email"
                                        name="email"
                                        id="email"
@@ -135,8 +132,7 @@ class CreateAccount extends Component {
                                 getFieldDecorator('password', {
                                     rules: [{ required: true, message: 'Please input your password!' }],
                                     validateTrigger: 'onBlur',
-                                })
-                                (
+                                })(
                                 <Input type="password"
                                        name="password"
                                        id="password"

@@ -86,8 +86,7 @@ class Login extends Component {
                                     rules: [{ required: true, message: 'Please input your E-mail address!' },
                                             {type: 'email', message: 'The input is not valid E-mail!'}],
                                     validateTrigger: 'onBlur'
-                                })
-                                (
+                                })(
                                 <Input
                                     prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                     placeholder="Email Address"
@@ -102,8 +101,7 @@ class Login extends Component {
                                 getFieldDecorator('password', {
                                     rules: [{ required: true, message: 'Please input your password!' }],
                                     validateTrigger: 'onBlur',
-                                })
-                                (
+                                })(
                                     <Input type="password"
                                            name="password"
                                            id="password"
