@@ -1,25 +1,39 @@
 language: node_js
 node_js:
-  - "node"
+- node
 addons:
   apt:
     packages:
-      - xvfb
+    - xvfb
 install:
-  - npm --prefix ./favour-trader install ./favour-trader
-  - npm --prefix ./favour-trader/client install ./favour-trader/client
+- npm --prefix ./favour-trader install ./favour-trader
+- npm --prefix ./favour-trader/client install ./favour-trader/client
+- npm --prefix ./favour-trader/client run build
 before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 10 # give xvfb some time to start
-  - cd favour-trader
-  - npm run dev &
-  - sleep 10 # give Web server some time to bind to sockets, etc
-  - cd ..
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
+- sleep 10
+- cd favour-trader
+- npm run dev &
+- sleep 10
+- cd ..
 script:
-  - cd favour-trader
-  - npm test
-  - cd client
-  - npm test
-  - npm run e2etest
-  - killall node
+- cd favour-trader
+- npm test
+- cd client
+- npm test
+- npm run e2etest
+- killall node
+env:
+  global:
+  - secure: DlH/ixK9LCTQeTJcpQgStVTrvr4GWZGzzc8fQE7I2M/ti4W0MClLTGqweWtwHQA71lk0zE7XlV1EhptAetEeJO1bQWG50RmhJfC2/fbMDqsM5LXPGmg/tOPHvsUl8NrjINv3A06zAvO+C3iU+pmZ9xs5J0aGloqYP5IahIfS9vfGY5q8MHCwqWr/lIAusapgscE2rYQuePAvyFQh7/JiMzR7eUwNu2GZP3XviG7PFKz3Jd1YJQBmc0RhmUkuoBLYcRq6TP52a6oKTcPOOM+UXQUzSjgIJJTudOTwnZrudljKSe5cqK+dkz5fX2BvXqte9hpsxv6k5akKhauUK7XioLFEGaQJ0169gUscI2fQ9c4wnFGQvS7cieeEY5+3ypCB6W6rU125lPfU+anrio9YCadfLBGtVHTJB5H2/PLmWJmA6Rl/DctIgduadYZDmY2b4+rMLrURWhWF4WMNJWiZtrqXRSTVotkaEzNWEH0Eh3I/IvO5M9rFde9gRsBLLDPlfcG0kjILeflkpvr4oMLj+FfnaLAHiGtwb2LIzQu5u+qgEEiHOiWsV7/eYnOaP4V1KPUyxjWGEajR2oYrYdy86XJJCPywjUJmVSFU7/cZdvoW+Eqk+NQ/ZetkH6qEa/vx2RB/Sliudx0MKZrZZVvXB8KC26/c8h/m70rph+LKxXs=
+  - secure: XvzHm1iVsvkkWMOgPSbNJDyJ8VTDQigdcriEvQrxGxnP9xHq5S0FDqsLQMEwmalAgqXL3rq68C7qM3oWY7y2bawPJ8MrGsxXJ5BhkBw2nkQyqj1PY+dH2cBTkHm8E/BHuP4J7QzgGCCCHwO8fdgXj6SFRF3nYgWuda0iJYoNKQkrrSjUUx1sNF+vAfuV1CgKwBcCwFt1+xog9k87D5+hBs5MKuTVjyyuievr7H1c0ntdWHPh5s1wfXUMBiKl1+C0Bt+nNwd87UweRMJsK+K7re+HDOMNyekehwQ9T9SutNDi3vNaUX9QE/HTlBpoj/Q2a9bwonAMGEnRalsakxWhj3mPxPfaOTfJiCWR0kXNJbbpxSPHCmeLcQtANlPXiFKqQV8yUtUguFVvdi+DwHEsCAC3XTUncvgGZI6KV3iPlr3Sptb5o6/x9oQp3APX1D5/1OVC1CX/LCq31CkBBHLDyVUSU7WaFk7fb3kN00Hfn0EYOCHQ90w6mVIC0UxcHJoETphr4n9pQ6XzZkBZM1QWK5jsXzTqjlMZWqOWQ9TRAoPFsYNWiRAtWxSfSsilxzY9nzsMmFq98I9Cza3gHNKnnk0BUWOxYm0GRAeHwhrfFYOdfi97zll8qnxUmQ2jGSVj5GQv0QsAls5xkxdMPd0YVJL5K4AEDgHzHm1VAKp+sTI=
+before_deploy:
+- cd ..
+- openssl aes-256-cbc -K $encrypted_a8f10f5b6560_key -iv $encrypted_a8f10f5b6560_iv
+  -in secrets.tar.enc -out secrets.tar -d
+- tar xvf secrets.tar --strip-components=0
+deploy:
+  provider: gae
+  project: favour-trader
+  skip_cleanup: true
