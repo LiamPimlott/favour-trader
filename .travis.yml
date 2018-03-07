@@ -30,6 +30,7 @@ env:
   - secure: XvzHm1iVsvkkWMOgPSbNJDyJ8VTDQigdcriEvQrxGxnP9xHq5S0FDqsLQMEwmalAgqXL3rq68C7qM3oWY7y2bawPJ8MrGsxXJ5BhkBw2nkQyqj1PY+dH2cBTkHm8E/BHuP4J7QzgGCCCHwO8fdgXj6SFRF3nYgWuda0iJYoNKQkrrSjUUx1sNF+vAfuV1CgKwBcCwFt1+xog9k87D5+hBs5MKuTVjyyuievr7H1c0ntdWHPh5s1wfXUMBiKl1+C0Bt+nNwd87UweRMJsK+K7re+HDOMNyekehwQ9T9SutNDi3vNaUX9QE/HTlBpoj/Q2a9bwonAMGEnRalsakxWhj3mPxPfaOTfJiCWR0kXNJbbpxSPHCmeLcQtANlPXiFKqQV8yUtUguFVvdi+DwHEsCAC3XTUncvgGZI6KV3iPlr3Sptb5o6/x9oQp3APX1D5/1OVC1CX/LCq31CkBBHLDyVUSU7WaFk7fb3kN00Hfn0EYOCHQ90w6mVIC0UxcHJoETphr4n9pQ6XzZkBZM1QWK5jsXzTqjlMZWqOWQ9TRAoPFsYNWiRAtWxSfSsilxzY9nzsMmFq98I9Cza3gHNKnnk0BUWOxYm0GRAeHwhrfFYOdfi97zll8qnxUmQ2jGSVj5GQv0QsAls5xkxdMPd0YVJL5K4AEDgHzHm1VAKp+sTI=
 before_deploy:
 - cd ..
+### Do not add another encrypted file as travis cli will override. Talk to Justine to add it to the tar.
 - openssl aes-256-cbc -K $encrypted_a8f10f5b6560_key -iv $encrypted_a8f10f5b6560_iv
   -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar --strip-components=0
