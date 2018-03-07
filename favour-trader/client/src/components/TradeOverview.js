@@ -1,6 +1,6 @@
 import React, { Component} from "react";
 import { Card, Row, Col, Button, Icon, Popover } from 'antd';
-class UserOverview extends Component{
+class TradeOverview extends Component{
     render() {
         const {offererName, offereeName, tradeStatus, tradeMessage} = this.props.overview;
         const title = <h5>{offereeName} <Icon type={'swap'}/>{offererName}</h5>;
@@ -23,4 +23,4 @@ class UserOverview extends Component{
     }
 }
 
-export default UserOverview;
+export default TradeOverview;
