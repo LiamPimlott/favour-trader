@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, Tabs, Button/*, Card*/ } from 'antd';    // Card not used
+import { List/*, Tabs*/, Button/*, Card*/ } from 'antd';    // Tabs, Card not used
 //const TabPane = Tabs.TabPane;     // Not used
 
 class SkillsList extends Component {
