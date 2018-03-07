@@ -102,7 +102,7 @@ class SidePanelContent extends Component {
 							</Link>
 						</Menu.Item>
                         <Menu.Item key="5"
-							onClick={ ()=>{this.props.params.filtertype} }>
+							onClick={ ()=> this.props.params.filtertype }>
 							<Link to="/filterHas">
 								What I Have
 							</Link>
