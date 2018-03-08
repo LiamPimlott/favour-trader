@@ -3,13 +3,15 @@
   "helpers": {
     "Nightmare": {
       "url": "http://localhost:3000",
-      "show": true
+      "show": true,
+      "windowSize": "1500x1000"
     }
   },
   "include": {
     "I": "./src/test/e2e/steps_file.js",
     "loginPage": "./src/test/e2e/pages/Login.js",
-    "signupPage": "./src/test/e2e/pages/signup.js"
+    "signupPage": "./src/test/e2e/pages/signup.js",
+    "profilePage": "./src/test/e2e/pages/profilePage.js"
   },
   "mocha": {},
   "bootstrap": false,
