@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { /*Card,*/ Modal, Button/*, Icon*/, Row/*, Col*/ } from 'antd';     // Card, Icon, Col not used
+import { Modal, Button, Row } from 'antd';
 import UserOverview from "../components/UserOverview";
 import EditUserOverview from "../components/EditUserOverview";
 import NewSkillModal from "../components/NewSkillModal";
 import CreateTradeModal from "../components/CreateTradeModal";
 import UserSkills from '../components/UserSkills';
-//import SkillsList from '../components/SkillsList';    // import not used
 import './Profile.css';
 
 class Profile extends Component {
