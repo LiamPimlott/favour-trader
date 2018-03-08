@@ -286,9 +286,52 @@ describe("User API Tests", () => {
 
     // });
 
-    // describe("/AUTH", () =>  {
+    describe("/AUTH", () =>  {
+        var authToken;
 
-    // });
+        beforeEach((done)=>{
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[0])
+                .end((err, res) => {
+                    authToken = res.body.token;
+                    done();
+                });
+        });
+
+        it("Should pass for a valid token",(done)=>{
+            chai.request(url)
+            .get("/api/users/auth")
+            .set("Authorization",authToken)
+            .end((err,res)=>{
+                should.not.exist(err);
+                res.should.have.property("text");
+                res.text.should.equal("Token is valid! User name is: Mark Ripptoe");
+                done();
+            });
+        });
+
+        it("Should fail for an invalid token",(done)=>{
+            chai.request(url)
+            .get("/api/users/auth")
+            .set("Authorization",authToken+"cheese")
+            .end((err,res)=>{
+                should.exist(err);
+                err.status.should.eql(401);
+                done();
+            });
+        });
+
+        it("Should fail for no token",(done)=>{
+            chai.request(url)
+            .get("/api/users/auth")
+            .end((err,res)=>{
+                should.exist(err);
+                err.status.should.eql(401);
+                done();
+            });
+        });
+    });
 
     describe("/PROFILE", () => {
         var profileToken;
@@ -722,7 +765,6 @@ describe("User API Tests", () => {
     describe("/DELETE", () => {
         var deleteToken;
 
-        //currently causing a timeout. Why?
             beforeEach((done) => {
                 chai.request(url)
                     .post('/api/users/register')
