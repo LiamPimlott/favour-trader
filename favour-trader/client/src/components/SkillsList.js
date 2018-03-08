@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { List/*, Tabs*/, Button/*, Card*/ } from 'antd';    // Tabs, Card not used
-//const TabPane = Tabs.TabPane;     // Not used
+import { List, Button } from 'antd';
 
 class SkillsList extends Component {
     render() {
