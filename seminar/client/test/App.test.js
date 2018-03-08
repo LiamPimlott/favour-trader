@@ -23,27 +23,6 @@ describe('<App />', () => {
         expect(component.state()).toEqual(initialState);
     });
 
-    it('contains a form', () => {
-        const initialState = {
-            posts: [],
-        };
-
-        const fakeEvent = {
-            preventDefault() {},
-            target: {
-                elements: {
-                    subreddit: {
-                        value: 'value',
-                    },
-                },
-            },
-        };
-
-        const component = mount(<App/>);
-        const form = component.find('form');
-        expect(form).not.toBeNull();
-    });
-
     it('contains an input', () => {
         const component = mount(<App/>);
         const input = component.find('input');
@@ -54,12 +33,5 @@ describe('<App />', () => {
         const component = mount(<App/>);
         const form = component.find('form');
         expect(form).not.toBeNull();
-    });
-})
-
-describe('fetch', () => {
-    it('should return data', () => {
-        fetch('https://www.reddit.com/r/aww.json')
-        .then(res=>console.log(res))
     });
 })
