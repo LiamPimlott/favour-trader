@@ -2,6 +2,7 @@ process.env.NODE_ENV = 'test';
 
 const mongoose = require("mongoose");
 let User = require("../models/user");
+let Skill = require("../models/skill");
 
 let chai = require("chai");
 let chaiHttp = require('chai-http');
@@ -123,7 +124,11 @@ const users = [
     },
 ];
 
-
+const skills = [
+    {skill: "Skeeball"},
+    {skill: "3 Point Shot Making"},
+    {skill: "Making Out"}
+]
 
 describe("User API Tests", () => {
     beforeEach((done) => {
@@ -429,14 +434,159 @@ describe("User API Tests", () => {
                 });
         });
     });
+    
 
-    // describe("/HAS", () =>  {
+    describe("/HAS", () =>  {
+        var skillIds = [];
+        var hasToken;
 
-    // });
+        beforeEach((done)=>{
+            var addSkills = new Promise((resolve) => {
+                Skill.insertMany(skills, (error,docs) => {
+                    Skill.find({}, { _id: true }, (err, res) => {
+                        for (var i = 0; i < res.length; i++) {
+                            skillIds.push(res[i]._id);
+                        }
+                        resolve();
+                    });
+                });
+            });
 
-    // describe("/WANTS", () =>  {
+            addSkills.then((result) => {
+                chai.request(url)
+                    .post('/api/users/register')
+                    .send(users[10])
+                    .end((err, res) => {
+                        hasToken = res.body.token;
+                        done();
+                    });
+            });
+        });
 
-    // });
+        afterEach((done)=>{
+            Skill.remove({}, () => {
+                done();
+            });
+            skillIds = [];
+        });
+
+        it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
+            chai.request(url)
+            .post("/api/users/has")
+            .set("Authorization",hasToken)
+            .end((err,res)=>{
+                should.not.exist(err);
+                res.body.should.have.property("message");
+                res.body.should.have.property("success");
+                res.body.should.have.property("user");
+                res.body.user.has.length.should.equal(0);
+                res.body.success.should.equal(true);
+                done();
+            });
+        });
+
+        it("Should return two skills when the logged in user has two skills", (done) => {
+            User.update({}, { has: [skillIds[0], skillIds[1]] }, { multi: true }, (err, res) => {
+                chai.request(url)
+                    .post("/api/users/has")
+                    .set("Authorization", hasToken)
+                    .end((err, res) => {
+                        should.not.exist(err);
+                        res.body.should.have.property("message");
+                        res.body.should.have.property("success");
+                        res.body.should.have.property("user");
+                        res.body.user.has.length.should.equal(2)
+                        res.body.success.should.equal(true);
+                        done();
+                    });
+            })
+        });
+
+        it("Should return an error without proper authorization",(done) => {
+            chai.request(url)
+            .post("/api/users/has")
+            .end((err,res)=>{
+                should.exist(err);
+                done();
+            });
+        });
+    });
+
+    describe("/WANTS", () =>  {
+        var skillIds = [];
+        var wantToken;
+
+        beforeEach((done)=>{
+            var addSkills = new Promise((resolve) => {
+                Skill.insertMany(skills, (error,docs) => {
+                    Skill.find({}, { _id: true }, (err, res) => {
+                        for (var i = 0; i < res.length; i++) {
+                            skillIds.push(res[i]._id);
+                        }
+                        resolve();
+                    });
+                });
+            });
+
+            addSkills.then((result) => {
+                chai.request(url)
+                    .post('/api/users/register')
+                    .send(users[10])
+                    .end((err, res) => {
+                        wantToken = res.body.token;
+                        done();
+                    });
+            });
+        });
+
+        afterEach((done)=>{
+            Skill.remove({}, () => {
+                done();
+            });
+            skillIds = [];
+        });
+
+        it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
+            chai.request(url)
+            .post("/api/users/has")
+            .set("Authorization",wantToken)
+            .end((err,res)=>{
+                should.not.exist(err);
+                res.body.should.have.property("message");
+                res.body.should.have.property("success");
+                res.body.should.have.property("user");
+                res.body.user.wants.length.should.equal(0);
+                res.body.success.should.equal(true);
+                done();
+            });
+        });
+
+        it("Should return two wants when the logged in user has two wanats", (done) => {
+            User.update({}, { wants: [skillIds[0], skillIds[1]] }, { multi: true }, (err, res) => {
+                chai.request(url)
+                    .post("/api/users/has")
+                    .set("Authorization", wantToken)
+                    .end((err, res) => {
+                        should.not.exist(err);
+                        res.body.should.have.property("message");
+                        res.body.should.have.property("success");
+                        res.body.should.have.property("user");
+                        res.body.user.wants.length.should.equal(2)
+                        res.body.success.should.equal(true);
+                        done();
+                    });
+            })
+        });
+
+        it("Should return an error without proper authorization",(done) => {
+            chai.request(url)
+            .post("/api/users/has")
+            .end((err,res)=>{
+                should.exist(err);
+                done();
+            });
+        });
+    });
 
 
     describe("/LOGIN", () => {
@@ -496,77 +646,77 @@ describe("User API Tests", () => {
     });
     
 
-        describe("/UPDATE", () =>  {
-            //before each update, shove a user to update in the database.
-            var updateToken;
-            var dummyIds = ["0a9ad73e15db46c552c24d45","0a9ad73e88ed46c552c24d45","0a9ad73e15db46c552c24d23"];
-    
-            beforeEach((done) => {
-                chai.request(url)
-                    .post('/api/users/register')
-                    .send(users[0])
-                    .end((err, res) => {
-                        updateToken = res.body.token;
-                        done();
-                    });
-            });
+    describe("/UPDATE", () => {
+        //before each update, shove a user to update in the database.
+        var updateToken;
+        var dummyIds = ["0a9ad73e15db46c552c24d45", "0a9ad73e88ed46c552c24d45", "0a9ad73e15db46c552c24d23"];
 
-            it("should add some wants.", (done) => {
-                chai.request(url)
-                    .put('/api/users/update')
-                    .set("Authorization",updateToken)
-                    .send({wants:dummyIds})
-                    .end((err,res)=>{
-                        should.not.exist(err);
-                        User.find({},(err,res)=>{
-                            res[0].has.should.have.length(0);
-                            res[0].wants.should.have.length(3);
-                            done();
-                        });
-                    });
-            });
-
-            it("should add some has.", (done) => {
-                chai.request(url)
-                    .put('/api/users/update')
-                    .set("Authorization",updateToken)
-                    .send({has:dummyIds})
-                    .end((err,res)=>{
-                        should.not.exist(err);
-                        User.find({},(err,res)=>{
-                            res[0].has.should.have.length(3);
-                            res[0].wants.should.have.length(0);
-                            done();
-                        });
-                    });
-            });
-
-            it("should change an about and add some has.", (done) => {
-                chai.request(url)
-                    .put('/api/users/update')
-                    .set("Authorization",updateToken)
-                    .send({has:dummyIds, about: "AAAAAAAAAAAAAAAAAAAAA"})
-                    .end((err,res)=>{
-                        should.not.exist(err);
-                        User.find({},(err,res)=>{
-                            res[0].has.should.have.length(3);
-                            res[0].wants.should.have.length(0);
-                            res[0].about.should.equal("AAAAAAAAAAAAAAAAAAAAA");
-                            done();
-                        });
-                    });
-            });
-            
-            it("should not do anything to a user without authorization.", (done) => {
-                chai.request(url)
-                    .put('/api/users/update')
-                    .send(users[1])
-                    .end((err,res)=>{
-                        should.exist(err);
-                        done();
-                    });
-            });
+        beforeEach((done) => {
+            chai.request(url)
+                .post('/api/users/register')
+                .send(users[0])
+                .end((err, res) => {
+                    updateToken = res.body.token;
+                    done();
+                });
         });
+
+        it("should add some wants.", (done) => {
+            chai.request(url)
+                .put('/api/users/update')
+                .set("Authorization", updateToken)
+                .send({ wants: dummyIds })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    User.find({}, (err, res) => {
+                        res[0].has.should.have.length(0);
+                        res[0].wants.should.have.length(3);
+                        done();
+                    });
+                });
+        });
+
+        it("should add some has.", (done) => {
+            chai.request(url)
+                .put('/api/users/update')
+                .set("Authorization", updateToken)
+                .send({ has: dummyIds })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    User.find({}, (err, res) => {
+                        res[0].has.should.have.length(3);
+                        res[0].wants.should.have.length(0);
+                        done();
+                    });
+                });
+        });
+
+        it("should change an about and add some has.", (done) => {
+            chai.request(url)
+                .put('/api/users/update')
+                .set("Authorization", updateToken)
+                .send({ has: dummyIds, about: "AAAAAAAAAAAAAAAAAAAAA" })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    User.find({}, (err, res) => {
+                        res[0].has.should.have.length(3);
+                        res[0].wants.should.have.length(0);
+                        res[0].about.should.equal("AAAAAAAAAAAAAAAAAAAAA");
+                        done();
+                    });
+                });
+        });
+
+        it("should not do anything to a user without authorization.", (done) => {
+            chai.request(url)
+                .put('/api/users/update')
+                .send(users[1])
+                .end((err, res) => {
+                    should.exist(err);
+                    done();
+                });
+        });
+    });
     
 
     describe("/DELETE", () => {
@@ -606,5 +756,4 @@ describe("User API Tests", () => {
             });
         });
     });
-    
 });
