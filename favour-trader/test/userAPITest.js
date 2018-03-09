@@ -155,7 +155,6 @@ describe("User API Tests", () => {
         done();
     });
 
-    
     describe("/ALL", () => {
         it("it should return nothing when db is empty.", (done) => {
             chai.request(url)
@@ -282,10 +281,6 @@ describe("User API Tests", () => {
         });
     });
 
-    // describe("/MATCH", () =>  {
-
-    // });
-
     describe("/AUTH", () =>  {
         var authToken;
 
@@ -378,7 +373,6 @@ describe("User API Tests", () => {
                 });
         });
     });
-
 
     describe("/ID/PROFILE", () => {
         var ids = [];
@@ -478,7 +472,6 @@ describe("User API Tests", () => {
         });
     });
     
-
     describe("/HAS", () =>  {
         var skillIds = [];
         var hasToken;
@@ -591,31 +584,33 @@ describe("User API Tests", () => {
 
         it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
             chai.request(url)
-            .post("/api/users/has")
+            .post("/api/users/wants")
             .set("Authorization",wantToken)
             .end((err,res)=>{
                 should.not.exist(err);
                 res.body.should.have.property("message");
                 res.body.should.have.property("success");
                 res.body.should.have.property("user");
-                res.body.user.wants.length.should.equal(0);
+                res.body.user.should.have.property("wants"); 
                 res.body.success.should.equal(true);
+                res.body.user.wants.length.should.equal(0);
                 done();
             });
         });
 
-        it("Should return two wants when the logged in user has two wanats", (done) => {
+        it("Should return two wants when the logged in user has two wants", (done) => {
             User.update({}, { wants: [skillIds[0], skillIds[1]] }, { multi: true }, (err, res) => {
                 chai.request(url)
-                    .post("/api/users/has")
+                    .post("/api/users/wants")
                     .set("Authorization", wantToken)
                     .end((err, res) => {
                         should.not.exist(err);
                         res.body.should.have.property("message");
                         res.body.should.have.property("success");
                         res.body.should.have.property("user");
-                        res.body.user.wants.length.should.equal(2)
+                        res.body.user.should.have.property("wants");
                         res.body.success.should.equal(true);
+                        res.body.user.wants.length.should.equal(2);
                         done();
                     });
             })
@@ -630,7 +625,6 @@ describe("User API Tests", () => {
             });
         });
     });
-
 
     describe("/LOGIN", () => {
         beforeEach((done) => {
@@ -688,7 +682,6 @@ describe("User API Tests", () => {
         });
     });
     
-
     describe("/UPDATE", () => {
         //before each update, shove a user to update in the database.
         var updateToken;
@@ -761,7 +754,6 @@ describe("User API Tests", () => {
         });
     });
     
-
     describe("/DELETE", () => {
         var deleteToken;
 
