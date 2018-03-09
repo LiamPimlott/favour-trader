@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import Drawer from '../components/Drawer.js';
 
 export default class HomeScreen extends React.Component {
-	static navigationOptions = { 
-		title: 'Home',
-		headerLeft: null
-	};
 	render(){
 		const { navigate } = this.props.navigation;
 		return(
