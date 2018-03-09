@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Tabs, List, Card } from 'antd';
+import { Button, Tabs, Card } from 'antd';
 import SkillsList from "./SkillsList";
 const TabPane = Tabs.TabPane;
 

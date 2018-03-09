@@ -45,7 +45,7 @@ class SelectableSkill extends Component {
                         onChange={this.toggleSelection}/>
                 </td>
                 <td>
-                    {skill.skill}
+                    {skill.category.skill}
                     {
                         (selected && expanded) ? (
                             <div>

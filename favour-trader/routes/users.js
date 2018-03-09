@@ -66,7 +66,7 @@ router.get('/:id/profile', passport.authenticate('jwt', { session: false }), fun
 router.post('/has', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
 	select('has').
-	populate('has').
+	populate('has.category').
 	exec( (err, userHas) => {
 		if (err) {
 			devDebug(err);
@@ -81,7 +81,7 @@ router.post('/has', passport.authenticate('jwt', { session: false }), function (
 router.post('/wants', passport.authenticate('jwt', { session: false }), function (req, res, next) {
 	User.findById(req.user.id).
 	select('wants').
-	populate('wants').
+	populate('wants.category').
 	exec( (err, userWants) => {
 		if (err) {
 			devDebug(err);
