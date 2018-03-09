@@ -17,7 +17,7 @@ export default class AuthService {
         email,
         password,
     ) {
-        return this.fetch('/api/users/register', {
+        return this.fetch('http://favour-trader.appspot.com/api/users/register', {
             "email": email,
             "password": password,
             "firstName": firstName,
@@ -35,8 +35,9 @@ export default class AuthService {
     }
 
     login(email, password) {
+        console.log("Logging in...");
         // Get a token from api server using the fetch api
-        return this.fetch(`/api/users/login`, {
+        return this.fetch(`http://favour-trader.appspot.com/api/users/login`, {
             'email': email,
             'password': password,
         }, {
@@ -45,7 +46,9 @@ export default class AuthService {
                 'Authorization': this.getToken(),
             }).then(res => {
                 if (res.success && res.token) {
+                    console.log("Result looks good...");
                     this.setToken(res.token); // Setting the token in AsyncStorage
+                    console.log("Token set...");
                 }
                 return Promise.resolve(res);
             });
@@ -71,17 +74,17 @@ export default class AuthService {
         }
     }
 
-    setToken(idToken) {
+    async setToken(idToken) {
+        console.log("Setting token...");
         // Saves user token to AsyncStorage
-        AsyncStorage.setItem('id_token', res.token)
+        await AsyncStorage.setItem('id_token', idToken)
     }
 
-    getToken() {
+    async getToken() {
         // Retrieves the user token from AsyncStorage
         try {
             const idToken = await AsyncStorage.getItem('id_token');
-            if (value !== null) {
-                console.log(idToken);
+            if (idToken !== null) {
                 return idToken;
             }
         } catch (error) {
@@ -89,9 +92,9 @@ export default class AuthService {
         }
     }
 
-    logout() {
+    async logout() {
         // Clear user token and profile data from AsyncStorage
-        AsyncStorage.removeItem('id_token');
+        await AsyncStorage.removeItem('id_token');
     }
 
     getProfile() {
