@@ -3,16 +3,12 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { StackNavigator, NavigationActions } from 'react-navigation';
 
 export default class Login extends React.Component {
-	static navigationOptions = { 
-		header: null
-	}
 	render(){
 		const { navigate } = this.props.navigation;
-		
-		return(
 
+		return(
 			<KeyboardAvoidingView behavior="padding" style={styles.container}>
-				<Image source={require('../images/test.jpg')} style={styles.backgroundImage}></Image>
+				<Image source={require('../../images/test.jpg')} style={styles.backgroundImage}></Image>
 				<View style={styles.container}>   
 						<Text style={styles.title} >Welcome to Favour Trader</Text>
 						<Text style={styles.intro}>Login to start trading!</Text> 
