@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { List, Tabs, Button, Card } from 'antd';
-const TabPane = Tabs.TabPane;
+import { List, Button } from 'antd';
 
 class SkillsList extends Component {
     render() {

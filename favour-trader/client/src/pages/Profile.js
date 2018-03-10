@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Card, Modal, Button, Icon, Row, Col } from 'antd';
+import { Modal, Button, Row } from 'antd';
 import UserOverview from "../components/UserOverview";
 import EditUserOverview from "../components/EditUserOverview";
 import NewSkillModal from "../components/NewSkillModal";
 import CreateTradeModal from "../components/CreateTradeModal";
 import UserSkills from '../components/UserSkills';
-import SkillsList from '../components/SkillsList';
 import './Profile.css';
 
 class Profile extends Component {
     constructor() {
         super();
         this.state = {
-            userId: '',
             overview: {
                 firstName: '',
                 lastName: '',
@@ -188,7 +186,7 @@ class Profile extends Component {
                 }
             };
 
-            const profileEndpoint = params.userId ? 
+            const profileEndpoint = params.userId ?
                 `/api/users/${params.userId}/profile` :
                 `/api/users/profile`;
 
@@ -235,22 +233,28 @@ class Profile extends Component {
     }
 
     render() {
-        const { authService } = this.props;
-        const { isCurrentUser } = this.state;
+        const { authService, match: { params } } = this.props;
+        const {
+            isCurrentUser,
+            overview, editUserVisible,
+            skills, confirmEditUser,
+            skillCategories, showNewSkillModal,
+            confirmNewSkill, createTradeModalOpen,
+        } = this.state;
         return (
             <div id='user-profile-page'>
                 <Row>
                     <UserOverview
                         isCurrentUser={isCurrentUser} 
-                        profileId={this.state.profileId}
-                        overview={this.state.overview}
+                        userId={params.userId}
+                        overview={overview}
                         onEditUser={this.toggleEditUserModal}
                     />
                 </Row>
                 <Row>
                     <UserSkills 
                         isCurrentUser={isCurrentUser}
-                        skills={this.state.skills} 
+                        skills={skills}
                         toggleNewSkillModal={this.toggleNewSkillModal}
                         toggleDeleteSkillConfirm={this.confirmDeleteSkill}
                     />
@@ -273,26 +277,26 @@ class Profile extends Component {
                 }
                 <EditUserOverview
                     ref={this.saveEditUserFormRef}
-                    overview={this.state.overview}
-                    visible={this.state.editUserVisible}
+                    overview={overview}
+                    visible={editUserVisible}
                     onCancel={this.toggleEditUserModal}
                     onSave={this.handleEditUserSave}
-                    confirmUpdate={this.state.confirmEditUser}
+                    confirmUpdate={confirmEditUser}
                 />
                 <NewSkillModal
                     ref={this.saveNewSkillFormRef}
-                    categories={this.state.skillCategories}
-                    visible={this.state.showNewSkillModal}
+                    categories={skillCategories}
+                    visible={showNewSkillModal}
                     onCancel={this.toggleNewSkillModal}
                     onSave={this.handleNewSkillSave}
-                    confirmNew={this.state.confirmNewSkill}
+                    confirmNew={confirmNewSkill}
                 />
-                <CreateTradeModal requestableSkills={this.state.skills.wants}
-                    username={this.state.overview.firstName}
-                    lastName={this.state.overview.lastName}
+                <CreateTradeModal requestableSkills={skills.wants}
+                    username={overview.firstName}
+                    lastName={overview.lastName}
                     authService={authService}
-                    offereeId={this.state.userId}
-                    isOpen={this.state.createTradeModalOpen}
+                    offereeId={params.userId}
+                    isOpen={createTradeModalOpen}
                     toggle={this.toggleCreateTradeModal}/>
             </div>
         );
