@@ -225,7 +225,6 @@ describe("User API Tests", () => {
                 .post('/api/users/register')
                 .send(users[2])
                 .end((err, res) => {
-                    // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
                     res.body.should.be.a('object');
                     done();
@@ -237,7 +236,6 @@ describe("User API Tests", () => {
                 .post('/api/users/register')
                 .send(users[3])
                 .end((err, res) => {
-                    // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
                     res.body.should.be.a('object');
                     done();
@@ -249,7 +247,6 @@ describe("User API Tests", () => {
                 .post('/api/users/register')
                 .send(users[4])
                 .end((err, res) => {
-                    // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
                     res.body.should.be.a('object');
                     done();
@@ -261,7 +258,6 @@ describe("User API Tests", () => {
                 .post('/api/users/register')
                 .send(users[6])
                 .end((err, res) => {
-                    // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
                     res.body.should.be.a('object');
                     done();
@@ -273,7 +269,6 @@ describe("User API Tests", () => {
                 .post('/api/users/register')
                 .send(users[7])
                 .end((err, res) => {
-                    // console.log(JSON.stringify(res.body))
                     res.body.should.have.property("success").eql(false);
                     res.body.should.be.a('object');
                     done();
@@ -673,7 +668,6 @@ describe("User API Tests", () => {
                     password: "password"
                 })
                 .end((err, res) => {
-                    console.log("end called");
                     should.not.exist(err);
                     res.body.should.have.property("success").eql(false);
                     res.body.should.have.property("message").eql("Incorrect password.");
@@ -685,23 +679,53 @@ describe("User API Tests", () => {
     describe("/UPDATE", () => {
         //before each update, shove a user to update in the database.
         var updateToken;
-        var dummyIds = ["0a9ad73e15db46c552c24d45", "0a9ad73e88ed46c552c24d45", "0a9ad73e15db46c552c24d23"];
+        var updateSkillIds = [];
 
         beforeEach((done) => {
-            chai.request(url)
+            var addSkills = new Promise((resolve) => {
+                Skill.insertMany(skills, (error,docs) => {
+                        for (var i = 0; i < docs.length; i++) {
+                            updateSkillIds.push(docs[i]._id);
+                        }
+                        resolve();
+                });
+            });
+
+            addSkills.then((resolve)=>{
+                chai.request(url)
                 .post('/api/users/register')
                 .send(users[0])
                 .end((err, res) => {
                     updateToken = res.body.token;
                     done();
                 });
+            });
+        });
+
+        afterEach((done)=>{
+            Skill.remove({},(error,docs)=>{
+                done();
+            });
         });
 
         it("should add some wants.", (done) => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ wants: dummyIds })
+                .send({ wants: [
+                    {
+                        category: updateSkillIds[0],
+                        description: "Wow"
+                    },
+                    {
+                        category: updateSkillIds[1],
+                        description: "Wow"
+                    },
+                    {
+                        category: updateSkillIds[2],
+                        description: "Wow"
+                    }
+                ] })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -716,7 +740,20 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ has: dummyIds })
+                .send({ has: [
+                    {
+                        category: updateSkillIds[0],
+                        description: "Wow"
+                    },
+                    {
+                        category: updateSkillIds[1],
+                        description: "Wow"
+                    },
+                    {
+                        category: updateSkillIds[2],
+                        description: "Wow"
+                    }
+                ] })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -731,7 +768,20 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ has: dummyIds, about: "AAAAAAAAAAAAAAAAAAAAA" })
+                .send({ has: [
+                    {
+                        category: updateSkillIds[0],
+                        description: "Wow"
+                    },
+                    {
+                        category: updateSkillIds[1],
+                        description: "Wow"
+                    },
+                    {
+                        category: updateSkillIds[2],
+                        description: "Wow"
+                    }
+                ], about: "AAAAAAAAAAAAAAAAAAAAA" })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
