@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert, Image } from 'react-native';
 import AuthService from "../components/AuthService";
 
 export default class Login extends React.Component {
@@ -37,9 +37,11 @@ export default class Login extends React.Component {
     renderErrorText(message) {
         Alert.alert('Invalid Login', message);
     }
-
+	
+	
     render(){
-        return(
+		const { navigate } = this.props.navigation;
+       return(
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <View style={styles.container}>
                     <Text style={styles.title} >Welcome to Favour Trader</Text>
@@ -67,6 +69,7 @@ export default class Login extends React.Component {
                 </View>
                 <TouchableOpacity
                     style={styles.buttonSignUp}
+					onPress = { () => navigate('Signup') }
                 >
                     <Text style={styles.buttonTextAcc}>No Account?</Text>
                     <Text style={styles.buttonText}>SIGN UP</Text>
