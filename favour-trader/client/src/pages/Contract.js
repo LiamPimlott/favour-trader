@@ -45,7 +45,6 @@ class Contract extends Component {
     }
 
     render() {
-        const { match: { params } } = this.props;
         return (
             <div >
                 <Row type="flex" justify="center">
