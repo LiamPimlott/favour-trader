@@ -4,7 +4,6 @@ import { mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import moxios from "moxios";
 import { MemoryRouter } from 'react-router-dom'
-import renderer from 'react-test-renderer';
 
 beforeEach(function () {
     configure({ adapter: new Adapter() });
@@ -12,12 +11,47 @@ beforeEach(function () {
 });
 
 it('renders correctly', () => {
-    const offererName = 'testor';
-    const offereeName = 'testee';
-    const tradeStatus = 'completed';
-    const tradeMessage = 'perfect! amazing!';
-    const tree = renderer
-    .create(<TradeOverview offererName={offererName} offereeName={offereeName} tradeStatus={tradeStatus} tradeMessage={tradeMessage} />)
-    .toJSON();
-  expect(tree).toMatchSnapshot();
+
+    const overview= {
+        offererName : 'testor',
+        offereeName : 'testee',
+        tradeStatus : 'completed',
+        tradeMessage : 'perfect! amazing!',
+
+        };
+    const trade = {
+        offeror: {
+            id: 123,
+            favours: [
+                {
+                    skillId: 1,
+                    description: 'Test description.',
+                },
+            ],
+            name: {
+                first: 'Jane',
+                last: 'Doe',
+            },
+        },
+        offeree: {
+            id: 456,
+            favours: [
+                {
+                    skillId: 2,
+                    description: 'Test description 2.',
+                },
+            ],
+            name: {
+                first: 'John',
+                last: 'Smith',
+            },
+        },
+
+    };       
+      mount(
+        <MemoryRouter>
+            <TradeOverview overview={overview} trade={trade}/>
+        </MemoryRouter>
+    )
+
 });

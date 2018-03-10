@@ -21,7 +21,6 @@ class Contract extends Component {
         const { authService } = this.props;
         const { match: { params } } = this.props;
 
-        console.log(params.tradeID);
         if (authService.loggedIn()) {
             const config = {
                 headers: {
