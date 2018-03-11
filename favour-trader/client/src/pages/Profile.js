@@ -12,6 +12,7 @@ class Profile extends Component {
     constructor() {
         super();
         this.state = {
+            profileUserId: '',
             overview: {
                 firstName: '',
                 lastName: '',
@@ -193,6 +194,7 @@ class Profile extends Component {
             axios.get(profileEndpoint, config)
                 .then(res => res.data.user)
                 .then(userData => this.setState({
+                    profileUserId: userData._id,
                     overview: {
                         firstName: userData.name.first,
                         lastName: userData.name.last,
@@ -292,11 +294,12 @@ class Profile extends Component {
                             >
                                 Offer a Trade!
                             </Button>
-                            <CreateTradeModal requestableSkills={this.state.skills.wants}
+                            <CreateTradeModal 
+                                requestableSkills={this.state.skills.has}
                                 username={this.state.overview.firstName}
                                 lastName={this.state.overview.lastName}
                                 authService={authService}
-                                offereeId={this.state.userId}
+                                offereeId={this.state.profileUserId}
                                 isOpen={createTradeModalOpen}
                                 toggle={this.toggleCreateTradeModal}
                             />
