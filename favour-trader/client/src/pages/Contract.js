@@ -47,10 +47,8 @@ class Contract extends Component {
     render() {
         return (
             <div >
-                <Row type="flex" justify="center">
-                    <Col span={12}>
-                        <TradeOverview overview={this.state.overview} />
-                    </Col>
+                <Row>
+                    <TradeOverview overview={this.state.overview} />
                 </Row>
             </div>
         );
