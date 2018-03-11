@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import TradeOverview from '../components/TradeOverview.js';
 import axios from 'axios'
 import {Row, Col} from 'antd';
+import TradeTerms from "../components/TradeTerms";
 
 class Contract extends Component {
     constructor() {
@@ -12,6 +13,10 @@ class Contract extends Component {
                 offererName: '',
                 tradeStatus: '',
                 tradeMessage: '',
+            },
+            terms: {
+                offereeTerms: [],
+                offererTerms: [],
             },
             trade: ''
         };
@@ -30,14 +35,19 @@ class Contract extends Component {
 
             axios.get(`/api/contracts/contract/${params.tradeID}`, config)
                 .then(res => res.data.trade)
-                .then((tradeData) => this.setState({
+                .then((tradeData) => { this.setState({
                     overview: {
                         offererName: tradeData.offeror.name.first + ' ' + tradeData.offeror.name.last,
                         offereeName: tradeData.offeree.name.first + ' ' + tradeData.offeree.name.last,
                         tradeStatus: tradeData.status,
                         tradeMessage: tradeData.messages[0],
+                    },
+                    terms: {
+                        offerorTerms: tradeData.offeror.favours,
+                        offereeTerms: tradeData.offeree.favours,
                     }
-                }) )
+                })
+                })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -47,11 +57,8 @@ class Contract extends Component {
     render() {
         return (
             <div >
-                <Row type="flex" justify="center">
-                    <Col span={12}>
-                        <TradeOverview overview={this.state.overview} />
-                    </Col>
-                </Row>
+                <TradeOverview overview={this.state.overview} />
+                <TradeTerms overview={this.state.overview} tradeTerms={this.state.terms}/>
             </div>
         );
     }
