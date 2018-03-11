@@ -260,8 +260,28 @@ class Profile extends Component {
                     />
                 </Row>
                 { isCurrentUser 
-                    ? '' 
+                    ? (
+                        <div id='isCurrentUser'>
+                            <EditUserOverview
+                                ref={this.saveEditUserFormRef}
+                                overview={this.state.overview}
+                                visible={editUserVisible}
+                                onCancel={this.toggleEditUserModal}
+                                onSave={this.handleEditUserSave}
+                                confirmUpdate={confirmEditUser}
+                            />
+                            <NewSkillModal
+                                ref={this.saveNewSkillFormRef}
+                                categories={skillCategories}
+                                visible={showNewSkillModal}
+                                onCancel={this.toggleNewSkillModal}
+                                onSave={this.handleNewSkillSave}
+                                confirmNew={confirmNewSkill}
+                            />
+                        </div>
+                    )
                     : (
+                        <div id='notCurrentUser'>
                         <Row type='flex' justify='space-around' align='middle'>
                             <Button
                                 type='primary'
@@ -272,32 +292,18 @@ class Profile extends Component {
                             >
                                 Offer a Trade!
                             </Button>
+                            <CreateTradeModal requestableSkills={this.state.skills.wants}
+                                username={this.state.overview.firstName}
+                                lastName={this.state.overview.lastName}
+                                authService={authService}
+                                offereeId={this.state.userId}
+                                isOpen={createTradeModalOpen}
+                                toggle={this.toggleCreateTradeModal}
+                            />
                         </Row>
+                        </div>
                     )
                 }
-                <EditUserOverview
-                    ref={this.saveEditUserFormRef}
-                    overview={overview}
-                    visible={editUserVisible}
-                    onCancel={this.toggleEditUserModal}
-                    onSave={this.handleEditUserSave}
-                    confirmUpdate={confirmEditUser}
-                />
-                <NewSkillModal
-                    ref={this.saveNewSkillFormRef}
-                    categories={skillCategories}
-                    visible={showNewSkillModal}
-                    onCancel={this.toggleNewSkillModal}
-                    onSave={this.handleNewSkillSave}
-                    confirmNew={confirmNewSkill}
-                />
-                <CreateTradeModal requestableSkills={skills.wants}
-                    username={overview.firstName}
-                    lastName={overview.lastName}
-                    authService={authService}
-                    offereeId={params.userId}
-                    isOpen={createTradeModalOpen}
-                    toggle={this.toggleCreateTradeModal}/>
             </div>
         );
     }
