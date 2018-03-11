@@ -39,6 +39,21 @@ router.get('/',
     }
 );
 
+// GET - USERS/ID - returns a user's profile by their id.
+router.get('/contract/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
+    Contract.findById(req.params.id).
+    exec((err, foundTrade) => {
+        if (err) {
+            devDebug(err);
+            next(err);
+        } else if (!foundTrade) {
+            res.json({ success: false, message: "Trade does not exist."})
+        } else {
+            res.json({ success: true, message: "Trade retrieved.", trade: foundTrade});
+        }
+    });
+});
+
 // POST - ROOT - create a contract
 router.post('/',
     passport.authenticate('jwt', { session: false }),
