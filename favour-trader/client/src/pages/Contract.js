@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TradeOverview from '../components/TradeOverview.js';
 import TradeFavours from '../components/TradeFavours.js';
 import axios from 'axios'
-import {Row, Col} from 'antd';
+import {Row, Col, Button} from 'antd';
 
 class Contract extends Component {
     constructor() {
@@ -86,7 +86,7 @@ class Contract extends Component {
     }
 
     render() {
-        const {favours, offeror, offeree, currentUserId} = this.state;
+        const {status, favours, offeror, offeree, currentUserId} = this.state;
 
         return (
             <div >
@@ -95,6 +95,7 @@ class Contract extends Component {
                 </Row>
                 <Row>
                     <TradeFavours
+                        status={status}
                         offeror={offeror}
                         offeree={offeree}
                         currentUserId={currentUserId}
@@ -102,6 +103,35 @@ class Contract extends Component {
                         toggleFavourCompleted={this.toggleFavourCompleted}
                     />
                 </Row>
+                { this.state.status === "Accepted" 
+                    ? ''
+                    : (
+                        <Row>
+                            <Col span={12}  style={{textAlign: 'center'}}>
+                                <Button
+                                    type='primary'
+                                    size='large'
+                                    icon='check'
+                                    style={{marginTop: '50px'}}
+                                    // onClick={this.toggleCreateTradeModal}
+                                >
+                                    Accept Trade
+                                </Button>
+                            </Col>
+                            <Col span={12}  style={{textAlign: 'center'}}>
+                                <Button
+                                    type='danger'
+                                    size='large'
+                                    icon='close'
+                                    style={{marginTop: '50px'}}
+                                    // onClick={this.toggleCreateTradeModal}
+                                >
+                                    Decline Trade
+                                </Button>
+                            </Col>
+                        </Row>
+                    )
+                }
             </div>
         );
     }

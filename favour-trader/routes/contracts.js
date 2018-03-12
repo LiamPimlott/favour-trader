@@ -194,9 +194,10 @@ router.put('/:id/terminate',
             } else if (!contract) {
                 res.json({ success: false, message: "Contract not found."});
             } else if ( //This can be middleware eventually to dry up code
-                contract.offeror.id !== req.user.id && 
-                contract.offeree.id !== req.user.id
+                contract.offeror.id != req.user.id && 
+                contract.offeree.id != req.user.id
             ){
+                devDebug("OFFEROR: "+contract.offeror.id+ " OFFERee: "+contract.offeree.id+ " ID!!: "+req.user.id);
                 res.json({ success: false, message: "Unauthorized."})
             } else if ( contract.status === 'Accepted' ) {
                 res.json({ success: false, message: "Contract has already been accepted."});

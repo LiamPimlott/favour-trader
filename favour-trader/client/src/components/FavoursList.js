@@ -10,13 +10,23 @@ class FavoursList extends Component {
                 renderItem={item => (
                     <List.Item 
                         key={item._id}
-                        actions={ this.props.isEditable ? [<Checkbox 
-                            defaultChecked={item.completed}
-                            onChange={() => this.props.toggleFavourCompleted(this._id)}
-                        />] : [<Checkbox 
-                            checked={item.completed}
-                            disabled={true}
-                        />]}
+                        actions={ 
+                            (this.props.contractStatus === "Accepted" ?
+                                (this.props.isEditable ? 
+                                    [<Checkbox 
+                                        defaultChecked={item.completed}
+                                        onChange={() => this.props.toggleFavourCompleted(this._id)}
+                                    />]
+                                :
+                                    [<Checkbox 
+                                        checked={item.completed}
+                                        disabled={true}
+                                    />]
+                                )
+                            :
+                                []
+                            )
+                        }
                         style={{padding: '20px'}}
                     >
                         <List.Item.Meta

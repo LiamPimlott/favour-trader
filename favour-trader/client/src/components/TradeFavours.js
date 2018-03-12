@@ -6,6 +6,7 @@ const TabPane = Tabs.TabPane;
 class TradeFavours extends Component {
     
     render() {
+        const {offeror, offeree, currentUserId, status, favours, toggleFavourCompleted} = this.props;
         return (
             <Card 
                 bodyStyle={{padding: '0px'}} 
@@ -15,18 +16,20 @@ class TradeFavours extends Component {
                     size="large" 
                     tabBarStyle={{margin: '15px 0px 0px 0px'}}
                 >
-                    <TabPane tab="Offeror's Favours" key="offeror">
+                    <TabPane tab={offeror.firstName + "'s Promised Favours"} key="offeror">
                         <FavoursList
-                            favours={this.props.favours["offeror"]}
-                            isEditable={(this.props.currentUserId === this.props.offeror.id)}
-                            toggleFavourCompleted={this.props.toggleFavourCompleted}
+                            favours={favours["offeror"]}
+                            contractStatus={status}
+                            isEditable={(currentUserId === offeror.id)}
+                            toggleFavourCompleted={toggleFavourCompleted}
                         />
                     </TabPane>
-                    <TabPane tab="Offeree's Favours" key="offeree">
+                    <TabPane tab={offeree.firstName + "'s Promised Favours"} key="offeree">
                         <FavoursList
-                            favours={this.props.favours["offeree"]}
-                            isEditable={(this.props.currentUserId === this.props.offeree.id)}
-                            toggleFavourCompleted={this.props.toggleFavourCompleted}
+                            favours={favours["offeree"]}
+                            contractStatus={status}
+                            isEditable={(currentUserId === offeree.id)}
+                            toggleFavourCompleted={toggleFavourCompleted}
                         />
                     </TabPane>
                 </Tabs>
