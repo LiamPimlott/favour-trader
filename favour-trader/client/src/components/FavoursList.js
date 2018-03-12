@@ -15,7 +15,7 @@ class FavoursList extends Component {
                                 (this.props.isEditable ? 
                                     [<Checkbox 
                                         defaultChecked={item.completed}
-                                        onChange={() => this.props.toggleFavourCompleted(this._id)}
+                                        onChange={() => this.props.toggleFavourCompleted(item._id)}
                                     />]
                                 :
                                     [<Checkbox 
@@ -30,7 +30,7 @@ class FavoursList extends Component {
                         style={{padding: '20px'}}
                     >
                         <List.Item.Meta
-                            title={<span>{item.skillId.skill}{item.completed ? '(completed)' : ''}</span> }
+                            title={<span>{item.skillId.skill}{item.completed ? ' (completed)' : ''}</span> }
                             description={item.description}
                         />
                     </List.Item>

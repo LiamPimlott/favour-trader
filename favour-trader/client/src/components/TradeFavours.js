@@ -6,11 +6,25 @@ const TabPane = Tabs.TabPane;
 class TradeFavours extends Component {
     
     render() {
-        const {offeror, offeree, currentUserId, status, favours, toggleFavourCompleted} = this.props;
+        const {offeror, offeree, isUserOfferor, status, favours, toggleFavourCompleted, favoursEdited} = this.props;
         return (
             <Card 
                 bodyStyle={{padding: '0px'}} 
-                actions={[<Button>Save Changes</Button>, <Button>Discard Changes</Button>]}
+                actions={favoursEdited ? 
+                    [
+                        <Button
+                        
+                        >
+                            Save Changes
+                        </Button>,
+                        <Button
+                        
+                        >
+                            Discard Changes
+                        </Button>
+                    ] :
+                    []
+                }
             >
                 <Tabs 
                     size="large" 
@@ -20,7 +34,7 @@ class TradeFavours extends Component {
                         <FavoursList
                             favours={favours["offeror"]}
                             contractStatus={status}
-                            isEditable={(currentUserId === offeror.id)}
+                            isEditable={isUserOfferor}
                             toggleFavourCompleted={toggleFavourCompleted}
                         />
                     </TabPane>
@@ -28,7 +42,7 @@ class TradeFavours extends Component {
                         <FavoursList
                             favours={favours["offeree"]}
                             contractStatus={status}
-                            isEditable={(currentUserId === offeree.id)}
+                            isEditable={!isUserOfferor}
                             toggleFavourCompleted={toggleFavourCompleted}
                         />
                     </TabPane>

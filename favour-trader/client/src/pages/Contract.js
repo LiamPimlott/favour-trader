@@ -35,7 +35,39 @@ class Contract extends Component {
                 offeree: [],
             },
             currentUserId: '',
+            isUserOfferor: false,
+            favoursEdited: false,
         };
+    }
+
+    toggleFavourCompleted = (favourId) => {
+        const { authService } = this.props;
+        if (authService.loggedIn()) {
+            const userFavourSet = this.state.isUserOfferor ? 'offeror' : 'offeree';
+            const updatedOfferorFavours = this.state.favours.offeror.map( favour => {
+                favour.completed = (
+                    (favour._id === favourId && userFavourSet === 'offeror') ?
+                    !favour.completed :
+                    favour.completed
+                );
+                return favour;
+            });
+            const updatedOffereeFavours = this.state.favours.offeree.map( favour => {
+                favour.completed = (
+                    (favour._id === favourId && userFavourSet === 'offeree') ?
+                        !favour.completed :
+                        favour.completed
+                );
+                return favour;
+            });
+            this.setState({
+                favours: {
+                    offeror: updatedOfferorFavours,
+                    offeree: updatedOffereeFavours,
+                },
+                favoursEdited: true,
+            });
+        }
     }
 
     componentDidMount(){
@@ -78,6 +110,7 @@ class Contract extends Component {
                         offeree: tradeData.offeree.favours,
                     },
                     currentUserId: currentUserId,
+                    isUserOfferor: (currentUserId === tradeData.offeror.id),
                 }) )
                 .catch((err) => {
                     console.log(err);
@@ -86,7 +119,7 @@ class Contract extends Component {
     }
 
     render() {
-        const {status, favours, offeror, offeree, currentUserId} = this.state;
+        const {status, favours, offeror, offeree, currentUserId, isUserOfferor, favoursEdited} = this.state;
 
         return (
             <div >
@@ -98,7 +131,8 @@ class Contract extends Component {
                         status={status}
                         offeror={offeror}
                         offeree={offeree}
-                        currentUserId={currentUserId}
+                        isUserOfferor={isUserOfferor}
+                        favoursEdited={favoursEdited}
                         favours={favours}
                         toggleFavourCompleted={this.toggleFavourCompleted}
                     />
