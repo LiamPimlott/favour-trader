@@ -18,14 +18,14 @@ class TradeFavours extends Component {
                     <TabPane tab="Offeror's Favours" key="offeror">
                         <FavoursList
                             favours={this.props.favours["offeror"]}
-                            isCurrentUser={this.props.isCurrentUser}
+                            isEditable={(this.props.currentUserId === this.props.offeror.id)}
                             toggleFavourCompleted={this.props.toggleFavourCompleted}
                         />
                     </TabPane>
                     <TabPane tab="Offeree's Favours" key="offeree">
                         <FavoursList
-                            favours={this.props.favours["wants"]}
-                            isCurrentUser={this.props.isCurrentUser}
+                            favours={this.props.favours["offeree"]}
+                            isEditable={(this.props.currentUserId === this.props.offeree.id)}
                             toggleFavourCompleted={this.props.toggleFavourCompleted}
                         />
                     </TabPane>
@@ -35,4 +35,4 @@ class TradeFavours extends Component {
     }
 }
 
-export default UserSkills
+export default TradeFavours;

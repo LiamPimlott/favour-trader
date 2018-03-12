@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, CheckBox } from 'antd';
+import { List, Checkbox } from 'antd';
 
 class FavoursList extends Component {
     render() {
@@ -10,15 +10,17 @@ class FavoursList extends Component {
                 renderItem={item => (
                     <List.Item 
                         key={item._id}
-                        actions={ this.props.isCurrentUser ? [<CheckBox 
-                            type="danger"
-                            icon="delete"
+                        actions={ this.props.isEditable ? [<Checkbox 
+                            defaultChecked={item.completed}
                             onChange={() => this.props.toggleFavourCompleted(this._id)}
-                        />] : []}
+                        />] : [<Checkbox 
+                            checked={item.completed}
+                            disabled={true}
+                        />]}
                         style={{padding: '20px'}}
                     >
                         <List.Item.Meta
-                            title={<a>{item.skillID.category.skill}</a>}
+                            title={<span>{item.skillId.skill}{item.completed ? '(completed)' : ''}</span> }
                             description={item.description}
                         />
                     </List.Item>
@@ -28,4 +30,4 @@ class FavoursList extends Component {
     }
 }
 
-export default SkillsList;
+export default FavoursList;

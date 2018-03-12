@@ -1,19 +1,40 @@
 import React, {Component} from 'react';
 import TradeOverview from '../components/TradeOverview.js';
+import TradeFavours from '../components/TradeFavours.js';
 import axios from 'axios'
 import {Row, Col} from 'antd';
 
 class Contract extends Component {
     constructor() {
         super();
-        this.state = {
+        this.state = { 
             overview: {
                 offereeName: '',
                 offererName: '',
                 tradeStatus: '',
                 tradeMessage: '',
             },
-            trade: ''
+            status: '',
+            messages: [],
+            offeror: {
+                id: '',
+                firstName: '',
+                lastName: '',
+                requestTermination: false,
+
+            },
+            offeree: {
+                id: '',
+                firstName: '',
+                lastName: '',
+                requestTermination: false,
+
+            },
+            favours: {
+                offeror: [],
+                offeree: [],
+            },
+            currentUserId: '',
         };
     }
 
@@ -27,6 +48,7 @@ class Contract extends Component {
                     Authorization: authService.getToken()
                 }
             };
+            const currentUserId = authService.getProfile().id;
 
             axios.get(`/api/contracts/contract/${params.tradeID}`, config)
                 .then(res => res.data.trade)
@@ -36,7 +58,26 @@ class Contract extends Component {
                         offereeName: tradeData.offeree.name.first + ' ' + tradeData.offeree.name.last,
                         tradeStatus: tradeData.status,
                         tradeMessage: tradeData.messages[0],
-                    }
+                    },
+                    status: tradeData.status,
+                    messages: tradeData.messages,
+                    offeror: {
+                        id: tradeData.offeror.id,
+                        firstName: tradeData.offeror.name.first,
+                        lastName: tradeData.offeror.name.last,
+                        requestTermination: tradeData.offeror.requestTermination,
+                    },
+                    offeree: {
+                        id: tradeData.offeree.id,
+                        firstName: tradeData.offeree.name.first,
+                        lastName: tradeData.offeree.name.last,
+                        requestTermination: tradeData.offeree.requestTermination,
+                    },
+                    favours: {
+                        offeror: tradeData.offeror.favours,
+                        offeree: tradeData.offeree.favours,
+                    },
+                    currentUserId: currentUserId,
                 }) )
                 .catch((err) => {
                     console.log(err);
@@ -45,10 +86,21 @@ class Contract extends Component {
     }
 
     render() {
+        const {favours, offeror, offeree, currentUserId} = this.state;
+
         return (
             <div >
                 <Row>
                     <TradeOverview overview={this.state.overview} />
+                </Row>
+                <Row>
+                    <TradeFavours
+                        offeror={offeror}
+                        offeree={offeree}
+                        currentUserId={currentUserId}
+                        favours={favours}
+                        toggleFavourCompleted={this.toggleFavourCompleted}
+                    />
                 </Row>
             </div>
         );
