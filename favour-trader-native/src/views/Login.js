@@ -61,9 +61,9 @@ export default class Login extends React.Component {
                             onChangeText={(text) => this.setState({password: text})}
                         />
                         <TouchableOpacity style={styles.buttonContainer}
-                                          onPress = { this.submit }
+							onPress = { this.submit }
                         >
-                            <Text style={styles.buttonText}>LOGIN</Text>
+							<Text style={styles.buttonText}>LOGIN</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         backgroundColor: '#6F4B9B',
         justifyContent: 'center',
-        height: 75,
+        height: '15%',
         width: 400,
         marginTop: 10,
         marginBottom: 5,

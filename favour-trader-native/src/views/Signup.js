@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Image, ScrollView, Alert } from 'react-native';
 import { StackNavigator } from 'react-navigation';
+import AuthService from "../components/AuthService";
 
 export default class SignUp extends React.Component {
 	constructor(){
@@ -11,19 +12,34 @@ export default class SignUp extends React.Component {
             email: '',
             password: '',
         };
+		this.authService = new AuthService();
         this.submit = this.submit.bind(this);
     }
 
 	 submit() {
-		 //signup here
+		const { navigate } = this.props.navigation;
+
+		this.authService.signup(
+			this.state.firstName, 
+			this.state.lastName, 
+			this.state.email, 
+			this.state.password
+			)
+			.then(res => {
+				if (res.success && res.token) {
+						Alert.alert('Account Created', 'An account has been created under the email ' + this.state.email + '.  Happy Trading! :)');
+						navigate('Login');
+				} else {
+					Alert.alert(res.message); 
+				}
+			})
+			.catch(err => {
+				message.error(err.message);
+			});
 	 }
 	 
 	render(){
-		
-		const { navigate } = this.props.navigation;
-
 		return(
-
 			<View style={styles.container}>
 				<Text style={styles.title} >Ready to start trading?</Text>
 				<Text style={styles.intro} >We just need a bit of info to get you going..</Text>  
@@ -39,7 +55,7 @@ export default class SignUp extends React.Component {
 						/>
 						<TextInput
 							placeholder="Last Name" 
-							style={styles.inputSectionEnd}
+							style={styles.input}
 							ref={(input) => this.lastNameInput = input}
 							onChangeText={(lastName) => this.setState({lastName})}
 							onSubmitEditing={() => this.emailInput.focus()} 
@@ -63,8 +79,6 @@ export default class SignUp extends React.Component {
 							onPress = { 
 								() => {
 									this.submit();
-									Alert.alert('Account Created', 'An account has been created under the email ' + this.state.email + '.  Happy Trading! :)'); 
-									navigate('Login');
 								}
 							}  
 						>
@@ -77,22 +91,17 @@ export default class SignUp extends React.Component {
 	}
 }
 
-
-
 const styles = StyleSheet.create({
 	container: {  
 		flex: 1,
 		backgroundColor: 'transparent',
 		alignItems: 'center'
 	},    
-	backgroundImage: {
-		position: 'absolute',
-		bottom: 0        
-	},
+
 	buttonContainer: { 
 		backgroundColor: '#6F4B9B',
 		justifyContent: 'center',
-		height: '8%',
+		height: '10%',
 		marginTop: 10, 
 		marginBottom: 5,
 		borderRadius: 20
@@ -117,17 +126,13 @@ const styles = StyleSheet.create({
 		marginBottom: '3%'
 	},
   	input: { 
-		backgroundColor: '#9978C2',
-		padding: 20,
-		marginBottom: 5,      
-		fontSize: 20,
-		width: 400
-	},
-	inputSectionEnd: { 
-		backgroundColor: '#9978C2',
-		padding: 20,
-		marginBottom: 20,      
-		fontSize: 20,
-		width: 400
+		padding: 15,
+        marginBottom: 5,
+        fontSize: 20,
+        borderWidth: 1,
+        borderStyle: 'solid',
+		width: 400,
+        borderColor: 'black',
+        borderRadius: 10,
 	},
 });
