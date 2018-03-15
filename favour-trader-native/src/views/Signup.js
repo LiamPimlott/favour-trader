@@ -5,18 +5,18 @@ import AuthService from "../components/AuthService";
 
 export default class SignUp extends React.Component {
 	constructor(){
-        super();
-        this.state = {
-		firstName: '',
-		lastName: '',
-            	email: '',
-          	password: '',
-        };
-	this.authService = new AuthService();
-        this.submit = this.submit.bind(this);
-    }
+		super();
+		this.state = {
+			firstName: '',
+			lastName: '',
+			email: '',
+			password: '',
+		};
+		this.authService = new AuthService();
+		this.submit = this.submit.bind(this);
+    	}
 
-	 submit() {
+	submit() {
 		const { navigate } = this.props.navigation;
 
 		this.authService.signup(
