@@ -7,12 +7,12 @@ export default class SignUp extends React.Component {
 	constructor(){
         super();
         this.state = {
-            firstName: '',
-			lastName: '',
-            email: '',
-            password: '',
+		firstName: '',
+		lastName: '',
+            	email: '',
+          	password: '',
         };
-		this.authService = new AuthService();
+	this.authService = new AuthService();
         this.submit = this.submit.bind(this);
     }
 
@@ -27,8 +27,8 @@ export default class SignUp extends React.Component {
 			)
 			.then(res => {
 				if (res.success && res.token) {
-						Alert.alert('Account Created', 'An account has been created under the email ' + this.state.email + '.  Happy Trading! :)');
-						navigate('Login');
+					Alert.alert('Account Created', 'An account has been created under the email ' + this.state.email + '.  Happy Trading! :)');
+					navigate('Login');
 				} else {
 					Alert.alert(res.message); 
 				}
