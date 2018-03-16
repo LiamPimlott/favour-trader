@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Picker, FlatList} from 'react-native';
+import React, { Component } from 'react';
+import { FlatList, StyleSheet, View, Picker, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 import {Divider} from 'react-native-elements'
 import AuthService from "../components/AuthService";
 import axios from 'axios';

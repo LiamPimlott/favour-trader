@@ -90,7 +90,7 @@ router.post('/',
     }
 );
 
-// GET - RECEIVED - get all contracts for the user which are currently 'accepted'
+// GET - ACTIVE - get all contracts for the user which are currently 'accepted'
 router.get('/active',
     passport.authenticate('jwt', { session: false }),
     function(req, res, next)
