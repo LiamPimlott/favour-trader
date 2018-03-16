@@ -23,7 +23,6 @@ router.get('/',
     passport.authenticate('jwt', { session: false }),
     function(req, res, next)
     {
-        devDebug(req.user.id);
         Contract.find({ 
             $or: [
                 { 'offeror.id': req.user.id },
