@@ -4,6 +4,7 @@ import { StackNavigator, DrawerNavigator } from 'react-navigation';
 import AuthService from "../components/AuthService";
 import HomeScreen from '../views/HomeScreen.js';
 import Login from '../views/Login.js';
+import Signup from '../views/Signup.js';
 import Trades from '../views/Trades.js';
 
 // Add conditional logic based on AuthService (When AuthService is merged in)
@@ -20,6 +21,13 @@ const DrawerScreens = DrawerNavigator({
         screen: HomeScreen,
         navigationOptions: {
             title: 'Home',
+        },
+    },
+	  Signup: {
+        screen: Signup,
+        navigationOptions: {
+            title: 'Signup',
+			      header: null, // Signup page should not show the navigation
         },
     },
     Trades: {

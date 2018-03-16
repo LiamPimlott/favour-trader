@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert, Image } from 'react-native';
 import AuthService from "../components/AuthService";
 
 export default class Login extends React.Component {
@@ -37,9 +37,11 @@ export default class Login extends React.Component {
     renderErrorText(message) {
         Alert.alert('Invalid Login', message);
     }
-
+	
+	
     render(){
-        return(
+		const { navigate } = this.props.navigation;
+       return(
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <View style={styles.container}>
                     <Text style={styles.title} >Welcome to Favour Trader</Text>
@@ -59,14 +61,15 @@ export default class Login extends React.Component {
                             onChangeText={(text) => this.setState({password: text})}
                         />
                         <TouchableOpacity style={styles.buttonContainer}
-                                          onPress = { this.submit }
+							onPress = { this.submit }
                         >
-                            <Text style={styles.buttonText}>LOGIN</Text>
+							<Text style={styles.buttonText}>LOGIN</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
                 <TouchableOpacity
                     style={styles.buttonSignUp}
+					onPress = { () => navigate('Signup') }
                 >
                     <Text style={styles.buttonTextAcc}>No Account?</Text>
                     <Text style={styles.buttonText}>SIGN UP</Text>
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         backgroundColor: '#6F4B9B',
         justifyContent: 'center',
-        height: 75,
+        height: '15%',
         width: 400,
         marginTop: 10,
         marginBottom: 5,
