@@ -49,5 +49,4 @@ class ReviewSkillsModal extends Component {
       );
   }
 }
-
 export default ReviewSkillsModal;

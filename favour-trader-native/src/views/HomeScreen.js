@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Picker, FlatList} from 'react-native';
+import {Divider} from 'react-native-elements'
 import AuthService from "../components/AuthService";
 import axios from 'axios';
 import MatchCard from "../components/MatchCard";
@@ -81,6 +82,8 @@ export default class HomeScreen extends React.Component {
                     <Picker.Item label="Perfect Matches" value="perfect"/>
                 </Picker>
 
+                <Divider style={styles.divider} />
+
                 <FlatList
                     data={this.state.matchedUsers}
                     keyExtractor={this._keyExtractor}
@@ -96,19 +99,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
     },
-    buttonContainer: {
-        width: 400
-    },
-    title: {
-        fontWeight: 'bold',
-        fontSize: 40
-    },
-    intro: {
-        fontSize: 15
-    },
     picker: {
-        width: 200,
-        borderRadius: 2,
-        borderColor: 'black'
+        width: 300,
     },
+    divider: {
+        height: 1,
+        width: 300,
+        backgroundColor: 'grey'
+    }
 });
