@@ -171,8 +171,29 @@ router.put('/:id/offeror/favours',
                 if (err) {
                     devDebug(err);
                     next(err);
-                } 
-                res.json({ success: true, message: "Contract Updated.", contract: updatedContract})
+                }
+                Contract.findById(updatedContract._id).
+                populate('offeror.favours').
+                populate('offeror.favours.skillId').
+                populate('offeree.favours').
+                populate('offeree.favours.skillId').
+                exec((err, foundContract) => {
+                    if (err) {
+                        devDebug(err);
+                        next(err);
+                    } else if (!foundContract) {
+                        res.json({ success: false, message: "Trade does not exist."})
+                    } else {
+                        res.json({
+                            success: true,
+                            message: "Offeror favours updated.",
+                            favours: {
+                                offeror: foundContract.offeror.favours,
+                                offeree: foundContract.offeree.favours
+                            },
+                        });
+                    }
+                });
             });
         });
     }
@@ -196,8 +217,29 @@ router.put('/:id/offeree/favours',
                 if (err) {
                     devDebug(err);
                     next(err);
-                } 
-                res.json({ success: true, message: "Contract Updated.", contract: updatedContract})
+                }
+                Contract.findById(updatedContract._id).
+                populate('offeror.favours').
+                populate('offeror.favours.skillId').
+                populate('offeree.favours').
+                populate('offeree.favours.skillId').
+                exec((err, foundContract) => {
+                    if (err) {
+                        devDebug(err);
+                        next(err);
+                    } else if (!foundContract) {
+                        res.json({ success: false, message: "Trade does not exist."})
+                    } else {
+                        res.json({
+                            success: true,
+                            message: "Offeror favours updated.",
+                            favours: {
+                                offeror: foundContract.offeror.favours,
+                                offeree: foundContract.offeree.favours
+                            },
+                        });
+                    }
+                });
             });
         });
     }
