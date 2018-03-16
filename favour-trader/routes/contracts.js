@@ -38,7 +38,77 @@ router.get('/',
     }
 );
 
-// GET - USERS/ID - returns a user's profile by their id.
+// GET - RECEIVED - get all contracts for the user which are currently 'Accepted'
+router.get('/active',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find(
+            {
+                $or: [
+                    { 'offeror.id': req.user.id },
+                    { 'offeree.id': req.user.id }
+                ],
+                'status': 'Accepted',
+            },
+            function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - RECEIVED - get all contracts where user is the offeree & status is 'Pending'
+router.get('/received',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find(
+            {
+                $and: [
+                    { 'offeree.id': req.user.id },
+                    { 'status': 'Pending' }
+                ]
+            },
+            function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - SENT - get all contracts where user is the offeror & status is 'Pending'
+router.get('/sent',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find(
+            {
+                $and: [
+                    { 'offeror.id': req.user.id },
+                    { 'status': 'Pending' }
+                ]
+            },
+            function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - Contract/ID - returns a contract by id.
 router.get('/contract/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
     Contract.findById(req.params.id).
     populate('offeror.favours').
@@ -88,65 +158,6 @@ router.post('/',
                 res.json({success: false, message: "Required fields are missing."});
             } else {
                 res.json(contract);
-            }
-        });
-    }
-);
-
-// GET - RECEIVED - get all contracts for the user which are currently 'accepted'
-router.get('/active',
-    passport.authenticate('jwt', { session: false }),
-    function(req, res, next)
-    {
-        Contract.find({
-            $or: [
-                { 'offeror.id': req.user.id },
-                { 'offeree.id': req.user.id }
-            ],
-            $and: [
-                { 'status': 'accepted'},
-            ]}, function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
-    }
-);
-
-// GET - RECEIVED - get all contracts where user is the offeree
-router.get('/received',
-    passport.authenticate('jwt', { session: false }),
-    function(req, res, next)
-    {
-        Contract.find({
-            'offeree.id': req.user.id
-            }, function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
-    }
-);
-
-// GET - SENT - get all contracts where user is the offeror
-router.get('/sent',
-    passport.authenticate('jwt', { session: false }),
-    function(req, res, next)
-    {
-        Contract.find({
-            'offeror.id': req.user.id
-            }, function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
             }
         });
     }
