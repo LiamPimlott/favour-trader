@@ -153,8 +153,8 @@ router.get('/sent',
     }
 );
 
-// PUT - ROOT - update a contract by its id  (this actaully may not be necessary for mvp)
-router.put('/:id',
+// PUT - UPDATE OFFEROR FAVOURS - update the offeror's favours for a contract.
+router.put('/:id/offeror/favours',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
         Contract.findById(req.params.id, function (err, contract) {
@@ -163,22 +163,42 @@ router.put('/:id',
                 next(err);
             } else if (!contract) {
                 res.json({ success: false, message: "Contract not found."});
-            } else if ( //This can be middleware eventually to dry up code
-                contract.offeror.id !== req.user.id && 
-                contract.offeree.id !== req.user.id
-            ){
-                res.json({ success: false, message: "Unauthorized."})
-            } else {
-                Contract.findByIdAndUpdate(contract._id, function (err, updatedContract) {
-                    if (err || !contract) {
-                        devDebug(err);
-                        next(err);
-                    } else {
-                        res.json(updatedContract);
-                    }
-                })
-                res.json({ success: true, message: "Contract Updated.", contract: contract})
-            }
+            } else if ( contract.offeror.id != req.user.id ) {
+                res.json({ success: false, message: "Sorry, you are not the offeror."})
+            } 
+            contract.offeror.favours = req.body.updatedFavours;
+            contract.save(function(err, updatedContract) {
+                if (err) {
+                    devDebug(err);
+                    next(err);
+                } 
+                res.json({ success: true, message: "Contract Updated.", contract: updatedContract})
+            });
+        });
+    }
+);
+
+// PUT - UPDATE OFFEREE FAVOURS - update the offeree's favours for a contract.
+router.put('/:id/offeree/favours',
+    passport.authenticate('jwt', { session: false }),
+    function (req, res, next) {
+        Contract.findById(req.params.id, function (err, contract) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else if (!contract) {
+                res.json({ success: false, message: "Contract not found."});
+            } else if ( contract.offeree.id != req.user.id ) {
+                res.json({ success: false, message: "Sorry, you are not the offeree."})
+            } 
+            contract.offeree.favours = req.body.updatedFavours;
+            contract.save(function(err, updatedContract) {
+                if (err) {
+                    devDebug(err);
+                    next(err);
+                } 
+                res.json({ success: true, message: "Contract Updated.", contract: updatedContract})
+            });
         });
     }
 );
