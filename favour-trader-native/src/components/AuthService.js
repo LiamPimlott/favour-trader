@@ -35,7 +35,6 @@ export default class AuthService {
     }
 
     login(email, password) {
-        console.log("Logging in...");
         // Get a token from api server using the fetch api
         return this.fetch(`http://favour-trader.appspot.com/api/users/login`, {
             'email': email,
@@ -46,9 +45,7 @@ export default class AuthService {
                 'Authorization': this.getToken(),
             }).then(res => {
                 if (res.success && res.token) {
-                    console.log("Result looks good...");
                     this.setToken(res.token); // Setting the token in AsyncStorage
-                    console.log("Token set...");
                 }
                 return Promise.resolve(res);
             });
@@ -75,7 +72,6 @@ export default class AuthService {
     }
 
     async setToken(idToken) {
-        console.log("Setting token...");
         // Saves user token to AsyncStorage
         await AsyncStorage.setItem('id_token', idToken)
     }
@@ -97,9 +93,13 @@ export default class AuthService {
         await AsyncStorage.removeItem('id_token');
     }
 
-    getProfile() {
+    async getProfile() {
         // Using jwt-decode npm package to decode the token
-        return jwt_decode(this.getToken());
+        const token = await this.getToken()
+        if (token !== null) {
+            const profile = jwt_decode(token);
+            return profile;
+        }
     }
 
     fetch(url, body, headers) {
