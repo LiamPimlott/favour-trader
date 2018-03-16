@@ -14,7 +14,7 @@ class FavoursList extends Component {
                             (this.props.contractStatus === "Accepted" ?
                                 (this.props.isEditable ? 
                                     [<Checkbox 
-                                        defaultChecked={item.completed}
+                                        checked={item.completed}
                                         onChange={() => this.props.toggleFavourCompleted(item._id)}
                                     />]
                                 :

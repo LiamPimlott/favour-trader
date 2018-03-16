@@ -4,6 +4,9 @@ import TradeFavours from '../components/TradeFavours.js';
 import axios from 'axios'
 import {Row, Col, Button} from 'antd';
 
+const OFFEROR = 'offeror';
+const OFFEREE = 'offeree';
+
 class Contract extends Component {
     constructor() {
         super();
@@ -34,38 +37,84 @@ class Contract extends Component {
                 offeror: [],
                 offeree: [],
             },
+            userUpdatedFavours: [],
             currentUserId: '',
             isUserOfferor: false,
             favoursEdited: false,
+            saveFavoursWaiting: false,
         };
     }
 
     toggleFavourCompleted = (favourId) => {
         const { authService } = this.props;
+        const { userUpdatedFavours, isUserOfferor } = this.state;
         if (authService.loggedIn()) {
-            const userFavourSet = this.state.isUserOfferor ? 'offeror' : 'offeree';
-            const updatedOfferorFavours = this.state.favours.offeror.map( favour => {
-                favour.completed = (
-                    (favour._id === favourId && userFavourSet === 'offeror') ?
-                    !favour.completed :
-                    favour.completed
+            const userFavourSet = isUserOfferor ? OFFEROR : OFFEREE;
+            const updatedUserFavours = userUpdatedFavours.map( favour => {
+                const updatedFavour = {...favour};
+                updatedFavour.completed = (
+                    favour._id === favourId ? !favour.completed : favour.completed 
                 );
-                return favour;
-            });
-            const updatedOffereeFavours = this.state.favours.offeree.map( favour => {
-                favour.completed = (
-                    (favour._id === favourId && userFavourSet === 'offeree') ?
-                        !favour.completed :
-                        favour.completed
-                );
-                return favour;
+                return updatedFavour;
             });
             this.setState({
-                favours: {
-                    offeror: updatedOfferorFavours,
-                    offeree: updatedOffereeFavours,
-                },
+                userUpdatedFavours: updatedUserFavours,
                 favoursEdited: true,
+            });
+        }
+    }
+
+    saveEditedFavours = () => {
+        const { authService, match: { params } } = this.props;
+        const { isUserOfferor, userUpdatedFavours, favours } = this.state;
+        if (authService.loggedIn()) {
+            const headers = {
+                    Authorization: authService.getToken(),
+            };
+            const body = {
+                updatedFavours: [
+                    ...userUpdatedFavours
+                ],
+            };
+            const base = window.location.origin;
+            const tradeId = this.props.match.params.tradeID;
+            const userRole = isUserOfferor ? OFFEROR : OFFEREE;
+            const endpoint = `api/contracts/${tradeId}/${userRole}/favours`;
+            this.setState({ saveFavoursWaiting: true });
+            axios({
+                method: 'put',
+                headers: headers,
+                baseURL: base,
+                url: endpoint,
+                data: body
+            })
+            .then(res => res.data.favours)
+            .then(updatedFavours => {
+                this.setState({
+                    favours: updatedFavours,
+                    saveFavoursWaiting: false, 
+                    favoursEdited: false,
+                });
+            })
+            .catch((err) => {
+                this.setState({
+                    userUpdatedFavours: favours[userRole],
+                    saveFavoursWaiting: false, 
+                    favoursEdited: false 
+                })
+                console.log(err);
+            });
+        }
+    }
+
+    cancelEditedFavours = () => {
+        const { authService, match: { params } } = this.props;
+        const { isUserOfferor, favours } = this.state;
+        if (authService.loggedIn()) {
+            const userRole = isUserOfferor ? OFFEROR : OFFEREE;
+            this.setState({ 
+                userUpdatedFavours: favours[userRole],
+                favoursEdited: false,
             });
         }
     }
@@ -80,38 +129,41 @@ class Contract extends Component {
                     Authorization: authService.getToken()
                 }
             };
-            const currentUserId = authService.getProfile().id;
-
             axios.get(`/api/contracts/contract/${params.tradeID}`, config)
                 .then(res => res.data.trade)
-                .then((tradeData) => this.setState({
-                    overview: {
-                        offererName: tradeData.offeror.name.first + ' ' + tradeData.offeror.name.last,
-                        offereeName: tradeData.offeree.name.first + ' ' + tradeData.offeree.name.last,
-                        tradeStatus: tradeData.status,
-                        tradeMessage: tradeData.messages[0],
-                    },
-                    status: tradeData.status,
-                    messages: tradeData.messages,
-                    offeror: {
-                        id: tradeData.offeror.id,
-                        firstName: tradeData.offeror.name.first,
-                        lastName: tradeData.offeror.name.last,
-                        requestTermination: tradeData.offeror.requestTermination,
-                    },
-                    offeree: {
-                        id: tradeData.offeree.id,
-                        firstName: tradeData.offeree.name.first,
-                        lastName: tradeData.offeree.name.last,
-                        requestTermination: tradeData.offeree.requestTermination,
-                    },
-                    favours: {
-                        offeror: tradeData.offeror.favours,
-                        offeree: tradeData.offeree.favours,
-                    },
-                    currentUserId: currentUserId,
-                    isUserOfferor: (currentUserId === tradeData.offeror.id),
-                }) )
+                .then((tradeData) => {
+                    const currentUserId = authService.getProfile().id;
+                    const isUserOfferor = (currentUserId === tradeData.offeror.id);
+                    this.setState({
+                        overview: {
+                            offererName: tradeData.offeror.name.first + ' ' + tradeData.offeror.name.last,
+                            offereeName: tradeData.offeree.name.first + ' ' + tradeData.offeree.name.last,
+                            tradeStatus: tradeData.status,
+                            tradeMessage: tradeData.messages[0],
+                        },
+                        status: tradeData.status,
+                        messages: tradeData.messages,
+                        offeror: {
+                            id: tradeData.offeror.id,
+                            firstName: tradeData.offeror.name.first,
+                            lastName: tradeData.offeror.name.last,
+                            requestTermination: tradeData.offeror.requestTermination,
+                        },
+                        offeree: {
+                            id: tradeData.offeree.id,
+                            firstName: tradeData.offeree.name.first,
+                            lastName: tradeData.offeree.name.last,
+                            requestTermination: tradeData.offeree.requestTermination,
+                        },
+                        favours: {
+                            offeror: tradeData.offeror.favours,
+                            offeree: tradeData.offeree.favours,
+                        },
+                        userUpdatedFavours: (isUserOfferor ? tradeData.offeror.favours : tradeData.offeree.favours),
+                        currentUserId: currentUserId,
+                        isUserOfferor: isUserOfferor,
+                    }) 
+                })
                 .catch((err) => {
                     console.log(err);
                 });
@@ -119,7 +171,11 @@ class Contract extends Component {
     }
 
     render() {
-        const {status, favours, offeror, offeree, currentUserId, isUserOfferor, favoursEdited} = this.state;
+        const {
+            status, favours, offeror,
+            offeree, currentUserId, isUserOfferor,
+            favoursEdited, saveFavoursWaiting, userUpdatedFavours,
+        } = this.state;
 
         return (
             <div >
@@ -133,8 +189,12 @@ class Contract extends Component {
                         offeree={offeree}
                         isUserOfferor={isUserOfferor}
                         favoursEdited={favoursEdited}
+                        saveFavoursWaiting={saveFavoursWaiting}
                         favours={favours}
+                        userUpdatedFavours={userUpdatedFavours}
                         toggleFavourCompleted={this.toggleFavourCompleted}
+                        saveEditedFavours={this.saveEditedFavours}
+                        cancelEditedFavours={this.cancelEditedFavours}
                     />
                 </Row>
                 { this.state.status === "Accepted" 
