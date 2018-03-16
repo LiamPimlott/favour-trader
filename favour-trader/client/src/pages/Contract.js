@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TradeOverview from '../components/TradeOverview.js';
 import TradeFavours from '../components/TradeFavours.js';
 import axios from 'axios'
-import {Row, Col, Button} from 'antd';
+import {Row, Col, Button, Spin} from 'antd';
 
 const OFFEROR = 'offeror';
 const OFFEREE = 'offeree';
@@ -42,6 +42,7 @@ class Contract extends Component {
             isUserOfferor: false,
             favoursEdited: false,
             saveFavoursWaiting: false,
+            pageLoaded: false,
         };
     }
 
@@ -119,7 +120,7 @@ class Contract extends Component {
         }
     }
 
-    componentDidMount(){
+    componentWillMount(){
         const { authService } = this.props;
         const { match: { params } } = this.props;
 
@@ -162,6 +163,7 @@ class Contract extends Component {
                         userUpdatedFavours: (isUserOfferor ? tradeData.offeror.favours : tradeData.offeree.favours),
                         currentUserId: currentUserId,
                         isUserOfferor: isUserOfferor,
+                        pageLoaded: true,
                     }) 
                 })
                 .catch((err) => {
@@ -175,59 +177,68 @@ class Contract extends Component {
             status, favours, offeror,
             offeree, currentUserId, isUserOfferor,
             favoursEdited, saveFavoursWaiting, userUpdatedFavours,
+            pageLoaded,
         } = this.state;
 
-        return (
-            <div >
+        return pageLoaded ?
+            (
+                <div >
+                    <Row>
+                        <TradeOverview overview={this.state.overview} />
+                    </Row>
+                    <Row>
+                        <TradeFavours
+                            status={status}
+                            offeror={offeror}
+                            offeree={offeree}
+                            isUserOfferor={isUserOfferor}
+                            favoursEdited={favoursEdited}
+                            saveFavoursWaiting={saveFavoursWaiting}
+                            favours={favours}
+                            userUpdatedFavours={userUpdatedFavours}
+                            toggleFavourCompleted={this.toggleFavourCompleted}
+                            saveEditedFavours={this.saveEditedFavours}
+                            cancelEditedFavours={this.cancelEditedFavours}
+                        />
+                    </Row>
+                    { this.state.status === "Pending" && !this.state.isUserOfferor 
+                        ? (
+                            <Row>
+                                <Col span={12}  style={{textAlign: 'center'}}>
+                                    <Button
+                                        type='primary'
+                                        size='large'
+                                        icon='check'
+                                        style={{marginTop: '50px'}}
+                                        // onClick={this.toggleCreateTradeModal}
+                                    >
+                                        Accept Trade
+                                    </Button>
+                                </Col>
+                                <Col span={12}  style={{textAlign: 'center'}}>
+                                    <Button
+                                        type='danger'
+                                        size='large'
+                                        icon='close'
+                                        style={{marginTop: '50px'}}
+                                        // onClick={this.toggleCreateTradeModal}
+                                    >
+                                        Decline Trade
+                                    </Button>
+                                </Col>
+                            </Row>
+                        )
+                        : ''
+                    }
+                </div>
+            ) :
+            (
                 <Row>
-                    <TradeOverview overview={this.state.overview} />
+                    <Col style={{textAlign: 'center'}}>
+                        <Spin size='large' style={{textAlign: 'center'}}/>
+                    </Col>
                 </Row>
-                <Row>
-                    <TradeFavours
-                        status={status}
-                        offeror={offeror}
-                        offeree={offeree}
-                        isUserOfferor={isUserOfferor}
-                        favoursEdited={favoursEdited}
-                        saveFavoursWaiting={saveFavoursWaiting}
-                        favours={favours}
-                        userUpdatedFavours={userUpdatedFavours}
-                        toggleFavourCompleted={this.toggleFavourCompleted}
-                        saveEditedFavours={this.saveEditedFavours}
-                        cancelEditedFavours={this.cancelEditedFavours}
-                    />
-                </Row>
-                { this.state.status === "Accepted" 
-                    ? ''
-                    : (
-                        <Row>
-                            <Col span={12}  style={{textAlign: 'center'}}>
-                                <Button
-                                    type='primary'
-                                    size='large'
-                                    icon='check'
-                                    style={{marginTop: '50px'}}
-                                    // onClick={this.toggleCreateTradeModal}
-                                >
-                                    Accept Trade
-                                </Button>
-                            </Col>
-                            <Col span={12}  style={{textAlign: 'center'}}>
-                                <Button
-                                    type='danger'
-                                    size='large'
-                                    icon='close'
-                                    style={{marginTop: '50px'}}
-                                    // onClick={this.toggleCreateTradeModal}
-                                >
-                                    Decline Trade
-                                </Button>
-                            </Col>
-                        </Row>
-                    )
-                }
-            </div>
-        );
+            );
     }
 }
 
