@@ -163,6 +163,44 @@ router.post('/',
     }
 );
 
+// PUT - ACCEPT/DECLINE TRADE - Changes the trade's status to "Accepted" or "Declined" if requested by offeree
+router.put('/:id/status',
+    passport.authenticate('jwt', {session: false}),
+    function (req, res, next) {
+        Contract.findById(req.params.id, function (err, contract) {
+            const newStatus = req.body.status;
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else if (!contract) {
+                res.json({ success: false, message: "Contract not found."});
+            } else if ( contract.offeree.id != req.user.id ) {
+                res.json({ success: false, message: "Sorry, you are not the Offeree."});
+            } else if (!newStatus) {
+                res.json({ success: false, message: "You must provide a new status."});
+            } else if (newStatus !== 'Accepted' && newStatus !== 'Declined') {
+                res.json({ success: false, message: "Invalid status provided."});
+            }
+            Contract.findByIdAndUpdate(contract._id,
+                { $set: { status: newStatus }},
+                { new: true }
+            ).
+            populate('offeror.favours').
+            populate('offeror.favours.skillId').
+            populate('offeree.favours').
+            populate('offeree.favours.skillId').
+            exec(function (err, updatedContract) {
+                if (err) {
+                    devDebug(err);
+                    next(err);
+                } else {
+                    res.json({ success: true, message: "Status updated!", contract: updatedContract });
+                }
+            });
+        });
+    }
+);
+
 // PUT - UPDATE OFFEROR FAVOURS - update the offeror's favours for a contract.
 router.put('/:id/offeror/favours',
     passport.authenticate('jwt', { session: false }),
