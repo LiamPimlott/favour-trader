@@ -7,7 +7,6 @@ class MatchCard extends React.Component{
         modalVisible: false,
     };
 
-
     setModalVisible() {
         this.setState({modalVisible: !this.state.modalVisible});
     }
@@ -16,7 +15,6 @@ class MatchCard extends React.Component{
         const { match } = this.props;
         return (
             <View key={match._id}>
-
                 <Card
                     title={match.name.first + ' ' + match.name.last}>
                     <View style={styles.avatar}>

@@ -82,9 +82,7 @@ export default class HomeScreen extends React.Component {
                     <Picker.Item label="What I Have" value="has"/>
                     <Picker.Item label="Perfect Matches" value="perfect"/>
                 </Picker>
-
                 <Divider style={styles.divider} />
-
                 <FlatList
                     data={this.state.matchedUsers}
                     keyExtractor={this._keyExtractor}
