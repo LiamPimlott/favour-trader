@@ -7,6 +7,7 @@ import './CreateTradeModal.css';
 
 const initialState = {
     step: 1,
+    requestableSkills: [],
     requestedSkills: [],
     offeredSkills: [],
     message: '',
@@ -58,11 +59,20 @@ class CreateTradeModal extends Component {
     }
 
     componentWillUnmount() {
+        this.reset();
         this.mounted = false;
     }
 
     reset() {
-        this.setState(initialState);
+        this.setState({
+            step: 1,
+            requestableSkills: [],
+            requestedSkills: [],
+            offeredSkills: [],
+            message: '',
+            redirect: false,
+            failedAttempt: false,
+        });
     }
 
     nextStep() {
@@ -205,6 +215,7 @@ class CreateTradeModal extends Component {
                     });
                 }
             });
+            this.reset();
     }
 
     renderSkills(skillSet, skills) {
@@ -326,7 +337,12 @@ class CreateTradeModal extends Component {
     render() {
         const { isOpen, toggle } = this.props;
         return (
-            <Modal isOpen={isOpen} toggle={toggle} backdrop={true}>
+            <Modal 
+                isOpen={isOpen}
+                toggle={toggle}
+                backdrop={true}
+                onCancel={this.reset}
+            >
                 <ModalHeader toggle={toggle}>Offer a trade</ModalHeader>
                 {this.renderModalBody()}
                 {this.renderModalFooter()}
