@@ -125,9 +125,9 @@ const users = [
 ];
 
 const skills = [
-    {skill: "Skeeball"},
-    {skill: "3 Point Shot Making"},
-    {skill: "Making Out"}
+    { skill: "Skeeball" },
+    { skill: "3 Point Shot Making" },
+    { skill: "Making Out" }
 ]
 
 describe("User API Tests", () => {
@@ -605,7 +605,7 @@ describe("User API Tests", () => {
     describe("/AUTH", () => {
         var authToken;
 
-        beforeEach((done)=>{
+        beforeEach((done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[0])
@@ -615,37 +615,37 @@ describe("User API Tests", () => {
                 });
         });
 
-        it("Should pass for a valid token",(done)=>{
+        it("Should pass for a valid token", (done) => {
             chai.request(url)
-            .get("/api/users/auth")
-            .set("Authorization",authToken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                res.should.have.property("text");
-                res.text.should.equal("Token is valid! User name is: Mark Ripptoe");
-                done();
-            });
+                .get("/api/users/auth")
+                .set("Authorization", authToken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.property("text");
+                    res.text.should.equal("Token is valid! User name is: Mark Ripptoe");
+                    done();
+                });
         });
 
-        it("Should fail for an invalid token",(done)=>{
+        it("Should fail for an invalid token", (done) => {
             chai.request(url)
-            .get("/api/users/auth")
-            .set("Authorization",authToken+"cheese")
-            .end((err,res)=>{
-                should.exist(err);
-                err.status.should.eql(401);
-                done();
-            });
+                .get("/api/users/auth")
+                .set("Authorization", authToken + "cheese")
+                .end((err, res) => {
+                    should.exist(err);
+                    err.status.should.eql(401);
+                    done();
+                });
         });
 
-        it("Should fail for no token",(done)=>{
+        it("Should fail for no token", (done) => {
             chai.request(url)
-            .get("/api/users/auth")
-            .end((err,res)=>{
-                should.exist(err);
-                err.status.should.eql(401);
-                done();
-            });
+                .get("/api/users/auth")
+                .end((err, res) => {
+                    should.exist(err);
+                    err.status.should.eql(401);
+                    done();
+                });
         });
     });
 
@@ -792,14 +792,14 @@ describe("User API Tests", () => {
                 });
         });
     });
-    
-    describe("/HAS", () =>  {
+
+    describe("/HAS", () => {
         var skillIds = [];
         var hasToken;
 
-        beforeEach((done)=>{
+        beforeEach((done) => {
             var addSkills = new Promise((resolve) => {
-                Skill.insertMany(skills, (error,docs) => {
+                Skill.insertMany(skills, (error, docs) => {
                     Skill.find({}, { _id: true }, (err, res) => {
                         for (var i = 0; i < res.length; i++) {
                             skillIds.push(res[i]._id);
@@ -820,26 +820,26 @@ describe("User API Tests", () => {
             });
         });
 
-        afterEach((done)=>{
+        afterEach((done) => {
             Skill.remove({}, () => {
                 done();
             });
             skillIds = [];
         });
 
-        it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
+        it("Should return no skills when the logged in user doesn't have any skills", (done) => {
             chai.request(url)
-            .post("/api/users/has")
-            .set("Authorization",hasToken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                res.body.should.have.property("message");
-                res.body.should.have.property("success");
-                res.body.should.have.property("user");
-                res.body.user.has.length.should.equal(0);
-                res.body.success.should.equal(true);
-                done();
-            });
+                .post("/api/users/has")
+                .set("Authorization", hasToken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.should.have.property("message");
+                    res.body.should.have.property("success");
+                    res.body.should.have.property("user");
+                    res.body.user.has.length.should.equal(0);
+                    res.body.success.should.equal(true);
+                    done();
+                });
         });
 
         it("Should return two skills when the logged in user has two skills", (done) => {
@@ -859,23 +859,23 @@ describe("User API Tests", () => {
             })
         });
 
-        it("Should return an error without proper authorization",(done) => {
+        it("Should return an error without proper authorization", (done) => {
             chai.request(url)
-            .post("/api/users/has")
-            .end((err,res)=>{
-                should.exist(err);
-                done();
-            });
+                .post("/api/users/has")
+                .end((err, res) => {
+                    
+                    done();
+                });
         });
     });
 
-    describe("/WANTS", () =>  {
+    describe("/WANTS", () => {
         var skillIds = [];
         var wantToken;
 
-        beforeEach((done)=>{
+        beforeEach((done) => {
             var addSkills = new Promise((resolve) => {
-                Skill.insertMany(skills, (error,docs) => {
+                Skill.insertMany(skills, (error, docs) => {
                     Skill.find({}, { _id: true }, (err, res) => {
                         for (var i = 0; i < res.length; i++) {
                             skillIds.push(res[i]._id);
@@ -896,27 +896,27 @@ describe("User API Tests", () => {
             });
         });
 
-        afterEach((done)=>{
+        afterEach((done) => {
             Skill.remove({}, () => {
                 done();
             });
             skillIds = [];
         });
 
-        it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
+        it("Should return no skills when the logged in user doesn't have any skills", (done) => {
             chai.request(url)
-            .post("/api/users/wants")
-            .set("Authorization",wantToken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                res.body.should.have.property("message");
-                res.body.should.have.property("success");
-                res.body.should.have.property("user");
-                res.body.user.should.have.property("wants"); 
-                res.body.success.should.equal(true);
-                res.body.user.wants.length.should.equal(0);
-                done();
-            });
+                .post("/api/users/wants")
+                .set("Authorization", wantToken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.should.have.property("message");
+                    res.body.should.have.property("success");
+                    res.body.should.have.property("user");
+                    res.body.user.should.have.property("wants");
+                    res.body.success.should.equal(true);
+                    res.body.user.wants.length.should.equal(0);
+                    done();
+                });
         });
 
         it("Should return two wants when the logged in user has two wants", (done) => {
@@ -937,13 +937,13 @@ describe("User API Tests", () => {
             })
         });
 
-        it("Should return an error without proper authorization",(done) => {
+        it("Should return an error without proper authorization", (done) => {
             chai.request(url)
-            .post("/api/users/has")
-            .end((err,res)=>{
-                should.exist(err);
-                done();
-            });
+                .post("/api/users/has")
+                .end((err, res) => {
+                    should.exist(err);
+                    done();
+                });
         });
     });
 
@@ -1001,7 +1001,7 @@ describe("User API Tests", () => {
                 });
         });
     });
-    
+
     describe("/UPDATE", () => {
         //before each update, shove a user to update in the database.
         var updateToken;
@@ -1009,27 +1009,27 @@ describe("User API Tests", () => {
 
         beforeEach((done) => {
             var addSkills = new Promise((resolve) => {
-                Skill.insertMany(skills, (error,docs) => {
-                        for (var i = 0; i < docs.length; i++) {
-                            updateSkillIds.push(docs[i]._id);
-                        }
-                        resolve();
+                Skill.insertMany(skills, (error, docs) => {
+                    for (var i = 0; i < docs.length; i++) {
+                        updateSkillIds.push(docs[i]._id);
+                    }
+                    resolve();
                 });
             });
 
-            addSkills.then((resolve)=>{
+            addSkills.then((resolve) => {
                 chai.request(url)
-                .post('/api/users/register')
-                .send(users[0])
-                .end((err, res) => {
-                    updateToken = res.body.token;
-                    done();
-                });
+                    .post('/api/users/register')
+                    .send(users[0])
+                    .end((err, res) => {
+                        updateToken = res.body.token;
+                        done();
+                    });
             });
         });
 
-        afterEach((done)=>{
-            Skill.remove({},(error,docs)=>{
+        afterEach((done) => {
+            Skill.remove({}, (error, docs) => {
                 done();
             });
         });
@@ -1038,20 +1038,22 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ wants: [
-                    {
-                        category: updateSkillIds[0],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[1],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[2],
-                        description: "Wow"
-                    }
-                ] })
+                .send({
+                    wants: [
+                        {
+                            category: updateSkillIds[0],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[1],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[2],
+                            description: "Wow"
+                        }
+                    ]
+                })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -1066,20 +1068,22 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ has: [
-                    {
-                        category: updateSkillIds[0],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[1],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[2],
-                        description: "Wow"
-                    }
-                ] })
+                .send({
+                    has: [
+                        {
+                            category: updateSkillIds[0],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[1],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[2],
+                            description: "Wow"
+                        }
+                    ]
+                })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -1094,20 +1098,22 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ has: [
-                    {
-                        category: updateSkillIds[0],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[1],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[2],
-                        description: "Wow"
-                    }
-                ], about: "AAAAAAAAAAAAAAAAAAAAA" })
+                .send({
+                    has: [
+                        {
+                            category: updateSkillIds[0],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[1],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[2],
+                            description: "Wow"
+                        }
+                    ], about: "AAAAAAAAAAAAAAAAAAAAA"
+                })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -1129,41 +1135,41 @@ describe("User API Tests", () => {
                 });
         });
     });
-    
+
     describe("/DELETE", () => {
         var deleteToken;
 
-            beforeEach((done) => {
-                chai.request(url)
-                    .post('/api/users/register')
-                    .send(users[0])
-                    .end((err, res) => {
-                        deleteToken = res.body.token;
-                        done();
-                    });
-            });
-
-        it("Should perform a delete with proper authorization",(done) => {
+        beforeEach((done) => {
             chai.request(url)
-            .delete("/api/users/delete")
-            .set("Authorization",deleteToken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                User.find({},(err,res)=>{
-                    res.should.have.length(0);
+                .post('/api/users/register')
+                .send(users[0])
+                .end((err, res) => {
+                    deleteToken = res.body.token;
                     done();
                 });
-            });
+        });
+
+        it("Should perform a delete with proper authorization", (done) => {
+            chai.request(url)
+                .delete("/api/users/delete")
+                .set("Authorization", deleteToken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    User.find({}, (err, res) => {
+                        res.should.have.length(0);
+                        done();
+                    });
+                });
         });
 
         it("Shouldn't perform a delete without authorization.", (done) => {
             chai.request(url)
-            .delete("/api/users/delete")
-            .end((err,res) => {
-                should.exist(err);
-                err.status.should.eql(401);
-                done();
-            });
+                .delete("/api/users/delete")
+                .end((err, res) => {
+                    should.exist(err);
+                    err.status.should.eql(401);
+                    done();
+                });
         });
     });
 });
