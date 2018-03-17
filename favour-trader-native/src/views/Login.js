@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert, Image } from 'react-native';
 import AuthService from "../components/AuthService";
+import { Input, Icon, Button, Card, Divider } from 'react-native-elements';
 
 export default class Login extends React.Component {
     constructor(){
@@ -37,43 +38,54 @@ export default class Login extends React.Component {
     renderErrorText(message) {
         Alert.alert('Invalid Login', message);
     }
-	
-	
+
     render(){
-		const { navigate } = this.props.navigation;
-       return(
+        const { navigate } = this.props.navigation;
+        return(
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <View style={styles.container}>
-                    <Text style={styles.title} >Welcome to Favour Trader</Text>
+                <Card
+                    title={'Welcome to Favour ⇋ Trader'}>
                     <Text style={styles.intro}>Login to start trading!</Text>
-                    <View>
-                        <TextInput
-                            placeholder="E-mail Address"
-                            style={styles.input}
+                    <View style={styles.input}>
+                        <Input
+                            placeholder='E-mail Address'
+                            leftIcon={
+                                <Icon
+                                    name='mail-outline' />
+                            }
                             autoCapitalize={'none'}
                             onChangeText={(text) => this.setState({email: text})}
                         />
-                        <TextInput
-                            placeholder="Password"
-                            style={styles.input}
-                            secureTextEntry
+                    </View>
+                    <View style={styles.input}>
+                        <Input
+                            placeholder='Password'
+                            leftIcon={
+                                <Icon
+                                    name='lock-outline' />
+                            }
                             autoCapitalize={'none'}
+                            secureTextEntry={true}
                             onChangeText={(text) => this.setState({password: text})}
                         />
-                        <TouchableOpacity style={styles.buttonContainer}
-							onPress = { this.submit }
-                        >
-							<Text style={styles.buttonText}>LOGIN</Text>
-                        </TouchableOpacity>
                     </View>
-                </View>
-                <TouchableOpacity
-                    style={styles.buttonSignUp}
-					onPress = { () => navigate('Signup') }
-                >
-                    <Text style={styles.buttonTextAcc}>No Account?</Text>
-                    <Text style={styles.buttonText}>SIGN UP</Text>
-                </TouchableOpacity>
+
+                    <Button
+                        backgroundColor='#03A9F4'
+                        buttonStyle={styles.button}
+                        title='Login'
+                        onPress = { this.submit} />
+
+                    <Divider style={styles.divider}/>
+                    <View style={styles.footerView}>
+                        <Text style={{textAlign: 'center'}}>No account?</Text>
+                        <Button
+                            clear={true}
+                            titleStyle={{ color: "#03A9F4" }}
+                            title='Sign Up'
+                            onPress = { () => navigate('Signup') } />
+                    </View>
+                </Card>
             </KeyboardAvoidingView>
         );
     }
@@ -87,44 +99,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     input: {
-        padding: 15,
-        marginBottom: 5,
-        fontSize: 20,
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: 'black',
-        borderRadius: 10,
-    },
-    buttonContainer: {
-        backgroundColor: '#6F4B9B',
-        justifyContent: 'center',
-        height: '15%',
-        width: 400,
         marginTop: 10,
-        marginBottom: 5,
-        borderRadius: 20
+        marginBottom: 15,
     },
-    buttonSignUp: {
-        backgroundColor: 'transparent',
-        justifyContent: 'center',
-        height: 75,
-        width: 200,
-        borderRadius: 25
-    },
-    buttonTextAcc: {
-        textAlign: 'center',
-        fontSize: 15
-    },
-    buttonText: {
-        textAlign: 'center',
-        fontSize: 25
-    },
-    title: {
-        fontWeight: 'bold',
-        fontSize: 40,
-        textAlign: 'center',
+    button: {
+        width: 300,
+        borderRadius: 0,
+        marginLeft: 0,
+        marginRight: 0,
+        marginBottom: 10
     },
     intro: {
-        fontSize: 20
+        fontSize: 15,
+        textAlign: 'center',
+        marginBottom: 10
+    },
+    divider: {
+        width: 300,
+        backgroundColor: 'grey',
+        marginTop: 15,
+    },
+    footerView: {
+        marginTop: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 });
