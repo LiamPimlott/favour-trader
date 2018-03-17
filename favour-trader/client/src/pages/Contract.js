@@ -46,7 +46,7 @@ class Contract extends Component {
 
     toggleFavourCompleted = (favourId) => {
         const { authService } = this.props;
-        const { userUpdatedFavours, isUserOfferor } = this.state;
+        const { userUpdatedFavours } = this.state;
         if (authService.loggedIn()) {
             const updatedUserFavours = userUpdatedFavours.map( favour => {
                 const updatedFavour = {...favour};
