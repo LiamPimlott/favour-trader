@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TradeOverview from '../components/TradeOverview.js';
 import TradeFavours from '../components/TradeFavours.js';
 import axios from 'axios'
-import {Row, Col, Button, Spin, message} from 'antd';
+import {Row, Col, Button, Spin} from 'antd';
 import Redirect from 'react-router-dom/Redirect';
 
 const OFFEROR = 'offeror';
@@ -48,7 +48,6 @@ class Contract extends Component {
         const { authService } = this.props;
         const { userUpdatedFavours, isUserOfferor } = this.state;
         if (authService.loggedIn()) {
-            const userFavourSet = isUserOfferor ? OFFEROR : OFFEREE;
             const updatedUserFavours = userUpdatedFavours.map( favour => {
                 const updatedFavour = {...favour};
                 updatedFavour.completed = (
@@ -80,7 +79,7 @@ class Contract extends Component {
                 ],
             };
             const base = window.location.origin;
-            const tradeId = this.props.match.params.tradeID;
+            const tradeId = params.tradeID;
             const userRole = isUserOfferor ? OFFEROR : OFFEREE;
             const endpoint = `api/contracts/${tradeId}/${userRole}/favours`;
             this.setState({ saveFavoursWaiting: true });
@@ -114,7 +113,7 @@ class Contract extends Component {
     }
 
     cancelEditedFavours = () => {
-        const { authService, match: { params } } = this.props;
+        const { authService } = this.props;
         const { isUserOfferor, favours } = this.state;
         if (authService.loggedIn()) {
             const userRole = isUserOfferor ? OFFEROR : OFFEREE;
@@ -136,7 +135,7 @@ class Contract extends Component {
                     Authorization: authService.getToken(),
             };
             const base = window.location.origin;
-            const tradeId = this.props.match.params.tradeID;
+            const tradeId = params.tradeID;
             const endpoint = `api/contracts/${tradeId}/status`;
             const body = { status: "Accepted" };
             this.setState({ acceptTradeWaiting: true });
@@ -174,7 +173,7 @@ class Contract extends Component {
                     Authorization: authService.getToken(),
             };
             const base = window.location.origin;
-            const tradeId = this.props.match.params.tradeID;
+            const tradeId = params.tradeID;
             const endpoint = `api/contracts/${tradeId}/status`;
             const body = { status: "Declined" };
             this.setState({ declineTradeWaiting: true });
@@ -207,8 +206,7 @@ class Contract extends Component {
     }
 
     componentWillMount(){
-        const { authService } = this.props;
-        const { match: { params } } = this.props;
+        const { authService, match: { params }  } = this.props;
         if (authService.loggedIn()) {
             const config = {
                 headers: {
@@ -257,17 +255,16 @@ class Contract extends Component {
 
     render() {
         const {
-            status, favours, offeror, messages, redirect,
-            offeree, currentUserId, isUserOfferor,
+            status, favours, offeror, messages, 
+            redirect, offeree, isUserOfferor,
             favoursEdited, saveFavoursWaiting, userUpdatedFavours,
             pageLoaded, acceptTradeWaiting, declineTradeWaiting,
         } = this.state;
-        const { match: { params } } = this.props;
 
         return pageLoaded ?
             (
                 <div >
-                    {(redirect && status == "Declined") ?
+                    {(redirect && status === "Declined") ?
                         <Redirect to={'/trades/received'}/> : ''
                     }
                     {(redirect) &&
