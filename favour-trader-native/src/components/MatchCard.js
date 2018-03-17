@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text, } from 'react-native';
-import { Card, Avatar, Button, } from 'react-native-elements'
+import { Card, Avatar, Button, Icon } from 'react-native-elements'
 import ReviewSkillsModal from "./ReviewSkillsModal";
 class MatchCard extends React.Component{
     state = {
@@ -22,7 +22,6 @@ class MatchCard extends React.Component{
                             large
                             rounded
                             source={{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"}}
-                            onPress={() => console.log("Works!")}
                             activeOpacity={0.7}
                         />
                     </View>
@@ -31,14 +30,14 @@ class MatchCard extends React.Component{
                         {match.email}
                     </Text>
                     <Button
-                        icon={{name: 'account-circle'}}
+                        icon={<Icon name={'account-circle'} color={'white'} />}
                         backgroundColor='#03A9F4'
-                        buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 10}}
+                        buttonStyle={styles.button}
                         title='View Profile' />
                     <Button
-                        icon={{name: 'info'}}
+                        icon={<Icon name={'info'} color={'white'} />}
                         backgroundColor='#03A9F4'
-                        buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                        buttonStyle={styles.button}
                         title='Review Skills'
                         onPress={() => {
                             this.setModalVisible(!this.state.modalVisible, match.has, match.wants);
@@ -65,8 +64,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    button: {
+        borderRadius: 0,
+        marginLeft: 0,
+        marginRight: 0,
+        marginBottom: 10,
+        width: 300
     }
-
 });
 
 export default MatchCard;

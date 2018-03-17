@@ -56,11 +56,7 @@ export default class SignUp extends React.Component {
                     <Text>We just need a bit of info to get you going..</Text>
                     <View style={styles.input}>
                         <Input
-                            leftIcon={
-                                <Icon
-                                    name={'face'}
-                                />
-                            }
+                            leftIcon={ <Icon name={'face'} /> }
                             placeholder="First Name"
                             ref={(input) => this.firstNameInput = input}
                             onSubmitEditing={() => this.lastNameInput.focus()}
@@ -69,11 +65,7 @@ export default class SignUp extends React.Component {
                     </View>
                     <View style={styles.input}>
                         <Input
-                            leftIcon={
-                                <Icon
-                                    name={'face'}
-                                />
-                            }
+                            leftIcon={ <Icon name={'face'} /> }
                             placeholder="Last Name"
                             ref={(input) => this.lastNameInput = input}
                             onChangeText={(lastName) => this.setState({lastName})}
@@ -83,10 +75,7 @@ export default class SignUp extends React.Component {
                     <View style={styles.input}>
                         <Input
                             placeholder="E-mail Address"
-                            leftIcon={
-                                <Icon
-                                    name='mail-outline'/>
-                            }
+                            leftIcon={ <Icon name='mail-outline'/> }
                             ref={(input) => this.emailInput = input}
                             onChangeText={(email) => this.setState({email})}
                             onSubmitEditing={() => this.passwordInput.focus()}
@@ -95,10 +84,7 @@ export default class SignUp extends React.Component {
                     <View style={styles.input}>
                         <Input
                             placeholder="Password"
-                            leftIcon={
-                                <Icon
-                                    name='lock-outline'/>
-                            }
+                            leftIcon={ <Icon name='lock-outline'/> }
                             style={styles.input}
                             secureTextEntry
                             ref={(input) => this.passwordInput = input}
