@@ -276,7 +276,333 @@ describe("User API Tests", () => {
         });
     });
 
-    describe("/AUTH", () =>  {
+    describe("/MATCH", () => {
+        var matchSkillIds = [];
+        var dummyUser = users[8];
+        var dummyUserId;
+
+        beforeEach((done) => {
+            var addUsers = new Promise((resolve) => {
+                User.insertMany(dummyUser, (error, docs) => {
+                    dummyUserId = docs[0]._id;
+                    resolve();
+                })
+            })
+
+            var addSkills = new Promise((resolve) => {
+                Skill.insertMany(skills, (error, docs) => {
+                    for (var i = 0; i < docs.length; i++) {
+                        matchSkillIds.push(docs[i]._id);
+                    }
+                    User.update({}, {
+                        wants: [
+                            {
+                                category: {
+                                    _id: matchSkillIds[0],
+                                },
+                                description: "Wow"
+                            }
+                        ],
+                        has: [
+                            {
+                                category: {
+                                    _id: matchSkillIds[1],
+                                },
+                                description: "Wow"
+                            }
+                        ]
+                    }, (err, raw) => {
+                        resolve();
+                    });
+                });
+            });
+
+            addSkills.then((result) => {
+                addUsers.then((result) => {
+                    chai.request(url)
+                        .post("/api/users/register")
+                        .send(users[0])
+                        .end((err, res) => {
+                            matchToken = res.body.token;
+                            done();
+                        })
+                });
+            });
+        });
+
+        afterEach((done) => {
+            matchSkillIds = [];
+            dummyUserId = null;
+            Skill.remove({}, () => {
+                done();
+            });
+        })
+
+        it("Should return nothing when there are no matches. (curr user has no has/wants)", (done) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .end((err, res) => {
+                    res.body.should.have.property("success");
+                    res.body.should.have.property("message");
+                    res.body.success.should.eql(false);
+                    res.body.should.not.have.property("matches");
+                    done();
+                });
+        });
+
+        it("Should return nothing when there are no matches. (curr user and dummy don't match up)", (done) => {
+            User.findOneAndUpdate({ _id: { $ne: dummyUserId } }, {
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, doc, res) => {
+                chai.request(url)
+                    .get("/api/users/matches")
+                    .set("Authorization", matchToken)
+                    .end((err, res) => {
+                        should.not.exist(err);
+                        res.body.should.have.property("success");
+                        res.body.should.have.property("message");
+                        res.body.success.should.eql(false);
+                        res.body.should.not.have.property("matches");
+                        done();
+                    });
+            });
+        });
+
+        it("Should not return a self match", (done) => {
+            User.findOneAndUpdate({ _id: { $ne: dummyUserId } }, {
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, doc, res) => {
+                chai.request(url)
+                    .get("/api/users/matches")
+                    .set("Authorization", matchToken)
+                    .end((err, res) => {
+                        res.body.should.not.have.property("matches");
+                        done();
+                    });
+            });
+        });
+
+        it("Should return a user who has a skill the current user wants", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+                    chai.request(url)
+                        .get("/api/users/matches")
+                        .set("Authorization", matchToken)
+                        .query({ hasFilter: true, wantsFilter: false })
+                        .end((err, res) => {
+                            res.body.should.have.property("matches");
+                            expect(res.body.matches).to.have.a.lengthOf(1);
+                            done();
+                        })
+            });
+        });
+
+        it("Should return a user who wants a skill the current user has", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .query({ hasFilter: false, wantsFilter: true })
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.have.property("matches");
+                    expect(res.body.success).to.equal(true);
+                    expect(res.body.matches).to.have.a.lengthOf(1);
+                    done();
+                });
+            });
+        });
+
+        it("Should return no users when the current user sets the hasFilter to true and only has want matches.", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .query({ hasFilter: true, wantsFilter: false })
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+
+        it("Should return no users when the current user sets the wantFilter to true and only has 'has' matches.", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .query({ hasFilter: false, wantsFilter: true })
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+        
+        it("Shouldn't return any matches when the user is looking for perfect matches but only has 'want' matches", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+
+        it("Shouldn't return any matches when the user is looking for perfect matches but only has 'has' matches", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+
+        it("Should return an error without authorization", (done) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401);
+                    done();
+                });
+        });
+    });
+
+    describe("/AUTH", () => {
         var authToken;
 
         beforeEach((done)=>{
