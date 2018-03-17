@@ -2,21 +2,17 @@ import React, {Component} from 'react';
 import TradeOverview from '../components/TradeOverview.js';
 import TradeFavours from '../components/TradeFavours.js';
 import axios from 'axios'
-import {Row, Col, Button, Spin} from 'antd';
+import {Row, Col, Button, Spin, message} from 'antd';
+import Redirect from 'react-router-dom/Redirect';
 
 const OFFEROR = 'offeror';
 const OFFEREE = 'offeree';
 
 class Contract extends Component {
+    
     constructor() {
         super();
         this.state = { 
-            overview: {
-                offereeName: '',
-                offererName: '',
-                tradeStatus: '',
-                tradeMessage: '',
-            },
             status: '',
             messages: [],
             offeror: {
@@ -42,6 +38,8 @@ class Contract extends Component {
             isUserOfferor: false,
             favoursEdited: false,
             saveFavoursWaiting: false,
+            acceptTradeWaiting: false,
+            declineTradeWaiting: false,
             pageLoaded: false,
         };
     }
@@ -61,6 +59,10 @@ class Contract extends Component {
             this.setState({
                 userUpdatedFavours: updatedUserFavours,
                 favoursEdited: true,
+            });
+        } else {
+            this.setState({
+                redirect: true,
             });
         }
     }
@@ -103,7 +105,10 @@ class Contract extends Component {
                     saveFavoursWaiting: false, 
                     favoursEdited: false 
                 })
-                console.log(err);
+            });
+        } else {
+            this.setState({
+                redirect: true,
             });
         }
     }
@@ -117,13 +122,93 @@ class Contract extends Component {
                 userUpdatedFavours: favours[userRole],
                 favoursEdited: false,
             });
+        } else {
+            this.setState({
+                redirect: true,
+            });
+        }
+    }
+
+    acceptTrade = () => {
+        const { authService, match: { params } } = this.props;
+        if (authService.loggedIn()) {
+            const headers = {
+                    Authorization: authService.getToken(),
+            };
+            const base = window.location.origin;
+            const tradeId = this.props.match.params.tradeID;
+            const endpoint = `api/contracts/${tradeId}/status`;
+            const body = { status: "Accepted" };
+            this.setState({ acceptTradeWaiting: true });
+            axios({
+                method: 'put',
+                headers: headers,
+                baseURL: base,
+                url: endpoint,
+                data: body
+            })
+            .then(res => res.data.contract.status)
+            .then(updatedStatus => {
+                this.setState({
+                    status: updatedStatus,
+                    acceptTradeWaiting: false, 
+                });
+            })
+            .catch((err) => {
+                this.setState({
+                    acceptTradeWaiting: false,
+                })
+                console.log(err);
+            });
+        } else {
+            this.setState({
+                redirect: true,
+            });
+        }
+    }
+
+    declineTrade = () => {
+        const { authService, match: { params } } = this.props;
+        if (authService.loggedIn()) {
+            const headers = {
+                    Authorization: authService.getToken(),
+            };
+            const base = window.location.origin;
+            const tradeId = this.props.match.params.tradeID;
+            const endpoint = `api/contracts/${tradeId}/status`;
+            const body = { status: "Declined" };
+            this.setState({ declineTradeWaiting: true });
+            axios({
+                method: 'put',
+                headers: headers,
+                baseURL: base,
+                url: endpoint,
+                data: body
+            })
+            .then(res => res.data.contract.status)
+            .then(updatedStatus => {
+                this.setState({
+                    status: updatedStatus,
+                    redirect: true,
+                    declineTradeWaiting: false, 
+                });
+            })
+            .catch((err) => {
+                this.setState({
+                    declineTradeWaiting: false,
+                })
+                console.log(err);
+            });
+        } else {
+            this.setState({
+                redirect: true,
+            });
         }
     }
 
     componentWillMount(){
         const { authService } = this.props;
         const { match: { params } } = this.props;
-
         if (authService.loggedIn()) {
             const config = {
                 headers: {
@@ -136,12 +221,6 @@ class Contract extends Component {
                     const currentUserId = authService.getProfile().id;
                     const isUserOfferor = (currentUserId === tradeData.offeror.id);
                     this.setState({
-                        overview: {
-                            offererName: tradeData.offeror.name.first + ' ' + tradeData.offeror.name.last,
-                            offereeName: tradeData.offeree.name.first + ' ' + tradeData.offeree.name.last,
-                            tradeStatus: tradeData.status,
-                            tradeMessage: tradeData.messages[0],
-                        },
                         status: tradeData.status,
                         messages: tradeData.messages,
                         offeror: {
@@ -169,22 +248,38 @@ class Contract extends Component {
                 .catch((err) => {
                     console.log(err);
                 });
+        } else {
+            this.setState({
+                redirect: true,
+            });
         }
     }
 
     render() {
         const {
-            status, favours, offeror,
+            status, favours, offeror, messages, redirect,
             offeree, currentUserId, isUserOfferor,
             favoursEdited, saveFavoursWaiting, userUpdatedFavours,
-            pageLoaded,
+            pageLoaded, acceptTradeWaiting, declineTradeWaiting,
         } = this.state;
+        const { match: { params } } = this.props;
 
         return pageLoaded ?
             (
                 <div >
+                    {(redirect && status == "Declined") ?
+                        <Redirect to={'/trades/received'}/> : ''
+                    }
+                    {(redirect) &&
+                        <Redirect to={'/login'}/>
+                    }
                     <Row>
-                        <TradeOverview overview={this.state.overview} />
+                        <TradeOverview 
+                            status={status}
+                            offeror={offeror}
+                            offeree={offeree}
+                            messages={messages[0]}
+                        />
                     </Row>
                     <Row>
                         <TradeFavours
@@ -210,7 +305,8 @@ class Contract extends Component {
                                         size='large'
                                         icon='check'
                                         style={{marginTop: '50px'}}
-                                        // onClick={this.toggleCreateTradeModal}
+                                        onClick={this.acceptTrade}
+                                        loading={acceptTradeWaiting}
                                     >
                                         Accept Trade
                                     </Button>
@@ -221,7 +317,8 @@ class Contract extends Component {
                                         size='large'
                                         icon='close'
                                         style={{marginTop: '50px'}}
-                                        // onClick={this.toggleCreateTradeModal}
+                                        onClick={this.declineTrade}
+                                        loading={declineTradeWaiting}
                                     >
                                         Decline Trade
                                     </Button>
