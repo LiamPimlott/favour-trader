@@ -47,12 +47,7 @@ class ReviewSkillsModal extends React.Component {
                                 ))
                             }
                         </List>
-                        <Button
-                            onPress={() => {
-                                toggle()
-                            }}
-                            title={"Close"}
-                        >
+                        <Button onPress={ () => {toggle()} } title={"Close"}>
                         </Button>
                     </View>
                 </View>
