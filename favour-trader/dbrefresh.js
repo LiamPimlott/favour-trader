@@ -177,7 +177,24 @@ var users = [
                 description: "I need some quark gluon plasma."
             }
         ]
-    }
+    },
+    {
+        name: {
+            first: "Clark",
+            last: "Kent"
+        },
+        address: {
+            postalCode: "123456",
+            street: "Fake St",
+            number: 7890,
+            city: "ABCD",
+            state: "EF",
+            country: ""
+        },
+        about: "",
+        email: "example@gmail.com",
+        password: "password",
+    },
 ]
 
 var removeSkills = new Promise((resolve) => {
@@ -225,7 +242,9 @@ var addUsers = new Promise(async function(resolve){
         for (const user of users){
             newUser = new User(user)
             await newUser.save((err)=>{
-                console.log(err)
+                if(err){
+                    console.log(err)
+                }
             })
         }
         resolve();
@@ -236,9 +255,12 @@ removeContracts.then((result)=>{
         removeSkills.then((result)=>{
             addSkills.then((result)=>{
                 addUsers.then((result)=>{
-                            mongoose.disconnect();
-                            console.log("We're done.")
-                            process.exit()
+                    User.find({},(err,res)=>{
+                        console.log(res)
+                        mongoose.disconnect();
+                        console.log("We're done.")
+                        process.exit()
+                    })
                 })
             })
         })
