@@ -177,7 +177,24 @@ var users = [
                 description: "I need some quark gluon plasma."
             }
         ]
-    }
+    },
+    {
+        name: {
+            first: "Clark",
+            last: "Kent"
+        },
+        address: {
+            postalCode: "123456",
+            street: "Fake St",
+            number: 7890,
+            city: "ABCD",
+            state: "EF",
+            country: ""
+        },
+        about: "",
+        email: "example@gmail.com",
+        password: "password",
+    },
 ]
 
 var removeSkills = new Promise((resolve) => {
