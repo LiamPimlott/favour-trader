@@ -49,10 +49,7 @@ export default class Login extends React.Component {
                     <View style={styles.input}>
                         <Input
                             placeholder='E-mail Address'
-                            leftIcon={
-                                <Icon
-                                    name='mail-outline' />
-                            }
+                            leftIcon={ <Icon name='mail-outline' /> }
                             autoCapitalize={'none'}
                             onChangeText={(text) => this.setState({email: text})}
                         />
@@ -60,10 +57,7 @@ export default class Login extends React.Component {
                     <View style={styles.input}>
                         <Input
                             placeholder='Password'
-                            leftIcon={
-                                <Icon
-                                    name='lock-outline' />
-                            }
+                            leftIcon={ <Icon name='lock-outline' /> }
                             autoCapitalize={'none'}
                             secureTextEntry={true}
                             onChangeText={(text) => this.setState({password: text})}
