@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text, } from 'react-native';
-import { Card, Avatar, Button, Icon } from 'react-native-elements'
+import { Card, Avatar, Button, Icon} from 'react-native-elements'
 import ReviewSkillsModal from "./ReviewSkillsModal";
 class MatchCard extends React.Component{
     state = {
@@ -13,6 +13,8 @@ class MatchCard extends React.Component{
 
     render() {
         const { match } = this.props;
+        const { userId } = this.props;
+        
         return (
             <View key={match._id}>
                 <Card
@@ -33,7 +35,8 @@ class MatchCard extends React.Component{
                         icon={<Icon name={'account-circle'} color={'white'} />}
                         backgroundColor='#03A9F4'
                         buttonStyle={styles.button}
-                        title='View Profile' />
+                        title='View Profile' 
+                        onPress = {this.props.passUserID.bind(this,match._id)}/>
                     <Button
                         icon={<Icon name={'info'} color={'white'} />}
                         backgroundColor='#03A9F4'

@@ -68,7 +68,6 @@ class Trades extends Component {
                                         return (
                                             <Col key={trade._id} xs={24} sm={24} md={12} lg={8}>
                                                 <TradeCard
-                                                    key={trade._id}
                                                     trade={trade}
                                                     source={source}
                                                     userId={userId}

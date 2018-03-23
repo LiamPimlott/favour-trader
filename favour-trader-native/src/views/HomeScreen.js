@@ -12,9 +12,16 @@ export default class HomeScreen extends React.Component {
         this.state = {
             matches: '',
             matchedUsers: [],
+            profileID: '',
         };
         this.authService = new AuthService();
         this.updateMatches = this.updateMatches.bind(this);
+        this.passUserID = this.passUserID.bind(this);
+
+    }
+
+    passUserID(match){
+    	this.props.navigation.navigate('MatchProfile', { profileID: match._id });
     }
 
     componentDidMount() {
@@ -53,7 +60,7 @@ export default class HomeScreen extends React.Component {
                     config.params.has = 'true';
                     config.params.wants = 'true';
                 }
-                axios.get('http://favour-trader.appspot.com/api/users/matches', config)
+                axios.get('http://favour-trader-test.appspot.com/api/users/matches', config)
                     .then(res => res.data.matches)
                     .then(matches => {
                         this.setState({matchedUsers: matches});
@@ -67,11 +74,12 @@ export default class HomeScreen extends React.Component {
     };
 
     _renderItem = ({item}) => (
-        <MatchCard match={item}/>
+        <MatchCard match={item} userId ={item._id} passUserID={this.passUserID.bind(this, item) }/>
     );
     _keyExtractor = (item, index) => item._id;
 
     render() {
+    	
         return (
             <View style={styles.container}>
                 <Picker selectedValue={this.state.matches}
@@ -83,6 +91,7 @@ export default class HomeScreen extends React.Component {
                     <Picker.Item label="Perfect Matches" value="perfect"/>
                 </Picker>
                 <Divider style={styles.divider} />
+
                 <FlatList
                     data={this.state.matchedUsers}
                     keyExtractor={this._keyExtractor}
