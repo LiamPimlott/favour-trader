@@ -316,6 +316,95 @@ var contracts = [
         messages:[]
     }
 ]
+
+var badContracts = [
+    {//contracts[0] - missing offeror
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    },
+    {//contracts[1] - missing offeree
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    },
+    {//contracts[2] - missing a user id in offeror
+        offeror: {
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    },
+    {//contracts[3] - missing a favour in offeror
+        offeror: {
+            id: userIds[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    },
+    {//contracts[4] - missing a name in offeror
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    }
+]
 //END OF DATA
 //PROMISES
 var addUsers = users.map((user)=>{
@@ -482,6 +571,76 @@ describe("Contract API Tests", () => {
     })
 
     describe.only("post / Test", (done) => {
+        it("Should say required fields are missing when we have no offeror",(done)=>{
+            chai.request(endpointUrl)
+            .post('/')
+            .set("Authorization", token)
+            .send(badContracts[0])
+            .end((err,res)=>{
+                expect(err).to.equal(null)
+                expect(res.status).to.equal(400)
+                expect(res.message).to.equal("Required fields are missing.")
+                expect(res.succes).to.equal(false)
+                done()
+            })
+        })
+
+        it("Should say required fields are missing when we have no offeree",(done)=>{
+            chai.request(endpointUrl)
+            .post('/')
+            .set("Authorization", token)
+            .send(badContracts[1])
+            .end((err,res)=>{
+                expect(err).to.equal(null)
+                expect(res.status).to.equal(400)
+                expect(res.message).to.equal("Required fields are missing.")
+                expect(res.succes).to.equal(false)
+                done()
+            })
+        })
+
+        it("Should say required fields are missing when we have no user id in offeror",(done)=>{
+            chai.request(endpointUrl)
+            .post('/')
+            .set("Authorization", token)
+            .send(badContracts[2])
+            .end((err,res)=>{
+                expect(err).to.equal(null)
+                expect(res.status).to.equal(400)
+                expect(res.message).to.equal("Required fields are missing.")
+                expect(res.succes).to.equal(false)
+                done()
+            })
+        })
+
+        it("Should say required fields are missing when we have no favour in offeror",(done)=>{
+            chai.request(endpointUrl)
+            .post('/')
+            .set("Authorization", token)
+            .send(badContracts[3])
+            .end((err,res)=>{
+                expect(err).to.equal(null)
+                expect(res.status).to.equal(400)
+                expect(res.message).to.equal("Required fields are missing.")
+                expect(res.succes).to.equal(false)
+                done()
+            })
+        })
+
+        it("Should say required fields are missing when we have no name in offeror",(done)=>{
+            chai.request(endpointUrl)
+            .post('/')
+            .set("Authorization", token)
+            .send(badContracts[4])
+            .end((err,res)=>{
+                expect(err).to.equal(null)
+                expect(res.status).to.equal(400)
+                expect(res.message).to.equal("Required fields are missing.")
+                expect(res.succes).to.equal(false)
+                done()
+            })
+        })
+
         it("Should return an error without authorization",(done)=>{
             chai.request(endpointUrl)
             .post("/")
