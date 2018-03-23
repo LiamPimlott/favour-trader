@@ -46,7 +46,7 @@ class CreateTradeModal extends Component {
             }
         };
 
-        axios.post('/api/users/has', {
+        axios.get('/api/users/has', {
             email: userEmail,
         }, config)
             .then(res => res.data.user)
