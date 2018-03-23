@@ -768,7 +768,57 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("get /sent Test", (done) => {
+    describe.only("get /sent Test", (done) => {
+        it("Should return nothing if the user has no contracts", (done) => {
+            chai.request(endpointUrl)
+                .get("/sent")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body).to.have.a.lengthOf(0)
+                    done()
+                })
+        })
+        
+        it("Should return 1 contract if the user has initiated it.", (done) => {
+            Contract.insertMany([contracts[0]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/sent")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body).to.have.a.lengthOf(1)
+                        done()
+                    })
+            })
+        })
+
+        it("Should return no contract if the user has one initiated by someone else.", (done) => {
+            Contract.insertMany([contracts[2]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/sent")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body).to.have.a.lengthOf(0)
+                        done()
+                    })
+            })
+        })
+
+        it("Should return 1 contract if the user has one they initiated and also ones they initiated.", (done) => {
+            Contract.insertMany([contracts[0],contracts[2]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/sent")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body).to.have.a.lengthOf(1)
+                        done()
+                    })
+            })
+        })
+
         it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
             .get("/sent")
