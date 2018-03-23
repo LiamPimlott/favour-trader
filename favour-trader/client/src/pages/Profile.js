@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { Modal, Button, Row } from 'antd';
+import { Modal, Button, Row, Col, Spin} from 'antd';
 import UserOverview from "../components/UserOverview";
 import EditUserOverview from "../components/EditUserOverview";
 import NewSkillModal from "../components/NewSkillModal";
@@ -12,6 +12,7 @@ class Profile extends Component {
     constructor() {
         super();
         this.state = {
+            profileUserId: '',
             overview: {
                 firstName: '',
                 lastName: '',
@@ -32,6 +33,7 @@ class Profile extends Component {
             showNewSkillModal:false,
             confirmNewSkill: false,
             createTradeModalOpen: false,
+            pageLoaded: false,
         };
     }
 
@@ -175,7 +177,7 @@ class Profile extends Component {
         Modal.confirm(settings);
     }
 
-    componentDidMount() {
+    componentWillMount() {
         const { authService } = this.props;
         const { match: { params } } = this.props;
         this.mounted = true;
@@ -193,6 +195,7 @@ class Profile extends Component {
             axios.get(profileEndpoint, config)
                 .then(res => res.data.user)
                 .then(userData => this.setState({
+                    profileUserId: userData._id,
                     overview: {
                         firstName: userData.name.first,
                         lastName: userData.name.last,
@@ -206,7 +209,8 @@ class Profile extends Component {
                         has: userData.has,
                         wants: userData.wants,
                     },
-                    isCurrentUser: (userData._id === authService.getProfile().id)
+                    isCurrentUser: (userData._id === authService.getProfile().id),
+                    pageLoaded: true,
                 }))
                 .catch( err => {
                     console.log(err);
@@ -235,71 +239,86 @@ class Profile extends Component {
     render() {
         const { authService, match: { params } } = this.props;
         const {
-            isCurrentUser,
+            isCurrentUser, pageLoaded,
             overview, editUserVisible,
             skills, confirmEditUser,
             skillCategories, showNewSkillModal,
             confirmNewSkill, createTradeModalOpen,
         } = this.state;
-        return (
-            <div id='user-profile-page'>
+        return pageLoaded ?
+            (
+                <div id='user-profile-page'>
+                    <Row>
+                        <UserOverview
+                            isCurrentUser={isCurrentUser} 
+                            userId={params.userId}
+                            overview={overview}
+                            onEditUser={this.toggleEditUserModal}
+                        />
+                    </Row>
+                    <Row>
+                        <UserSkills 
+                            isCurrentUser={isCurrentUser}
+                            skills={skills}
+                            toggleNewSkillModal={this.toggleNewSkillModal}
+                            toggleDeleteSkillConfirm={this.confirmDeleteSkill}
+                        />
+                    </Row>
+                    { isCurrentUser 
+                        ? (
+                            <div id='isCurrentUser'>
+                                <EditUserOverview
+                                    ref={this.saveEditUserFormRef}
+                                    overview={this.state.overview}
+                                    visible={editUserVisible}
+                                    onCancel={this.toggleEditUserModal}
+                                    onSave={this.handleEditUserSave}
+                                    confirmUpdate={confirmEditUser}
+                                />
+                                <NewSkillModal
+                                    ref={this.saveNewSkillFormRef}
+                                    categories={skillCategories}
+                                    visible={showNewSkillModal}
+                                    onCancel={this.toggleNewSkillModal}
+                                    onSave={this.handleNewSkillSave}
+                                    confirmNew={confirmNewSkill}
+                                />
+                            </div>
+                        )
+                        : (
+                            <div id='notCurrentUser'>
+                            <Row type='flex' justify='space-around' align='middle'>
+                                <Button
+                                    type='primary'
+                                    size='large'
+                                    icon='swap'
+                                    style={{marginTop: '50px'}}
+                                    onClick={this.toggleCreateTradeModal}
+                                >
+                                    Offer a Trade!
+                                </Button>
+                                <CreateTradeModal 
+                                    requestableSkills={this.state.skills.has}
+                                    username={this.state.overview.firstName}
+                                    lastName={this.state.overview.lastName}
+                                    authService={authService}
+                                    offereeId={this.state.profileUserId}
+                                    isOpen={createTradeModalOpen}
+                                    toggle={this.toggleCreateTradeModal}
+                                />
+                            </Row>
+                            </div>
+                        )
+                    }
+                </div>
+            ) :
+            (
                 <Row>
-                    <UserOverview
-                        isCurrentUser={isCurrentUser} 
-                        userId={params.userId}
-                        overview={overview}
-                        onEditUser={this.toggleEditUserModal}
-                    />
+                    <Col style={{textAlign: 'center'}}>
+                        <Spin size='large' style={{textAlign: 'center'}}/>
+                    </Col>
                 </Row>
-                <Row>
-                    <UserSkills 
-                        isCurrentUser={isCurrentUser}
-                        skills={skills}
-                        toggleNewSkillModal={this.toggleNewSkillModal}
-                        toggleDeleteSkillConfirm={this.confirmDeleteSkill}
-                    />
-                </Row>
-                { isCurrentUser 
-                    ? '' 
-                    : (
-                        <Row type='flex' justify='space-around' align='middle'>
-                            <Button
-                                type='primary'
-                                size='large'
-                                icon='swap'
-                                style={{marginTop: '50px'}}
-                                onClick={this.toggleCreateTradeModal}
-                            >
-                                Offer a Trade!
-                            </Button>
-                        </Row>
-                    )
-                }
-                <EditUserOverview
-                    ref={this.saveEditUserFormRef}
-                    overview={overview}
-                    visible={editUserVisible}
-                    onCancel={this.toggleEditUserModal}
-                    onSave={this.handleEditUserSave}
-                    confirmUpdate={confirmEditUser}
-                />
-                <NewSkillModal
-                    ref={this.saveNewSkillFormRef}
-                    categories={skillCategories}
-                    visible={showNewSkillModal}
-                    onCancel={this.toggleNewSkillModal}
-                    onSave={this.handleNewSkillSave}
-                    confirmNew={confirmNewSkill}
-                />
-                <CreateTradeModal requestableSkills={skills.wants}
-                    username={overview.firstName}
-                    lastName={overview.lastName}
-                    authService={authService}
-                    offereeId={params.userId}
-                    isOpen={createTradeModalOpen}
-                    toggle={this.toggleCreateTradeModal}/>
-            </div>
-        );
+            );
     }
 }
 

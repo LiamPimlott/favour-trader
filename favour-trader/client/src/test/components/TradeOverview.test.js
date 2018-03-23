@@ -12,15 +12,9 @@ beforeEach(function () {
 
 it('renders correctly', () => {
 
-    const overview= {
-        offererName : 'testor',
-        offereeName : 'testee',
-        tradeStatus : 'completed',
-        tradeMessage : 'perfect! amazing!',
-
-        };
-    const trade = {
-        offeror: {
+    const status = "Accepted";
+    const messages = "Hello I am a test message!";
+    const offeror = {
             id: 123,
             favours: [
                 {
@@ -32,8 +26,8 @@ it('renders correctly', () => {
                 first: 'Jane',
                 last: 'Doe',
             },
-        },
-        offeree: {
+    };
+    const offeree = {
             id: 456,
             favours: [
                 {
@@ -45,12 +39,16 @@ it('renders correctly', () => {
                 first: 'John',
                 last: 'Smith',
             },
-        },
-
-    };       
-      mount(
+    };
+       
+    mount(
         <MemoryRouter>
-            <TradeOverview overview={overview} trade={trade}/>
+            <TradeOverview 
+                status={status}
+                offeror={offeror}
+                offeree={offeree}
+                messages={messages[0]}
+            />
         </MemoryRouter>
     )
 
