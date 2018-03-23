@@ -225,7 +225,7 @@ var contracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     },
     {//contracts[1] - pending contract between user1 and user2
         offeror: {
@@ -247,7 +247,7 @@ var contracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     },
     {//contracts[2] - accepted contract between user2 and user0
         offeror: {
@@ -257,7 +257,7 @@ var contracts = [
                 first: users[2].name.first,
                 last: users[2].name.last
             },  
-            requestTermination: true
+            requestTermination: false
         },
         offeree: {
             id: userIds[0],
@@ -269,7 +269,7 @@ var contracts = [
             requestTermination: false
         },
         status: 'Accepted',
-        messages:[]
+        messages: []
     },
     {//contracts[3] - declined contract between user2 and user0
         offeror: {
@@ -291,7 +291,7 @@ var contracts = [
             requestTermination: false
         },
         status: 'Declined',
-        messages:[]
+        messages: []
     },
     {//all zeroes
         offeror: {
@@ -313,7 +313,7 @@ var contracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     }
 ]
 
@@ -329,7 +329,7 @@ var badContracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     },
     {//contracts[1] - missing offeree
         offeror: {
@@ -342,7 +342,7 @@ var badContracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     },
     {//contracts[2] - missing a user id in offeror
         offeror: {
@@ -363,7 +363,7 @@ var badContracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     },
     {//contracts[3] - missing a favour in offeror
         offeror: {
@@ -384,7 +384,7 @@ var badContracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     },
     {//contracts[4] - missing a name in offeror
         offeror: {
@@ -402,16 +402,16 @@ var badContracts = [
             requestTermination: false
         },
         status: 'Pending',
-        messages:[]
+        messages: []
     }
 ]
 //END OF DATA
 //PROMISES
-var addUsers = users.map((user)=>{
-    return new Promise((resolve,reject)=>{
+var addUsers = users.map((user) => {
+    return new Promise((resolve, reject) => {
         newUser = new User(user)
-        newUser.save((err,res)=>{
-            if(err){
+        newUser.save((err, res) => {
+            if (err) {
                 reject(err)
             } else {
                 console.log("guser added")
@@ -421,7 +421,7 @@ var addUsers = users.map((user)=>{
     })
 })
 
-function addSkills(){
+function addSkills() {
 return new Promise((resolve, reject) => {
     Skill.insertMany(skills, (error, docs) => {
         if (error) {
@@ -435,7 +435,7 @@ return new Promise((resolve, reject) => {
 })
 }
 
-function connect(){
+function connect() {
     return new Promise((resolve, reject) => {
     require('dotenv').config({ path: __dirname + '/../.env' })
     process.env.NODE_ENV = 'test'
@@ -447,8 +447,8 @@ function connect(){
 })
 }
 
-function login(){
-    return new Promise((resolve,reject)=>{
+function login() {
+    return new Promise((resolve, reject) => {
         chai.request(baseUrl)
         .post("/api/users/login")
         .send({
@@ -467,11 +467,11 @@ function login(){
     })
 }
 
-function clearDB(){
-    return new Promise((resolve,reject)=>{
+function clearDB() {
+    return new Promise((resolve, reject) => {
         User.remove({}, () => {
             Skill.remove({}, () => {
-                Contract.remove({},()=>{
+                Contract.remove({}, () => {
                     resolve()
                 })
             })
@@ -484,10 +484,10 @@ function clearDB(){
 describe("Contract API Tests", () => {
     before((done) => {
         connect().then((connectionResult) => {
-            clearDB().then((clearDBResult)=>{
+            clearDB().then((clearDBResult) => {
                 addSkills().then((skillsResult) => {
                     Promise.all(addUsers).then((userResults) => {
-                            login().then((loginResult)=>{
+                        login().then((loginResult) => {
                                 done()
                             })
                     })
@@ -525,11 +525,11 @@ describe("Contract API Tests", () => {
 
         it("Should return some stuff if current user has contracts", (done) => {
             newContract = new Contract(contracts[0])
-            newContract.save((err,res)=>{
+            newContract.save((err, res) => {
                 chai.request(endpointUrl)
                 .get('/')
                 .set("Authorization", token)
-                .end((err,res)=>{
+                    .end((err, res) => {
                     expect(err).to.equal(null)
                     expect(res.body).to.have.lengthOf(1)
                     done()
@@ -538,11 +538,11 @@ describe("Contract API Tests", () => {
         })
 
         it("Should return both active and inactive contracts if current user has contracts", (done) => {
-            Contract.insertMany([contracts[0],contracts[2],contracts[3]],(err,docs)=>{
+            Contract.insertMany([contracts[0], contracts[2], contracts[3]], (err, docs) => {
                 chai.request(endpointUrl)
                 .get('/')
                 .set("Authorization", token)
-                .end((err,res)=>{
+                    .end((err, res) => {
                     expect(err).to.equal(null)
                     expect(res.body).to.have.lengthOf(3)
                     done()
@@ -570,13 +570,13 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe.only("post / Test", (done) => {
-        it("Should return the complete contract we create if the contract is valid.",(done)=>{
+    describe("post / Test", (done) => {
+        it("Should return the complete contract we create if the contract is valid.", (done) => {
             chai.request(endpointUrl)
             .post('/')
             .set("Authorization", token)
             .send(contracts[0])
-            .end((err,res)=>{
+                .end((err, res) => {
                 expect(err).to.equal(null)
                 expect(res.status).to.equal(200)
                 expect(res.body.offeror.id).to.equal(String(contracts[0].offeror.id))
@@ -586,12 +586,12 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should say required fields are missing when we have no offeror",(done)=>{
+        it("Should say required fields are missing when we have no offeror", (done) => {
             chai.request(endpointUrl)
             .post('/')
             .set("Authorization", token)
             .send(badContracts[0])
-            .end((err,res)=>{
+                .end((err, res) => {
                 expect(err).to.equal(null)
                 expect(res.status).to.equal(400)
                 expect(res.message).to.equal("Required fields are missing.")
@@ -600,12 +600,12 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should say required fields are missing when we have no offeree",(done)=>{
+        it("Should say required fields are missing when we have no offeree", (done) => {
             chai.request(endpointUrl)
             .post('/')
             .set("Authorization", token)
             .send(badContracts[1])
-            .end((err,res)=>{
+                .end((err, res) => {
                 expect(err).to.equal(null)
                 expect(res.status).to.equal(400)
                 expect(res.message).to.equal("Required fields are missing.")
@@ -614,12 +614,12 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should say required fields are missing when we have no user id in offeror",(done)=>{
+        it("Should say required fields are missing when we have no user id in offeror", (done) => {
             chai.request(endpointUrl)
             .post('/')
             .set("Authorization", token)
             .send(badContracts[2])
-            .end((err,res)=>{
+                .end((err, res) => {
                 expect(err).to.equal(null)
                 expect(res.status).to.equal(400)
                 expect(res.message).to.equal("Required fields are missing.")
@@ -628,12 +628,12 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should say required fields are missing when we have no favour in offeror",(done)=>{
+        it("Should say required fields are missing when we have no favour in offeror", (done) => {
             chai.request(endpointUrl)
             .post('/')
             .set("Authorization", token)
             .send(badContracts[3])
-            .end((err,res)=>{
+                .end((err, res) => {
                 expect(err).to.equal(null)
                 expect(res.status).to.equal(400)
                 expect(res.message).to.equal("Required fields are missing.")
@@ -642,12 +642,12 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should say required fields are missing when we have no name in offeror",(done)=>{
+        it("Should say required fields are missing when we have no name in offeror", (done) => {
             chai.request(endpointUrl)
             .post('/')
             .set("Authorization", token)
             .send(badContracts[4])
-            .end((err,res)=>{
+                .end((err, res) => {
                 expect(err).to.equal(null)
                 expect(res.status).to.equal(400)
                 expect(res.message).to.equal("Required fields are missing.")
@@ -656,7 +656,7 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should return an error without authorization",(done)=>{
+        it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
             .post("/")
             .end((err, res) => {
@@ -665,7 +665,7 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should return an error without valid authorization",(done)=>{
+        it("Should return an error without valid authorization", (done) => {
             chai.request(endpointUrl)
                 .post("/")
                 .set("Authorization", token + "101010101010001010")
@@ -677,7 +677,7 @@ describe("Contract API Tests", () => {
     })
 
     describe("get /active Test", (done) => {
-        it("Should return an error without authorization",(done)=>{
+        it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
             .get("/active")
             .end((err, res) => {
@@ -686,7 +686,7 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should return an error without valid authorization",(done)=>{
+        it("Should return an error without valid authorization", (done) => {
             chai.request(endpointUrl)
                 .get("/active")
                 .set("Authorization", token + "101010101010001010")
@@ -698,7 +698,57 @@ describe("Contract API Tests", () => {
     })
 
     describe("get /received Test", (done) => {
-        it("Should return an error without authorization",(done)=>{
+        it("Should return nothing if the user has no contracts", (done) => {
+            chai.request(endpointUrl)
+                .get("/received")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body).to.have.a.lengthOf(0)
+                    done()
+                })
+        })
+
+        it("Should return nothing if the user has contracts, but they initiated all of them.", (done) => {
+            Contract.insertMany([contracts[0]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/received")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body).to.have.a.lengthOf(0)
+                        done()
+                    })
+            })
+        })
+
+        it("Should return 1 contract if the user has one initiated by someone else.", (done) => {
+            Contract.insertMany([contracts[2]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/received")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body).to.have.a.lengthOf(1)
+                        done()
+                    })
+            })
+        })
+
+        it("Should return 1 contract if the user has one initiated by someone else and also ones they initiated.", (done) => {
+            Contract.insertMany([contracts[0],contracts[2]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/received")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body).to.have.a.lengthOf(1)
+                        done()
+                    })
+            })
+        })
+
+        it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
             .get("/received")
             .end((err, res) => {
@@ -707,7 +757,7 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should return an error without valid authorization",(done)=>{
+        it("Should return an error without valid authorization", (done) => {
             chai.request(endpointUrl)
                 .get("/received")
                 .set("Authorization", token + "101010101010001010")
@@ -719,7 +769,7 @@ describe("Contract API Tests", () => {
     })
 
     describe("get /sent Test", (done) => {
-        it("Should return an error without authorization",(done)=>{
+        it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
             .get("/sent")
             .end((err, res) => {
@@ -728,7 +778,7 @@ describe("Contract API Tests", () => {
             })
         })
 
-        it("Should return an error without valid authorization",(done)=>{
+        it("Should return an error without valid authorization", (done) => {
             chai.request(endpointUrl)
                 .get("/sent")
                 .set("Authorization", token + "101010101010001010")
@@ -740,29 +790,29 @@ describe("Contract API Tests", () => {
     })
 
     describe("put /:id Test", (done) => {
-        it("Should return an error without a valid id",(done)=>{
+        it("Should return an error without a valid id", (done) => {
 
         })
 
-        it("Should return an error without authorization",(done)=>{
+        it("Should return an error without authorization", (done) => {
 
         })
 
-        it("Should return an error without valid authorization",(done)=>{
+        it("Should return an error without valid authorization", (done) => {
             
         })
     })
 
     describe("put /:id/terminate Test", (done) => {
-        it("Should return an error without a valid id",(done)=>{
+        it("Should return an error without a valid id", (done) => {
             
         })
 
-        it("Should return an error without authorization",(done)=>{
+        it("Should return an error without authorization", (done) => {
 
         })
 
-        it("Should return an error without valid authorization",(done)=>{
+        it("Should return an error without valid authorization", (done) => {
             
         })
     })
