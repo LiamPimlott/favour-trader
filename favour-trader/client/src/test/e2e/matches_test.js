@@ -24,3 +24,26 @@ Scenario('View Wants Matches @wantsMatches', (I, loginPage, mainPage) => {
     mainPage.showButtons();
     mainPage.clickWhatIWant();
 });
+
+Scenario('View a What I Have match profile @whatIHaveMatch', (I, loginPage, mainPage, profilePage) => {
+    I.amOnPage('/');
+    loginPage.login('example@gmail.com', 'password');
+    I.waitForText("Matched Traders");
+    I.see("Matched Traders");
+    mainPage.showButtons();
+    mainPage.clickWhatIHave();
+    I.waitForText("Shark H.");
+    I.click("//button[@title='View Profile'][0]");
+    I.see("Shark Hamil");
+});
+
+Scenario('No perfect matches @perfectMatchNotFound', (I, loginPage, mainPage, profilePage) => {
+    I.amOnPage('/');
+    loginPage.login('example@gmail.com', 'password');
+    I.waitForText("Matched Traders");
+    I.see("Matched Traders");
+    mainPage.showButtons();
+    mainPage.clickPerfectMatch();
+    I.waitForText("Sorry, No Matches");
+    I.see("Sorry, No Matches :( Try updating the skills you are seeking.");
+});
