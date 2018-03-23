@@ -10,7 +10,7 @@ exports[`renders correctly 1`] = `
     <input
       checked={true}
       className="checkbox"
-      id={123}
+      id={456}
       onChange={[Function]}
       type="checkbox"
     />
@@ -20,7 +20,7 @@ exports[`renders correctly 1`] = `
     <div>
       <textarea
         className="descriptionBox"
-        id={123}
+        id={456}
         onChange={[Function]}
         placeholder="add a description (optional)"
       />

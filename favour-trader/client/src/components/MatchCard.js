@@ -21,11 +21,9 @@ class MatchCard extends Component {
                                 ("Check out my Profile!")
                         }
                 </p>
-                <Button type="primary" style={{marginTop: '0px'}}>
-                    <Link to={'/Profile/'+user._id}>
-                        View Profile
-                    </Link>
-                </Button>
+                <Link to={'/Profile/'+user._id}>
+                    <Button type="primary" title={'View Profile'} style={{marginTop: '0px'}}>View Profile</Button>
+                </Link>
             </Card>
         );
     }

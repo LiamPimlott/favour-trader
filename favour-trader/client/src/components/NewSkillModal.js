@@ -7,7 +7,6 @@ const FormItem = Form.Item;
 
 const NewSkillModal = Form.create()(
   (props) => {
-    const skillset = props.skillset;
     const categories = props.categories;  
     const { visible, confirmNew, onCancel, onSave, form } = props;
     const { getFieldDecorator } = form;
@@ -44,7 +43,7 @@ const NewSkillModal = Form.create()(
                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                     >
                         {
-                            (categories !== null && categories !== []) ? (
+                            (categories !== null && Array.isArray(categories)) ? (
                                 categories.map( category => {
                                     return (<Option key={category.skill} value={category._id}>{category.skill}</Option>)
                                 })

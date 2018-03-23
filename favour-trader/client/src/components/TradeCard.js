@@ -17,11 +17,9 @@ class TradeCard extends Component {
                 <p style={{margin: '20px', height: '70px', width: '210px', fontSize: '13px'}}>
                     Wow, a trade!
                 </p>
-                <Button type="primary" style={{marginTop: '0px'}}>
                     <Link to={`/trades/${source}/${trade._id}`}>
-                        View Trade
+                        <Button type="primary" style={{marginTop: '0px'}}>View Trade</Button>
                     </Link>
-                </Button>
             </Card>
         );
     }

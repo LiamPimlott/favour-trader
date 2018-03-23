@@ -8,6 +8,7 @@ import Trades from '../pages/Trades.js';
 import Login from '../pages/Login.js';
 import FilterHas from '../pages/FilterHas.js';
 import FilterWants from '../pages/FilterWants.js';
+import Contract from '../pages/Contract';
 
 class RouteRenderer extends Component {
 
@@ -26,7 +27,8 @@ class RouteRenderer extends Component {
           <Route exact path='/profile' component={(routeProps) => (<Profile {...routeProps} {...this.props}/>)}/>
           <Route path='/profile/:userId' component={(routeProps) => (<Profile {...routeProps} {...this.props}/>)}/>
           <Route exact path='/trades' component={(routeProps) => (<Trades {...routeProps} {...this.props}/>)}/>
-          <Route path='/trades/:source' component={(routeProps) => (<Trades {...routeProps} {...this.props}/>)}/>
+          <Route exact path='/trades/:source' component={(routeProps) => (<Trades {...routeProps} {...this.props}/>)}/>
+          <Route exact path='/trades/:source/:tradeID' component={(routeProps) => (<Contract {...routeProps} {...this.props}/>)}/>
           <Route path='/login' render={(routeProps) => (<Login {...routeProps} {...this.props} />)}/>
           <Route path='/create-account' render={(routeProps) => (<CreateAccount {...routeProps} {...this.props} />)}/>         
           <Route path='*' component={NotFound}/>

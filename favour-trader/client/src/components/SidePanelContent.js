@@ -62,27 +62,6 @@ class SidePanelContent extends Component {
         }
     }
 
-    renderSkills(skillSet) {
-        const skills = this.state[skillSet];
-        return (
-            <div>
-                {
-                    (skills !== []) ? (
-                        <ul>
-                            {
-                                skills.map(function (skill) {
-                                    return (<li key={skill._id}> {skill.skill} </li>)
-                                }, this)
-                            }
-                        </ul>
-                    ) : (
-                            ''
-                    )
-                }
-            </div>
-        );
-    }
-
     render() {
         return (
                 <Menu theme="light"
@@ -102,7 +81,7 @@ class SidePanelContent extends Component {
 							</Link>
 						</Menu.Item>
                         <Menu.Item key="5"
-							onClick={ ()=>{this.props.params.filtertype} }>
+							onClick={ ()=> this.props.params.filtertype }>
 							<Link to="/filterHas">
 								What I Have
 							</Link>
@@ -114,17 +93,17 @@ class SidePanelContent extends Component {
 						</Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub3" title={<span><Icon type="book" /><span>Trades</span></span>}>
-                        <Menu.Item key="5">
+                        <Menu.Item key="7">
                             <Link to="/trades/active">
                                 Active
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="6">
+                        <Menu.Item key="8">
                             <Link to="/trades/sent">
                                 Sent
                             </Link>
                         </Menu.Item>
-                        <Menu.Item key="7">
+                        <Menu.Item key="9">
                             <Link to="/trades/received">
                                 Received
                             </Link>

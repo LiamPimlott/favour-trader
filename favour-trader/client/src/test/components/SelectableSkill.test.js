@@ -9,7 +9,11 @@ it('renders correctly', () => {
     .create(<SelectableSkill key={123}
         skill={{
             _id: 123,
-            skill: 'plumber'
+            category: {
+              _id: 456,
+              skill: 'plumber'
+
+            }
         }}
         checked={true}
         update={() => {}}

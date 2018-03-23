@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReviewSkillsModal from '../components/ReviewSkillsModal.js';
 import axios from 'axios'
 import {Row, Col} from 'antd';
 import TradeCard from '../components/TradeCard';
@@ -69,7 +68,6 @@ class Trades extends Component {
                                         return (
                                             <Col key={trade._id} xs={24} sm={24} md={12} lg={8}>
                                                 <TradeCard
-                                                    key={trade._id}
                                                     trade={trade}
                                                     source={source}
                                                     userId={userId}
@@ -131,9 +129,6 @@ class Trades extends Component {
     }
 
     render() {
-        const { match: { params } } = this.props;
-        const source = params.source;
-
         return (
             <div className={'center-helper'}>
                 {this.state.trades !== null && this.state.trades.length !== 0 ? this.renderTrades() : this.renderNoTrades()}
