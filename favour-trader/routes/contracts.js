@@ -293,7 +293,7 @@ router.put('/:id/offeree/favours',
     }
 );
 
-// DELETE - CID - REQUEST TERMINATION - request to terminate a contract
+// PUT - CID - REQUEST TERMINATION - request to change contract status to complete/terminate. (depending on completion of favours)
 router.put('/:id/terminate',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
@@ -303,26 +303,44 @@ router.put('/:id/terminate',
                 next(err);
             } else if (!contract) {
                 res.json({ success: false, message: "Contract not found."});
-            } else if ( //This can be middleware eventually to dry up code
+            } else if (
                 contract.offeror.id != req.user.id && 
                 contract.offeree.id != req.user.id
             ){
-                devDebug("OFFEROR: "+contract.offeror.id+ " OFFERee: "+contract.offeree.id+ " ID!!: "+req.user.id);
                 res.json({ success: false, message: "Unauthorized."})
-            } else if ( contract.status === 'Accepted' ) {
-                res.json({ success: false, message: "Contract has already been accepted."});
-            } else {
-                Contract.findByIdAndRemove(contract._id, function(err) {
-                    if (err) {
-                        devDebug(err);
-                        next(err);
-                    }
-                    res.json({ 
-                        success: true, 
-                        message: "Contract Terminated."
+            } else if ( contract.status !== 'Accepted' ) {
+                res.json({ success: false, message: "Contract must be active."});
+            }
+            const userRole = req.user.id == contract.offeror.id ? 'offeror' : 'offeree';
+            contract[userRole].requestTermination = true;
+            contract.save(function (err, updatedContract) {
+                if(err) {
+                    devDebug(err);
+                    next(err);
+                } else if(
+                    updatedContract.offeror.requestTermination && 
+                    updatedContract.offeree.requestTermination
+                ){
+                    let completed = true;
+                    updatedContract.offeror.favours.forEach(function (favour) {
+                        if(!favour.completed){ completed = false; }
                     });
-                });
-            } 
+                    updatedContract.offeree.favours.forEach(function (favour) {
+                        if(!favour.completed){ completed = false; }
+                    });
+                    const endStatus = completed ? 'Completed' : 'Terminated';
+                    updatedContract.status = endStatus;
+                    updatedContract.save(function (err, terminatedContract) {
+                        if(err){
+                            devDebug(err);
+                            next(err);
+                        }
+                        res.json({ success: true, message: "Contract has been terminated/completed", contract: terminatedContract });
+                    });
+                } else {
+                    res.json({ success: false, message: "Waiting for other party to terminate.", contract: updatedContract });
+                }
+            }); 
         }); 
     }
 );
