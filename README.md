@@ -19,13 +19,7 @@ Trello Board: https://trello.com/b/14MpAe9b
 
 ## Deployment
 
-Our current deployed version of the app is NOT our most up to date release.
-It is currently more a testing ground while we work to seamlessly intregrate our 
-continuous integration platform, Travis CI with our Google Compute Engine hosting service.
-
-You can still create an account and poke around but there is less features than our most recent release.
-
-View it here: https://favour-trader-test.appspot.com/login
+View our latest production build here: https://favour-trader.appspot.com/login
 
 ## Installation / Running Locally:
 ** In order to run this project locally, please ensure you have the latest version of Node (https://nodejs.org/en/).
@@ -58,7 +52,7 @@ Option 2 - Running server and web client concurrently: (note: this option is mor
 - A front end build is only require if accessing the front-end from the server (localhost//:3001), otherwise just do any browsing through the webpack server (localhost//:3000).
 
 Running Mobile Client:
-- TBD
+- ** SEE THE README FILE IN THE /favour-trader-native DIRECTORY **
 
 Notes for working on this repository:
 - Please only work off of the 'develop' branch (we will merge develop into master when a new release is scheduled)
@@ -68,7 +62,12 @@ Notes for working on this repository:
 ## Testing:
 
 The tests use Mocha and Chai. They connect to a totally different MongoDB instance as to not destroy the dev or prod dbs.
-They also run the server locally. At least they do in the api tests. ¯\_(ツ)_/¯
-Running the tests:
-- Do option 1a at least.
+- First ensure you have an up to date copy of the .env file
+### Running the server tests:
+- Navigate to /favour-trader
+- Run `npm install`
+- Run `npm test`
+### Running the front-end-tests:
+- Navigate to /favour-trader/client
+- Run `npm install`
 - Run `npm test`
