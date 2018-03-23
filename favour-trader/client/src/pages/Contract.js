@@ -20,14 +20,12 @@ class Contract extends Component {
                 firstName: '',
                 lastName: '',
                 requestTermination: false,
-
             },
             offeree: {
                 id: '',
                 firstName: '',
                 lastName: '',
                 requestTermination: false,
-
             },
             favours: {
                 offeror: [],

@@ -25,6 +25,7 @@ class App extends Component {
         });
         if (e.key === 'logout') {
             this.authService.logout();
+            this.setState({current: ''})
         }
     };
 
@@ -32,7 +33,6 @@ class App extends Component {
         this.setState({
             collapsed: !this.state.collapsed,
         });
-
     }
 
     renderNavToggler (loggedIn) {
@@ -40,11 +40,13 @@ class App extends Component {
             return (
                 <Menu mode={'horizontal'}
                       theme={'light'}
-                      style={{float: 'left'}}>
-                    <Menu.Item>
+                      style={{float: 'left'}}
+                      onClick={this.toggleSideMenu} >
+                    <Menu.Item key={'toggle'}>
                         <Icon className={'trigger'}
+                              style={{width: '50%'}}
                               type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                              onClick={this.toggleSideMenu}/>
+                        />
                     </Menu.Item>
                 </Menu>
             );
@@ -61,9 +63,7 @@ class App extends Component {
                     selectedKeys={[this.state.current]}
                     mode="horizontal"
                     theme={'light'}
-                    style={{float: 'right'}}
-                >
-
+                    style={{float: 'right'}}>
                     <Menu.Item key="logout">
                         <Icon type="logout"/>Log out
                     </Menu.Item>
@@ -76,16 +76,12 @@ class App extends Component {
                     selectedKeys={[this.state.current]}
                     mode="horizontal"
                     theme={'light'}
-                    style={{float: 'right'}}
-                >
-
+                    style={{float: 'right'}}>
                     <Menu.Item key="create-account" id={'create-account'}>
                         <Link to="/create-account" className="nav-text">
                             <Icon type="user-add" /> <span>Sign Up</span>
                         </Link>
-
                     </Menu.Item>
-
                     <Menu.Item key="login" className={'login'}>
                         <Link to="/login">
                             <Icon type="user"/> <span>Sign in</span>
@@ -113,9 +109,7 @@ class App extends Component {
                         trigger={null}
                         collapsible
                         collapsed={this.state.collapsed}
-                        style={{ background: '#ffffff', padding: 0 }}
-
-                    >
+                        style={{ background: '#ffffff', padding: 0 }}>
                         <SidePanel isVisible={this.state.collapsed}  authService={this.authService}/>
                     </Sider>
                     <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
