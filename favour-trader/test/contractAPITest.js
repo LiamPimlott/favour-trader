@@ -571,6 +571,21 @@ describe("Contract API Tests", () => {
     })
 
     describe.only("post / Test", (done) => {
+        it("Should return the complete contract we create if the contract is valid.",(done)=>{
+            chai.request(endpointUrl)
+            .post('/')
+            .set("Authorization", token)
+            .send(contracts[0])
+            .end((err,res)=>{
+                expect(err).to.equal(null)
+                expect(res.status).to.equal(200)
+                expect(res.body.offeror.id).to.equal(String(contracts[0].offeror.id))
+                expect(res.body.offeree.id).to.equal(String(contracts[0].offeree.id))
+                expect(res.body.status).to.equal('Pending')
+                done()
+            })
+        })
+
         it("Should say required fields are missing when we have no offeror",(done)=>{
             chai.request(endpointUrl)
             .post('/')
