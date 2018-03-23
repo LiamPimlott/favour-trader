@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import TradeOverview from '../components/TradeOverview.js';
 import TradeFavours from '../components/TradeFavours.js';
 import axios from 'axios'
-import {Row, Col, Button, Spin} from 'antd';
+import {Row, Col, Button, Spin, Popover, Alert} from 'antd';
 import Redirect from 'react-router-dom/Redirect';
 
 const OFFEROR = 'offeror';
@@ -40,6 +40,7 @@ class Contract extends Component {
             saveFavoursWaiting: false,
             acceptTradeWaiting: false,
             declineTradeWaiting: false,
+            requestTerminationWaiting: false,
             pageLoaded: false,
         };
     }
@@ -205,6 +206,39 @@ class Contract extends Component {
         }
     }
 
+    requestTermination = () => {
+        const { authService, match: { params } } = this.props;
+        const { isUserOfferor, favours } = this.state;
+        if (authService.loggedIn()) {
+            const userRole = isUserOfferor ? OFFEROR : OFFEREE;
+            const headers = {
+                    Authorization: authService.getToken(),
+            };
+            const base = window.location.origin;
+            const tradeId = params.tradeID;
+            const endpoint = `api/contracts/${tradeId}/terminate`;
+            this.setState({ requestTerminationWaiting: true });
+            axios({
+                method: 'put',
+                headers: headers,
+                baseURL: base,
+                url: endpoint,
+            })
+            .then(res => res.data.contract[userRole])
+            .then(updatedUserRoleField => {
+                let terminationStateChanges = { redirect: true, requestTerminationWaiting: false };
+                terminationStateChanges[userRole] = updatedUserRoleField;
+                this.setState(terminationStateChanges);
+            })
+            .catch((err) => {
+                this.setState({ requestTerminationWaiting: false });
+                console.log(err);
+            });
+        } else {
+            this.setState({ redirect: true });
+        }
+    }
+
     componentWillMount(){
         const { authService, match: { params }  } = this.props;
         if (authService.loggedIn()) {
@@ -259,7 +293,10 @@ class Contract extends Component {
             redirect, offeree, isUserOfferor,
             favoursEdited, saveFavoursWaiting, userUpdatedFavours,
             pageLoaded, acceptTradeWaiting, declineTradeWaiting,
+            requestTerminationWaiting,
         } = this.state;
+        const userRole = isUserOfferor ? offeror : offeree;
+        const otherPartyRole = isUserOfferor ? offeree : offeror;
 
         return pageLoaded ?
             (
@@ -270,6 +307,18 @@ class Contract extends Component {
                     {(redirect) &&
                         <Redirect to={'/login'}/>
                     }
+                    {(otherPartyRole.requestTermination && status != 'Terminated' && status != 'Completed' ? 
+                        (
+                            <Row>
+                                <Col span={24} style={{textAlign: 'center', marginBottom: '50px'}}>
+                                    <Alert 
+                                        message={otherPartyRole.firstName + ' has requested to end the contract.'}
+                                        type='warning'
+                                    />
+                                </Col>
+                            </Row>
+                        ) : ''
+                    )}
                     <Row>
                         <TradeOverview 
                             status={status}
@@ -322,7 +371,38 @@ class Contract extends Component {
                                 </Col>
                             </Row>
                         )
-                        : ''
+                        : ( userRole.requestTermination || status == 'Terminated' ? 
+                            (
+                                <Row>
+                                    <Col span={24}  style={{textAlign: 'center'}}>
+                                        <Popover content="Awaiting approval from other party." trigger="hover">
+                                            <Button 
+                                                size ="large"
+                                                type="normal"
+                                                style={{marginTop: '50px'}}
+                                            >
+                                                Completion/Termination Requested
+                                            </Button>
+                                        </Popover>
+                                    </Col>
+                                </Row>
+                            )
+                            : (
+                                <Row>
+                                    <Col span={24}  style={{textAlign: 'center', marginTop: '50px'}}>
+                                        <Button
+                                            type='danger'
+                                            size='large'
+                                            icon='checkCircle'
+                                            onClick={this.requestTermination}
+                                            loading={requestTerminationWaiting}
+                                        >
+                                            Complete/Terminate Trade
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            )
+                        )
                     }
                 </div>
             ) :
