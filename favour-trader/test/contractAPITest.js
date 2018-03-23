@@ -19,6 +19,8 @@ var baseUrl = "http://localhost:3002"
 var endpointUrl = baseUrl + "/api/contracts"
 
 //DATA
+var invalidId = new ObjectID()
+
 var skillIds = [
     new ObjectID(),
     new ObjectID(),
@@ -479,27 +481,115 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("post / Test", (done) => {
-        
+    describe.only("post / Test", (done) => {
+        it("Should return an error without authorization",(done)=>{
+            chai.request(endpointUrl)
+            .post("/")
+            .end((err, res) => {
+                expect(err.status).to.equal(401)
+                done()
+            })
+        })
+
+        it("Should return an error without valid authorization",(done)=>{
+            chai.request(endpointUrl)
+                .post("/")
+                .set("Authorization", token + "101010101010001010")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
     })
 
     describe("get /active Test", (done) => {
+        it("Should return an error without authorization",(done)=>{
+            chai.request(endpointUrl)
+            .get("/active")
+            .end((err, res) => {
+                expect(err.status).to.equal(401)
+                done()
+            })
+        })
 
+        it("Should return an error without valid authorization",(done)=>{
+            chai.request(endpointUrl)
+                .get("/active")
+                .set("Authorization", token + "101010101010001010")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
     })
 
     describe("get /received Test", (done) => {
+        it("Should return an error without authorization",(done)=>{
+            chai.request(endpointUrl)
+            .get("/received")
+            .end((err, res) => {
+                expect(err.status).to.equal(401)
+                done()
+            })
+        })
 
+        it("Should return an error without valid authorization",(done)=>{
+            chai.request(endpointUrl)
+                .get("/received")
+                .set("Authorization", token + "101010101010001010")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
     })
 
     describe("get /sent Test", (done) => {
+        it("Should return an error without authorization",(done)=>{
+            chai.request(endpointUrl)
+            .get("/sent")
+            .end((err, res) => {
+                expect(err.status).to.equal(401)
+                done()
+            })
+        })
 
+        it("Should return an error without valid authorization",(done)=>{
+            chai.request(endpointUrl)
+                .get("/sent")
+                .set("Authorization", token + "101010101010001010")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
     })
 
     describe("put /:id Test", (done) => {
+        it("Should return an error without a valid id",(done)=>{
 
+        })
+
+        it("Should return an error without authorization",(done)=>{
+
+        })
+
+        it("Should return an error without valid authorization",(done)=>{
+            
+        })
     })
 
     describe("put /:id/terminate Test", (done) => {
+        it("Should return an error without a valid id",(done)=>{
+            
+        })
 
+        it("Should return an error without authorization",(done)=>{
+
+        })
+
+        it("Should return an error without valid authorization",(done)=>{
+            
+        })
     })
 })
