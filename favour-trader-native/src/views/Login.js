@@ -43,32 +43,32 @@ export default class Login extends React.Component {
         const { navigate } = this.props.navigation;
         return(
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <Card
-                    title={'Welcome to Favour ⇋ Trader'}>
-                    <Text style={styles.intro}>Login to start trading!</Text>
-                    <View style={styles.input}>
-                        <Input
-                            placeholder='E-mail Address'
-                            leftIcon={ <Icon name='mail-outline' /> }
-                            autoCapitalize={'none'}
-                            onChangeText={(text) => this.setState({email: text})}
-                        />
-                    </View>
-                    <View style={styles.input}>
-                        <Input
-                            placeholder='Password'
-                            leftIcon={ <Icon name='lock-outline' /> }
-                            autoCapitalize={'none'}
-                            secureTextEntry={true}
-                            onChangeText={(text) => this.setState({password: text})}
-                        />
-                    </View>
+                    <Card
+                        title={'Welcome to Favour ⇋ Trader'}>
+                        <Text style={styles.intro}>Login to start trading!</Text>
+                        <View style={styles.input}>
+                            <Input
+                                placeholder='E-mail Address'
+                                leftIcon={ <Icon name='mail-outline' /> }
+                                autoCapitalize={'none'}
+                                onChangeText={(text) => this.setState({email: text})}
+                            />
+                        </View>
+                        <View style={styles.input}>
+                            <Input
+                                placeholder='Password'
+                                leftIcon={ <Icon name='lock-outline' /> }
+                                autoCapitalize={'none'}
+                                secureTextEntry={true}
+                                onChangeText={(text) => this.setState({password: text})}
+                            />
+                        </View>
 
-                    <Button
-                        backgroundColor='#03A9F4'
-                        buttonStyle={styles.button}
-                        title='Login'
-                        onPress = { this.submit} />
+                        <Button
+                            backgroundColor='#03A9F4'
+                            buttonStyle={styles.button}
+                            title='Login'
+                            onPress = { this.submit} />
 
                     <Divider style={styles.divider}/>
                     <View style={styles.footerView}>
