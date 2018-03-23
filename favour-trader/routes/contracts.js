@@ -307,6 +307,7 @@ router.put('/:id/terminate',
                 contract.offeror.id != req.user.id && 
                 contract.offeree.id != req.user.id
             ){
+                devDebug("OFFEROR: "+contract.offeror.id+ " OFFERee: "+contract.offeree.id+ " ID!!: "+req.user.id);
                 res.json({ success: false, message: "Unauthorized."})
             } else if ( contract.status !== 'Accepted' ) {
                 res.json({ success: false, message: "Contract must be active."});
