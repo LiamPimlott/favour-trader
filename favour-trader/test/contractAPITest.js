@@ -768,7 +768,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe.only("get /sent Test", (done) => {
+    describe("get /sent Test", (done) => {
         it("Should return nothing if the user has no contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/sent")
@@ -839,31 +839,113 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("put /:id Test", (done) => {
-        it("Should return an error without a valid id", (done) => {
+    describe.only("put /:id Test", (done) => {
+        var contractIds = []
+        var invalidId = new ObjectID()
 
+        beforeEach((done)=>{
+            Contract.insertMany([contracts[0],contracts[1]],(error,docs)=>{
+                for(var i = 0;i<docs.length;i++){
+                    contractIds.push(docs[i]._id)
+                }
+                done()
+            })
+        })
+
+        it("Should return an error without a valid id", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+invalidId)
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract not found.")
+                    done()
+                })
+        })
+
+        it("Should return unsuccessful if you aren't involved in a contract", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[1])
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract not found.")
+                    done()
+                })
         })
 
         it("Should return an error without authorization", (done) => {
-
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0])
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
         })
 
         it("Should return an error without valid authorization", (done) => {
-            
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0])
+                .set("Authorization", token+"010101001001")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
         })
     })
 
-    describe("put /:id/terminate Test", (done) => {
-        it("Should return an error without a valid id", (done) => {
-            
+    describe.only("put /:id/terminate Test", (done) => {
+        var contractIds = []
+        var invalidId = new ObjectID()
+
+        beforeEach((done)=>{
+            Contract.insertMany([contracts[0],contracts[1]],(error,docs)=>{
+                for(var i = 0;i<docs.length;i++){
+                    contractIds.push(docs[i]._id)
+                }
+                done()
+            })
+        })
+
+        it("Should return unsuccessful without a valid id", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+invalidId+"/terminate")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract not found.")
+                    done()
+                })
+        })
+
+        it("Should return unsuccessful if you aren't involved in a contract", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[1]+"/terminate")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract not found.")
+                    done()
+                })
         })
 
         it("Should return an error without authorization", (done) => {
-
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0]+"/terminate")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
         })
 
         it("Should return an error without valid authorization", (done) => {
-            
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0]+"/terminate")
+                .set("Authorization", token+"010101001001")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
         })
     })
 })
