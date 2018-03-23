@@ -206,7 +206,7 @@ class Contract extends Component {
 
     requestTermination = () => {
         const { authService, match: { params } } = this.props;
-        const { isUserOfferor, favours } = this.state;
+        const { isUserOfferor } = this.state;
         if (authService.loggedIn()) {
             const userRole = isUserOfferor ? OFFEROR : OFFEREE;
             const headers = {
@@ -305,7 +305,7 @@ class Contract extends Component {
                     {(redirect) &&
                         <Redirect to={'/login'}/>
                     }
-                    {(otherPartyRole.requestTermination && status != 'Terminated' && status != 'Completed' ? 
+                    {(otherPartyRole.requestTermination && status !== 'Terminated' && status !== 'Completed' ? 
                         (
                             <Row>
                                 <Col span={24} style={{textAlign: 'center', marginBottom: '50px'}}>
@@ -369,7 +369,7 @@ class Contract extends Component {
                                 </Col>
                             </Row>
                         )
-                        : ( userRole.requestTermination || status == 'Terminated' ? 
+                        : ( userRole.requestTermination || status === 'Terminated' ? 
                             (
                                 <Row>
                                     <Col span={24}  style={{textAlign: 'center'}}>
