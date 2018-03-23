@@ -96,6 +96,7 @@ export default class UserProfile extends React.Component {
 	}
 
 	render() {
+		const { navigate } = this.props.navigation;
 		return (
 			<View >
 				<ProfileCard name={this.state.name} email={this.state.email} />
@@ -109,7 +110,14 @@ export default class UserProfile extends React.Component {
 								backgroundColor='#03A9F4'
 								buttonStyle={styles.button}
 								title='Offer Trade'
-								onPress={() => { }} />
+								onPress={() => {
+									navigate('CreateTrade', {
+										requestableFavours: this.state.has,
+										recipientFirstName: this.state.name.first,
+										recipientLastName: this.state.name.last,
+										recipientId: this.state.profileId,
+									})
+								}} />
 						)
 				}
 			</View>
