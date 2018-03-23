@@ -18,6 +18,7 @@ var token
 var baseUrl = "http://localhost:3002"
 var endpointUrl = baseUrl + "/api/contracts"
 
+//DATA
 var skillIds = [
     new ObjectID(),
     new ObjectID(),
@@ -46,7 +47,7 @@ var skills = [
 ]
 
 var users = [
-    {
+    {//user[0] - the one we log in with
         _id: userIds[0],
         name: {
             first: "Mark",
@@ -69,7 +70,7 @@ var users = [
                     _id: skillIds[0],
                 },
                 description: "Like the sport."
-            }
+            },
         ],
         wants: [
             {
@@ -77,6 +78,12 @@ var users = [
                     _id: skillIds[1],
                 },
                 description: "I need some quark gluon plasma."
+            },
+            {
+                category: {
+                    _id: skillIds[2],
+                },
+                description: "Like the sport."
             }
         ]
     },
@@ -162,28 +169,153 @@ var users = [
     }
 ]
 
+var favours = [
+    {
+       skillId: skillIds[0],
+       description: "Winky Face",
+       completed: false
+    },
+    {
+        skillId: skillIds[1],
+        description: "Wonky Face",
+        completed: false
+     },
+     {
+        skillId: skillIds[2],
+        description: "Wanky Face (eww)",
+        completed: false
+     },
+     {
+        skillId: skillIds[0],
+        description: "Cranky Face",
+        completed: true
+     },
+     {
+         skillId: skillIds[1],
+         description: "Chunky Face",
+         completed: true
+      },
+      {
+         skillId: skillIds[2],
+         description: "Lanky Face (eww)",
+         completed: true
+      }
+ ]
+
 var contracts = [
-
+    {//contracts[0] - pending contract between user0 and user2
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[2],
+            favours: favours[2],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    },
+    {//contracts[1] - pending contract between user1 and user2
+        offeror: {
+            id: userIds[1],
+            favours: favours[2],
+            name: {
+                first: users[1].name.first,
+                last: users[1].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[2],
+            favours: favours[1],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    },
+    {//contracts[2] - accepted contract between user2 and user0
+        offeror: {
+            id: userIds[2],
+            favours: favours[1],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },  
+            requestTermination: true
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Accepted',
+        messages:[]
+    },
+    {//contracts[3] - declined contract between user2 and user0
+        offeror: {
+            id: userIds[2],
+            favours: favours[1],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },  
+            requestTermination: true
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Declined',
+        messages:[]
+    },
+    {//all zeroes
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages:[]
+    }
 ]
-
-
-// //PROMISES
-// var addUsers = new Promise(async function(resolve,reject){
-//     var results = []
-//     for (const user of users){
-//         newUser = new User(user)
-//         await newUser.save((err,newUser)=>{
-//             if(err){
-//                 console.log(err)
-//                 reject(err)
-//             } else {
-//                 results.push(newUser)
-//             }
-//         })
-//     }
-//     resolve(results);
-// })
-
+//END OF DATA
+//PROMISES
 var addUsers = users.map((user)=>{
     return new Promise((resolve,reject)=>{
         newUser = new User(user)
@@ -191,31 +323,38 @@ var addUsers = users.map((user)=>{
             if(err){
                 reject(err)
             } else {
+                console.log("guser added")
                 resolve(res)
             }
         })
     })
 })
 
-var addSkills = new Promise((resolve, reject) => {
+function addSkills(){
+return new Promise((resolve, reject) => {
     Skill.insertMany(skills, (error, docs) => {
         if (error) {
-            reject(err)
+            reject(error)
         }
         else {
+            console.log("gills added")
             resolve(docs)
         }
     })
 })
+}
 
-var connect = new Promise((resolve, reject) => {
+function connect(){
+    return new Promise((resolve, reject) => {
     require('dotenv').config({ path: __dirname + '/../.env' })
     process.env.NODE_ENV = 'test'
     let db = require("../db")
     server = require('../server')
     db.getConnection(false)
+    console.log("gonnected")
     resolve('connected')
 })
+}
 
 function login(){
     return new Promise((resolve,reject)=>{
@@ -227,12 +366,24 @@ function login(){
         })
         .end((err, res) => {
             if (err) {
-                // console.log(err)
                 reject(err)
             }
+            console.log("gogged in")
             token = res.body.token;
             console.log("Token" + token)
             resolve(res.body.token)
+        })
+    })
+}
+
+function clearDB(){
+    return new Promise((resolve,reject)=>{
+        User.remove({}, () => {
+            Skill.remove({}, () => {
+                Contract.remove({},()=>{
+                    resolve()
+                })
+            })
         })
     })
 }
@@ -241,13 +392,14 @@ function login(){
 //TESTS
 describe("Contract API Tests", () => {
     before((done) => {
-        connect.then((connectionResult) => {
-            addSkills.then((skillsResult) => {
-                Promise.all(addUsers).then((userResults) => {
-                        // console.log("Here's what happened:\nConnection: "+connectionResult+"\nSkills: "+skillsResult+"\nUsers: "+userResults+"\nLogin: \n")
-                        login().then((loginResult)=>{
-                            done()
-                        })
+        connect().then((connectionResult) => {
+            clearDB().then((clearDBResult)=>{
+                addSkills().then((skillsResult) => {
+                    Promise.all(addUsers).then((userResults) => {
+                            login().then((loginResult)=>{
+                                done()
+                            })
+                    })
                 })
             })
         })
@@ -281,11 +433,30 @@ describe("Contract API Tests", () => {
         })
 
         it("Should return some stuff if current user has contracts", (done) => {
-            done()
+            newContract = new Contract(contracts[0])
+            newContract.save((err,res)=>{
+                chai.request(endpointUrl)
+                .get('/')
+                .set("Authorization", token)
+                .end((err,res)=>{
+                    expect(err).to.equal(null)
+                    expect(res.body).to.have.lengthOf(1)
+                    done()
+                })
+            })
         })
 
         it("Should return both active and inactive contracts if current user has contracts", (done) => {
-            done()
+            Contract.insertMany([contracts[0],contracts[2],contracts[3]],(err,docs)=>{
+                chai.request(endpointUrl)
+                .get('/')
+                .set("Authorization", token)
+                .end((err,res)=>{
+                    expect(err).to.equal(null)
+                    expect(res.body).to.have.lengthOf(3)
+                    done()
+                })
+            })
         })
 
         it("Should return an error without authorization", (done) => {
@@ -309,7 +480,7 @@ describe("Contract API Tests", () => {
     })
 
     describe("post / Test", (done) => {
-
+        
     })
 
     describe("get /active Test", (done) => {
