@@ -66,7 +66,7 @@ var ContractSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Accepted', 'Declined'],
+        enum: ['Pending', 'Accepted', 'Declined', 'Completed', "Terminated"],
         required: true,
         default: 'Pending'
     },

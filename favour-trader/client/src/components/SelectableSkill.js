@@ -40,7 +40,7 @@ class SelectableSkill extends Component {
                 <td className={'checkboxTD'}>
                     <input type={'checkbox'}
                         className={'checkbox'}
-                        id={skill._id}
+                        id={skill.category._id}
                         checked={checked}
                         onChange={this.toggleSelection}/>
                 </td>
@@ -51,7 +51,7 @@ class SelectableSkill extends Component {
                             <div>
                                 {
                                     <textarea className={'descriptionBox'}
-                                        id={skill._id}
+                                        id={skill.category._id}
                                         placeholder={'add a description (optional)'}
                                         onChange={update}/>
                                 }

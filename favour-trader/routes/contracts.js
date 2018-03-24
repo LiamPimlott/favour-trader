@@ -23,7 +23,6 @@ router.get('/',
     passport.authenticate('jwt', { session: false }),
     function(req, res, next)
     {
-        devDebug(req.user.id);
         Contract.find({ 
             $or: [
                 { 'offeror.id': req.user.id },
@@ -39,9 +38,83 @@ router.get('/',
     }
 );
 
-// GET - USERS/ID - returns a user's profile by their id.
+// GET - RECEIVED - get all contracts for the user which are currently 'Accepted'
+router.get('/active',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find(
+            {
+                $or: [
+                    { 'offeror.id': req.user.id },
+                    { 'offeree.id': req.user.id }
+                ],
+                'status': 'Accepted',
+            },
+            function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - RECEIVED - get all contracts where user is the offeree & status is 'Pending'
+router.get('/received',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find(
+            {
+                $and: [
+                    { 'offeree.id': req.user.id },
+                    { 'status': 'Pending' }
+                ]
+            },
+            function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - SENT - get all contracts where user is the offeror & status is 'Pending'
+router.get('/sent',
+    passport.authenticate('jwt', { session: false }),
+    function(req, res, next)
+    {
+        Contract.find(
+            {
+                $and: [
+                    { 'offeror.id': req.user.id },
+                    { 'status': 'Pending' }
+                ]
+            },
+            function (err, contracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                res.json(contracts);
+            }
+        });
+    }
+);
+
+// GET - Contract/ID - returns a contract by id.
 router.get('/contract/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
     Contract.findById(req.params.id).
+    populate('offeror.favours').
+    populate('offeror.favours.skillId').
+    populate('offeree.favours').
+    populate('offeree.favours.skillId').
     exec((err, foundTrade) => {
         if (err) {
             devDebug(err);
@@ -90,67 +163,46 @@ router.post('/',
     }
 );
 
-// GET - ACTIVE - get all contracts for the user which are currently 'accepted'
-router.get('/active',
-    passport.authenticate('jwt', { session: false }),
-    function(req, res, next)
-    {
-        Contract.find({
-            $or: [
-                { 'offeror.id': req.user.id },
-                { 'offeree.id': req.user.id }
-            ],
-            $and: [
-                { 'status': 'accepted'},
-            ]}, function (err, contracts) {
+// PUT - ACCEPT/DECLINE TRADE - Changes the trade's status to "Accepted" or "Declined" if requested by offeree
+router.put('/:id/status',
+    passport.authenticate('jwt', {session: false}),
+    function (req, res, next) {
+        Contract.findById(req.params.id, function (err, contract) {
+            const newStatus = req.body.status;
             if (err) {
                 devDebug(err);
                 next(err);
-            } else {
-                res.json(contracts);
+            } else if (!contract) {
+                res.json({ success: false, message: "Contract not found."});
+            } else if ( contract.offeree.id != req.user.id ) {
+                res.json({ success: false, message: "Sorry, you are not the Offeree."});
+            } else if (!newStatus) {
+                res.json({ success: false, message: "You must provide a new status."});
+            } else if (newStatus !== 'Accepted' && newStatus !== 'Declined') {
+                res.json({ success: false, message: "Invalid status provided."});
             }
+            Contract.findByIdAndUpdate(contract._id,
+                { $set: { status: newStatus }},
+                { new: true }
+            ).
+            populate('offeror.favours').
+            populate('offeror.favours.skillId').
+            populate('offeree.favours').
+            populate('offeree.favours.skillId').
+            exec(function (err, updatedContract) {
+                if (err) {
+                    devDebug(err);
+                    next(err);
+                } else {
+                    res.json({ success: true, message: "Status updated!", contract: updatedContract });
+                }
+            });
         });
     }
 );
 
-// GET - RECEIVED - get all contracts where user is the offeree
-router.get('/received',
-    passport.authenticate('jwt', { session: false }),
-    function(req, res, next)
-    {
-        Contract.find({
-            'offeree.id': req.user.id
-            }, function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
-    }
-);
-
-// GET - SENT - get all contracts where user is the offeror
-router.get('/sent',
-    passport.authenticate('jwt', { session: false }),
-    function(req, res, next)
-    {
-        Contract.find({
-            'offeror.id': req.user.id
-            }, function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
-    }
-);
-
-// PUT - ROOT - update a contract by its id  (this actaully may not be necessary for mvp)
-router.put('/:id',
+// PUT - UPDATE OFFEROR FAVOURS - update the offeror's favours for a contract.
+router.put('/:id/offeror/favours',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
         Contract.findById(req.params.id, function (err, contract) {
@@ -159,26 +211,89 @@ router.put('/:id',
                 next(err);
             } else if (!contract) {
                 res.json({ success: false, message: "Contract not found."});
-            } else if ( //This can be middleware eventually to dry up code
-                contract.offeror.id != req.user.id && 
-                contract.offeree.id != req.user.id
-            ){
-                res.json({ success: false, message: "Unauthorized."})
-            } else {
-                Contract.findByIdAndUpdate(contract._id,req.body,{new:true}, function (err, updatedContract){
+            } else if ( contract.offeror.id != req.user.id ) {
+                res.json({ success: false, message: "Sorry, you are not the offeror."})
+            } 
+            contract.offeror.favours = req.body.updatedFavours;
+            contract.save(function(err, updatedContract) {
+                if (err) {
+                    devDebug(err);
+                    next(err);
+                }
+                Contract.findById(updatedContract._id).
+                populate('offeror.favours').
+                populate('offeror.favours.skillId').
+                populate('offeree.favours').
+                populate('offeree.favours.skillId').
+                exec((err, foundContract) => {
                     if (err) {
                         devDebug(err);
                         next(err);
+                    } else if (!foundContract) {
+                        res.json({ success: false, message: "Trade does not exist."})
                     } else {
-                        res.json({ success: true, message: "Contract Updated.", contract: updatedContract});
+                        res.json({
+                            success: true,
+                            message: "Offeror favours updated.",
+                            favours: {
+                                offeror: foundContract.offeror.favours,
+                                offeree: foundContract.offeree.favours
+                            },
+                        });
                     }
-                })
-            }
+                });
+            });
         });
     }
 );
 
-// DELETE - CID - REQUEST TERMINATION - request to terminate a contract
+// PUT - UPDATE OFFEREE FAVOURS - update the offeree's favours for a contract.
+router.put('/:id/offeree/favours',
+    passport.authenticate('jwt', { session: false }),
+    function (req, res, next) {
+        Contract.findById(req.params.id, function (err, contract) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else if (!contract) {
+                res.json({ success: false, message: "Contract not found."});
+            } else if ( contract.offeree.id != req.user.id ) {
+                res.json({ success: false, message: "Sorry, you are not the offeree."})
+            } 
+            contract.offeree.favours = req.body.updatedFavours;
+            contract.save(function(err, updatedContract) {
+                if (err) {
+                    devDebug(err);
+                    next(err);
+                }
+                Contract.findById(updatedContract._id).
+                populate('offeror.favours').
+                populate('offeror.favours.skillId').
+                populate('offeree.favours').
+                populate('offeree.favours.skillId').
+                exec((err, foundContract) => {
+                    if (err) {
+                        devDebug(err);
+                        next(err);
+                    } else if (!foundContract) {
+                        res.json({ success: false, message: "Trade does not exist."})
+                    } else {
+                        res.json({
+                            success: true,
+                            message: "Offeror favours updated.",
+                            favours: {
+                                offeror: foundContract.offeror.favours,
+                                offeree: foundContract.offeree.favours
+                            },
+                        });
+                    }
+                });
+            });
+        });
+    }
+);
+
+// PUT - CID - REQUEST TERMINATION - request to change contract status to complete/terminate. (depending on completion of favours)
 router.put('/:id/terminate',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
@@ -188,25 +303,45 @@ router.put('/:id/terminate',
                 next(err);
             } else if (!contract) {
                 res.json({ success: false, message: "Contract not found."});
-            } else if ( //This can be middleware eventually to dry up code
-                contract.offeror.id !== req.user.id && 
-                contract.offeree.id !== req.user.id
+            } else if (
+                contract.offeror.id != req.user.id && 
+                contract.offeree.id != req.user.id
             ){
+                devDebug("OFFEROR: "+contract.offeror.id+ " OFFERee: "+contract.offeree.id+ " ID!!: "+req.user.id);
                 res.json({ success: false, message: "Unauthorized."})
-            } else if ( contract.status === 'Accepted' ) {
-                res.json({ success: false, message: "Contract has already been accepted."});
-            } else {
-                Contract.findByIdAndRemove(contract._id, function(err) {
-                    if (err) {
-                        devDebug(err);
-                        next(err);
-                    }
-                    res.json({ 
-                        success: true, 
-                        message: "Contract Terminated."
+            } else if ( contract.status !== 'Accepted' ) {
+                res.json({ success: false, message: "Contract must be active."});
+            }
+            const userRole = req.user.id == contract.offeror.id ? 'offeror' : 'offeree';
+            contract[userRole].requestTermination = true;
+            contract.save(function (err, updatedContract) {
+                if(err) {
+                    devDebug(err);
+                    next(err);
+                } else if(
+                    updatedContract.offeror.requestTermination && 
+                    updatedContract.offeree.requestTermination
+                ){
+                    let completed = true;
+                    updatedContract.offeror.favours.forEach(function (favour) {
+                        if(!favour.completed){ completed = false; }
                     });
-                });
-            } 
+                    updatedContract.offeree.favours.forEach(function (favour) {
+                        if(!favour.completed){ completed = false; }
+                    });
+                    const endStatus = completed ? 'Completed' : 'Terminated';
+                    updatedContract.status = endStatus;
+                    updatedContract.save(function (err, terminatedContract) {
+                        if(err){
+                            devDebug(err);
+                            next(err);
+                        }
+                        res.json({ success: true, message: "Contract has been terminated/completed", contract: terminatedContract });
+                    });
+                } else {
+                    res.json({ success: false, message: "Waiting for other party to terminate.", contract: updatedContract });
+                }
+            }); 
         }); 
     }
 );
