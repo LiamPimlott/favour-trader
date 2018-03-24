@@ -12,7 +12,7 @@ module.exports = {
     navigateToMyProfilePage() {
         I.seeElement(this.buttons.profile);
         I.click(this.buttons.profile);
-        I.seeElement('#user-profile-page');
+        I.waitForText("About Me", 5);
     },
     editAddress() {
         I.waitForVisible(".anticon-edit", 5);
@@ -52,4 +52,4 @@ module.exports = {
         I.click("//*[contains(text(), 'Skills I Need')]");
         I.see("I suck at React");
     }
-}
+};
