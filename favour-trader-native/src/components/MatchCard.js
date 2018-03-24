@@ -13,8 +13,6 @@ class MatchCard extends React.Component{
 
     render() {
         const { match } = this.props;
-        const { userId } = this.props;
-        
         return (
             <View key={match._id}>
                 <Card

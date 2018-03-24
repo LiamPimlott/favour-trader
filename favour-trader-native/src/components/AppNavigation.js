@@ -6,10 +6,9 @@ import HomeScreen from '../views/HomeScreen.js';
 import Login from '../views/Login.js';
 import Signup from '../views/Signup.js';
 import Trades from '../views/Trades.js';
+import CreateTrade from '../views/CreateTrade.js';
 import UserProfile from '../views/UserProfile.js';
 import CurrentUserProfile from '../views/CurrentUserProfile.js';
-
-// Add conditional logic based on AuthService (When AuthService is merged in)
 
 const DrawerScreens = DrawerNavigator({
     Login: {
@@ -48,6 +47,13 @@ const DrawerScreens = DrawerNavigator({
         screen: UserProfile,
         navigationOptions: {
             title: 'User Profile',
+            drawerLabel: () => null,
+        },
+    },
+    CreateTrade: {
+        screen: CreateTrade,
+        navigationOptions: {
+            title: 'Create Trade',
             drawerLabel: () => null,
         },
     },

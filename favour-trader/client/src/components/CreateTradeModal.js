@@ -50,7 +50,6 @@ class CreateTradeModal extends Component {
             email: userEmail,
         }, config)
             .then(res => res.data.user)
-            // This setState below causes a front end JS warning, any idea why?
             .then((user) => {
                 if (this.mounted) {
                     this.setState({ offerableSkills: user.has });
