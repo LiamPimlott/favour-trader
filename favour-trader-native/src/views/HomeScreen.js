@@ -61,7 +61,7 @@ export default class HomeScreen extends React.Component {
                     config.params.has = 'true';
                     config.params.wants = 'true';
                 }
-                axios.get('http://favour-trader-test.appspot.com/api/users/matches', config)
+                axios.get('http://favour-trader.appspot.com/api/users/matches', config)
                     .then(res => res.data.matches)
                     .then(matches => {
                         this.setState({matchedUsers: matches});
