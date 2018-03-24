@@ -121,7 +121,7 @@ export default class HomeScreen extends Component {
             this.state.offerableFavours.forEach(offerable => {
                 if (offerable._id === trueValue[0]._id) {
                     selected.push({
-                        skillId: trueValue[0]._id,
+                        skillId: trueValue[0].category._id,
                         description: '',
                     });
                 }
@@ -143,7 +143,7 @@ export default class HomeScreen extends Component {
             this.state.requestableFavours.forEach(requestable => {
                 if (requestable._id === trueValue[0]._id) {
                     selected.push({
-                        skillId: trueValue[0]._id,
+                        skillId: trueValue[0].category._id,
                         description: '',
                     })
                 }
@@ -191,7 +191,7 @@ export default class HomeScreen extends Component {
                             last: recipientLastName,
                         },
                     },
-                    messages: [tradeMessage],
+                    messages: tradeMessage,
                 };
                 const headers = {
                     'Accept': 'application/json',
