@@ -213,7 +213,7 @@ router.put('/:id/offeror/favours',
                 res.json({ success: false, message: "Contract not found."});
             } else if ( contract.offeror.id != req.user.id ) {
                 res.json({ success: false, message: "Sorry, you are not the offeror."})
-            } 
+            } else {
             contract.offeror.favours = req.body.updatedFavours;
             contract.save(function(err, updatedContract) {
                 if (err) {
@@ -243,6 +243,7 @@ router.put('/:id/offeror/favours',
                     }
                 });
             });
+        }
         });
     }
 );
@@ -259,7 +260,7 @@ router.put('/:id/offeree/favours',
                 res.json({ success: false, message: "Contract not found."});
             } else if ( contract.offeree.id != req.user.id ) {
                 res.json({ success: false, message: "Sorry, you are not the offeree."})
-            } 
+            }  else {
             contract.offeree.favours = req.body.updatedFavours;
             contract.save(function(err, updatedContract) {
                 if (err) {
@@ -289,6 +290,7 @@ router.put('/:id/offeree/favours',
                     }
                 });
             });
+        }
         });
     }
 );

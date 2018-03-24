@@ -574,6 +574,7 @@ describe("Contract API Tests", () => {
                 addSkills().then((skillsResult) => {
                     Promise.all(addUsers).then((userResults) => {
                         login().then((loginResult) => {
+                                console.log(loginResult)
                                 done()
                             })
                     })
@@ -925,12 +926,13 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe.only("put /:id Test", (done) => {
+    describe("put /:id/offeror/favours Test", (done) => {
         var contractIds = []
         var invalidId = new ObjectID()
 
         beforeEach((done)=>{
-            Contract.insertMany([contracts[0],contracts[1]],(error,docs)=>{
+            //We're logged in as user0. user0 is the 
+            Contract.insertMany([contracts[0],contracts[1],contracts[2]],(error,docs)=>{
                 for(var i = 0;i<docs.length;i++){
                     contractIds.push(docs[i]._id)
                 }
@@ -943,67 +945,11 @@ describe("Contract API Tests", () => {
             done()
         })
 
-        it.only("Should update the status to accepted", (done) => {
-            chai.request(endpointUrl)
-                .put("/"+contractIds[0])
-                .set("Authorization", token)
-                .send(updatedContracts[0])
-                .end((err, res) => {
-                    expect(err).to.equal(null)
-                    expect(res.body.success).to.equal(true)
-                    expect(res.body.message).to.equal("Contract Updated.")
-                    expect(res.body.contract.status).to.equal('Accepted')
-                    done()
-                })
-        })
-
-        it.only("Should update the status to declined", (done) => {
-            chai.request(endpointUrl)
-                .put("/"+contractIds[0])
-                .set("Authorization", token)
-                .send(updatedContracts[1])
-                .end((err, res) => {
-                    expect(err).to.equal(null)
-                    expect(res.body.success).to.equal(true)
-                    expect(res.body.message).to.equal("Contract Updated.")
-                    expect(res.body.contract.status).to.equal('Declined')
-                    done()
-                })
-        })
-
-        it.only("Should update the messages", (done) => {
-            chai.request(endpointUrl)
-                .put("/"+contractIds[0])
-                .set("Authorization", token)
-                .send(updatedContracts[2])
-                .end((err, res) => {
-                    expect(err).to.equal(null)
-                    expect(res.body.success).to.equal(true)
-                    expect(res.body.message).to.equal("Contract Updated.")
-                    expect(res.body.contract.messages).to.have.a.lengthOf(1)
-                    done()
-                })
-        })
-
-        it.only("Should update the termination", (done) => {
-            chai.request(endpointUrl)
-                .put("/"+contractIds[0])
-                .set("Authorization", token)
-                .send(updatedContracts[3])
-                .end((err, res) => {
-                    expect(err).to.equal(null)
-                    expect(res.body.success).to.equal(true)
-                    expect(res.body.message).to.equal("Contract Updated.")
-                    expect(res.body.contract.offeror.requestTermination).to.equal(true)
-                    done()
-                })
-        })
-
         it("Should return an error without a valid id", (done) => {
             chai.request(endpointUrl)
-                .put("/"+invalidId)
+                .put("/"+invalidId+"/offeror/favours")
                 .set("Authorization", token)
-                .send(updatedContracts[0])
+                .send({updatedFavours: favours[0]})
                 .end((err, res) => {
                     expect(res.body.success).to.equal(false)
                     expect(res.body.message).to.equal("Contract not found.")
@@ -1013,20 +959,32 @@ describe("Contract API Tests", () => {
 
         it("Should return unsuccessful if you aren't involved in a contract", (done) => {
             chai.request(endpointUrl)
-                .put("/"+contractIds[1])
+                .put("/"+contractIds[1]+"/offeror/favours")
                 .set("Authorization", token)
-                .send(updatedContracts[0])
+                .send({updatedFavours: favours[0]})
                 .end((err, res) => {
                     expect(res.body.success).to.equal(false)
-                    expect(res.body.message).to.equal("Contract not found.")
+                    expect(res.body.message).to.equal("Sorry, you are not the offeror.")
+                    done()
+                })
+        })
+
+        it("Should return unsuccessful if you aren't the offeror in a contract", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/offeror/favours")
+                .set("Authorization", token)
+                .send({updatedFavours: favours[0]})
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Sorry, you are not the offeror.")
                     done()
                 })
         })
 
         it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
-                .put("/"+contractIds[0])
-                .send(updatedContracts[0])
+                .put("/"+contractIds[0]+"/offeror/favours")
+                .send({updatedFavours: favours[0]})
                 .end((err, res) => {
                     expect(err.status).to.equal(401)
                     done()
@@ -1035,9 +993,86 @@ describe("Contract API Tests", () => {
 
         it("Should return an error without valid authorization", (done) => {
             chai.request(endpointUrl)
-                .put("/"+contractIds[0])
+                .put("/"+contractIds[0]+"/offeror/favours")
                 .set("Authorization", token+"010101001001")
-                .send(updatedContracts[0])
+                .send({updatedFavours: favours[0]})
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
+    })
+
+    describe("put /:id/offeree/favours Test", (done) => {
+        var contractIds = []
+        var invalidId = new ObjectID()
+
+        beforeEach((done)=>{
+            //We're logged in as user0. user0 is the offeror in 0, nothing in 1, and offeree in 2
+            Contract.insertMany([contracts[0],contracts[1],contracts[2]],(error,docs)=>{
+                for(var i = 0;i<docs.length;i++){
+                    contractIds.push(docs[i]._id)
+                }
+                done()
+            })
+        })
+
+        afterEach((done)=>{
+            contractIds = []
+            done()
+        })
+
+        it("Should return an error without a valid id", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+invalidId+"/offeree/favours")
+                .set("Authorization", token)
+                .send({updatedFavours: favours[0]})
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract not found.")
+                    done()
+                })
+        })
+
+        it("Should return unsuccessful if you aren't involved in a contract", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[1]+"/offeree/favours")
+                .set("Authorization", token)
+                .send({updatedFavours: favours[0]})
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Sorry, you are not the offeree.")
+                    done()
+                })
+        })
+
+        it("Should return unsuccessful if you aren't the offeree in a contract", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0]+"/offeree/favours")
+                .set("Authorization", token)
+                .send({updatedFavours: favours[0]})
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Sorry, you are not the offeree.")
+                    done()
+                })
+        })
+
+        it("Should return an error without authorization", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0]+"/offeree/favours")
+                .send({updatedFavours: favours[0]})
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
+
+        it("Should return an error without valid authorization", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0]+"/offeree/favours")
+                .set("Authorization", token+"010101001001")
+                .send({updatedFavours: favours[0]})
                 .end((err, res) => {
                     expect(err.status).to.equal(401)
                     done()
@@ -1098,5 +1133,13 @@ describe("Contract API Tests", () => {
                     done()
                 })
         })
+    })
+
+    describe("get /contract/:id Test",(done)=>{
+
+    })
+
+    describe("put /:id/status",(done)=>{
+
     })
 })
