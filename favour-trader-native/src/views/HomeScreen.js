@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { FlatList, StyleSheet, View, Picker, Text, TextInput, TouchableOpacity } from 'react-native';
-import { StackNavigator } from 'react-navigation';
+import React, {Component} from 'react';
+import {FlatList, StyleSheet, View, Picker, Text, TextInput, TouchableOpacity} from 'react-native';
+import {StackNavigator} from 'react-navigation';
 import {Divider} from 'react-native-elements'
 import AuthService from "../components/AuthService";
 import axios from 'axios';
@@ -11,8 +11,9 @@ export default class HomeScreen extends React.Component {
         super();
         this.state = {
             matches: '',
-            matchedUsers: [],
+            matchedUsers: null,
             profileID: '',
+            matchFound: false,
         };
         this.authService = new AuthService();
         this.updateMatches = this.updateMatches.bind(this);
@@ -20,8 +21,8 @@ export default class HomeScreen extends React.Component {
 
     }
 
-    passUserID(match){
-    	this.props.navigation.navigate('MatchProfile', { profileID: match._id });
+    passUserID(match) {
+        this.props.navigation.navigate('MatchProfile', {profileID: match._id});
     }
 
     componentDidMount() {
@@ -65,6 +66,13 @@ export default class HomeScreen extends React.Component {
                     .then(matches => {
                         this.setState({matchedUsers: matches});
                     })
+                    .then(() => {
+                        if (typeof(this.state.matchedUsers) !== 'undefined') {
+                            this.setState({matchFound: true})
+                        } else {
+                            this.setState({matchFound: false});
+                        }
+                    })
                     .catch((err) => {
                         console.log(err);
                     });
@@ -74,12 +82,11 @@ export default class HomeScreen extends React.Component {
     };
 
     _renderItem = ({item}) => (
-        <MatchCard match={item} userId ={item._id} passUserID={this.passUserID.bind(this, item) }/>
+        <MatchCard match={item} userId={item._id} passUserID={this.passUserID.bind(this, item)}/>
     );
     _keyExtractor = (item, index) => item._id;
 
     render() {
-    	
         return (
             <View style={styles.container}>
                 <Picker selectedValue={this.state.matches}
@@ -90,13 +97,16 @@ export default class HomeScreen extends React.Component {
                     <Picker.Item label="What I Have" value="has"/>
                     <Picker.Item label="Perfect Matches" value="perfect"/>
                 </Picker>
-                <Divider style={styles.divider} />
-
-                <FlatList
-                    data={this.state.matchedUsers}
-                    keyExtractor={this._keyExtractor}
-                    renderItem={this._renderItem}
-                />
+                <Divider style={styles.divider}/>
+                {
+                    this.state.matchFound ? (
+                        <FlatList
+                            data={this.state.matchedUsers}
+                            keyExtractor={this._keyExtractor}
+                            renderItem={this._renderItem}
+                        />
+                    ) : (<Text>No matches found or Update selection from picker!</Text>)
+                }
             </View>
         );
     }
