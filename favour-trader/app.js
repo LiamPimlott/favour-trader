@@ -32,9 +32,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 // point express to our static create-react-app bundle
 app.use(express.static(path.join(__dirname, 'client/build')));
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
 // passport config
 app.use(passport.initialize());
 require('./config/passport')(passport);
@@ -74,7 +71,7 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.render('error');
+    res.send('Error');
 });
 
 module.exports = app;
