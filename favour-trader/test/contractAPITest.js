@@ -405,6 +405,97 @@ var badContracts = [
         messages: []
     }
 ]
+
+var updatedContracts = [
+    {//contracts[0] - accepted
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[2],
+            favours: favours[2],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Accepted',
+        messages: []
+    },
+    {//contracts[1] - declined
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[2],
+            favours: favours[2],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Declined',
+        messages: []
+    },
+    {//contracts[2] - update messages
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[2],
+            favours: favours[2],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages: ["This is a message"]
+    },
+    {//contracts[3] - terminate
+        offeror: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: true
+        },
+        offeree: {
+            id: userIds[2],
+            favours: favours[2],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages: []
+    },
+]
 //END OF DATA
 //PROMISES
 var addUsers = users.map((user) => {
@@ -414,7 +505,6 @@ var addUsers = users.map((user) => {
             if (err) {
                 reject(err)
             } else {
-                console.log("guser added")
                 resolve(res)
             }
         })
@@ -428,7 +518,6 @@ return new Promise((resolve, reject) => {
             reject(error)
         }
         else {
-            console.log("gills added")
             resolve(docs)
         }
     })
@@ -442,7 +531,6 @@ function connect() {
     let db = require("../db")
     server = require('../server')
     db.getConnection(false)
-    console.log("gonnected")
     resolve('connected')
 })
 }
@@ -459,9 +547,7 @@ function login() {
             if (err) {
                 reject(err)
             }
-            console.log("gogged in")
             token = res.body.token;
-            console.log("Token" + token)
             resolve(res.body.token)
         })
     })
@@ -852,10 +938,72 @@ describe("Contract API Tests", () => {
             })
         })
 
+        afterEach((done)=>{
+            contractIds = []
+            done()
+        })
+
+        it.only("Should update the status to accepted", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0])
+                .set("Authorization", token)
+                .send(updatedContracts[0])
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.message).to.equal("Contract Updated.")
+                    expect(res.body.contract.status).to.equal('Accepted')
+                    done()
+                })
+        })
+
+        it.only("Should update the status to declined", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0])
+                .set("Authorization", token)
+                .send(updatedContracts[1])
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.message).to.equal("Contract Updated.")
+                    expect(res.body.contract.status).to.equal('Declined')
+                    done()
+                })
+        })
+
+        it.only("Should update the messages", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0])
+                .set("Authorization", token)
+                .send(updatedContracts[2])
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.message).to.equal("Contract Updated.")
+                    expect(res.body.contract.messages).to.have.a.lengthOf(1)
+                    done()
+                })
+        })
+
+        it.only("Should update the termination", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0])
+                .set("Authorization", token)
+                .send(updatedContracts[3])
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.message).to.equal("Contract Updated.")
+                    expect(res.body.contract.offeror.requestTermination).to.equal(true)
+                    done()
+                })
+        })
+
         it("Should return an error without a valid id", (done) => {
             chai.request(endpointUrl)
                 .put("/"+invalidId)
                 .set("Authorization", token)
+                .send(updatedContracts[0])
                 .end((err, res) => {
                     expect(res.body.success).to.equal(false)
                     expect(res.body.message).to.equal("Contract not found.")
@@ -867,6 +1015,7 @@ describe("Contract API Tests", () => {
             chai.request(endpointUrl)
                 .put("/"+contractIds[1])
                 .set("Authorization", token)
+                .send(updatedContracts[0])
                 .end((err, res) => {
                     expect(res.body.success).to.equal(false)
                     expect(res.body.message).to.equal("Contract not found.")
@@ -877,6 +1026,7 @@ describe("Contract API Tests", () => {
         it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
                 .put("/"+contractIds[0])
+                .send(updatedContracts[0])
                 .end((err, res) => {
                     expect(err.status).to.equal(401)
                     done()
@@ -887,6 +1037,7 @@ describe("Contract API Tests", () => {
             chai.request(endpointUrl)
                 .put("/"+contractIds[0])
                 .set("Authorization", token+"010101001001")
+                .send(updatedContracts[0])
                 .end((err, res) => {
                     expect(err.status).to.equal(401)
                     done()
@@ -894,7 +1045,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe.only("put /:id/terminate Test", (done) => {
+    describe("put /:id/terminate Test", (done) => {
         var contractIds = []
         var invalidId = new ObjectID()
 

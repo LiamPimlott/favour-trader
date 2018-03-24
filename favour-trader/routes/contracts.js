@@ -160,20 +160,19 @@ router.put('/:id',
             } else if (!contract) {
                 res.json({ success: false, message: "Contract not found."});
             } else if ( //This can be middleware eventually to dry up code
-                contract.offeror.id !== req.user.id && 
-                contract.offeree.id !== req.user.id
+                contract.offeror.id != req.user.id && 
+                contract.offeree.id != req.user.id
             ){
                 res.json({ success: false, message: "Unauthorized."})
             } else {
-                Contract.findByIdAndUpdate(contract._id, function (err, updatedContract) {
-                    if (err || !contract) {
+                Contract.findByIdAndUpdate(contract._id,req.body,{new:true}, function (err, updatedContract){
+                    if (err) {
                         devDebug(err);
                         next(err);
                     } else {
-                        res.json(updatedContract);
+                        res.json({ success: true, message: "Contract Updated.", contract: updatedContract});
                     }
                 })
-                res.json({ success: true, message: "Contract Updated.", contract: contract})
             }
         });
     }
