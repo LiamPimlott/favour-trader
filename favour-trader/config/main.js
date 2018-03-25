@@ -24,6 +24,9 @@ var config = {
 
 module.exports = function(){
     switch(process.env.NODE_ENV){
+        case 'production':
+            config.db.connectString = process.env.DB_PREFIX + process.env.PROD_DB_USER + ':' + process.env.PROD_DB_PASS + process.env.PROD_DB_HOST;
+            return config;
         case 'development':
             return config;
         case 'test':

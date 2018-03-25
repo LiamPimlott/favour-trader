@@ -31,7 +31,7 @@ env:
 before_deploy:
 - cd ..
 ### Do not add another encrypted file as travis cli will override. Talk to Justine to add it to the tar.
-- openssl aes-256-cbc -K $encrypted_a8f10f5b6560_key -iv $encrypted_a8f10f5b6560_iv
+- openssl aes-256-cbc -K $encrypted_872adb0c19d8_key -iv $encrypted_872adb0c19d8_iv
   -in secrets.tar.enc -out secrets.tar -d
 - tar xvf secrets.tar --strip-components=0
 deploy:

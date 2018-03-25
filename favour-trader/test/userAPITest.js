@@ -125,9 +125,9 @@ const users = [
 ];
 
 const skills = [
-    {skill: "Skeeball"},
-    {skill: "3 Point Shot Making"},
-    {skill: "Making Out"}
+    { skill: "Skeeball" },
+    { skill: "3 Point Shot Making" },
+    { skill: "Making Out" }
 ]
 
 describe("User API Tests", () => {
@@ -276,10 +276,336 @@ describe("User API Tests", () => {
         });
     });
 
-    describe("/AUTH", () =>  {
+    describe("/MATCH", () => {
+        var matchSkillIds = [];
+        var dummyUser = users[8];
+        var dummyUserId;
+
+        beforeEach((done) => {
+            var addUsers = new Promise((resolve) => {
+                User.insertMany(dummyUser, (error, docs) => {
+                    dummyUserId = docs[0]._id;
+                    resolve();
+                })
+            })
+
+            var addSkills = new Promise((resolve) => {
+                Skill.insertMany(skills, (error, docs) => {
+                    for (var i = 0; i < docs.length; i++) {
+                        matchSkillIds.push(docs[i]._id);
+                    }
+                    User.update({}, {
+                        wants: [
+                            {
+                                category: {
+                                    _id: matchSkillIds[0],
+                                },
+                                description: "Wow"
+                            }
+                        ],
+                        has: [
+                            {
+                                category: {
+                                    _id: matchSkillIds[1],
+                                },
+                                description: "Wow"
+                            }
+                        ]
+                    }, (err, raw) => {
+                        resolve();
+                    });
+                });
+            });
+
+            addSkills.then((result) => {
+                addUsers.then((result) => {
+                    chai.request(url)
+                        .post("/api/users/register")
+                        .send(users[0])
+                        .end((err, res) => {
+                            matchToken = res.body.token;
+                            done();
+                        })
+                });
+            });
+        });
+
+        afterEach((done) => {
+            matchSkillIds = [];
+            dummyUserId = null;
+            Skill.remove({}, () => {
+                done();
+            });
+        })
+
+        it("Should return nothing when there are no matches. (curr user has no has/wants)", (done) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .end((err, res) => {
+                    res.body.should.have.property("success");
+                    res.body.should.have.property("message");
+                    res.body.success.should.eql(false);
+                    res.body.should.not.have.property("matches");
+                    done();
+                });
+        });
+
+        it("Should return nothing when there are no matches. (curr user and dummy don't match up)", (done) => {
+            User.findOneAndUpdate({ _id: { $ne: dummyUserId } }, {
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, doc, res) => {
+                chai.request(url)
+                    .get("/api/users/matches")
+                    .set("Authorization", matchToken)
+                    .end((err, res) => {
+                        should.not.exist(err);
+                        res.body.should.have.property("success");
+                        res.body.should.have.property("message");
+                        res.body.success.should.eql(false);
+                        res.body.should.not.have.property("matches");
+                        done();
+                    });
+            });
+        });
+
+        it("Should not return a self match", (done) => {
+            User.findOneAndUpdate({ _id: { $ne: dummyUserId } }, {
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, doc, res) => {
+                chai.request(url)
+                    .get("/api/users/matches")
+                    .set("Authorization", matchToken)
+                    .end((err, res) => {
+                        res.body.should.not.have.property("matches");
+                        done();
+                    });
+            });
+        });
+
+        it("Should return a user who has a skill the current user wants", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+                    chai.request(url)
+                        .get("/api/users/matches")
+                        .set("Authorization", matchToken)
+                        .query({ hasFilter: true, wantsFilter: false })
+                        .end((err, res) => {
+                            res.body.should.have.property("matches");
+                            expect(res.body.matches).to.have.a.lengthOf(1);
+                            done();
+                        })
+            });
+        });
+
+        it("Should return a user who wants a skill the current user has", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .query({ hasFilter: false, wantsFilter: true })
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.have.property("matches");
+                    expect(res.body.success).to.equal(true);
+                    expect(res.body.matches).to.have.a.lengthOf(1);
+                    done();
+                });
+            });
+        });
+
+        it("Should return no users when the current user sets the hasFilter to true and only has want matches.", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .query({ hasFilter: true, wantsFilter: false })
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+
+        it("Should return no users when the current user sets the wantFilter to true and only has 'has' matches.", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .query({ hasFilter: false, wantsFilter: true })
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+        
+        it("Shouldn't return any matches when the user is looking for perfect matches but only has 'want' matches", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[0],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+
+        it("Shouldn't return any matches when the user is looking for perfect matches but only has 'has' matches", (done) => {
+            User.update({ _id: { $ne: dummyUserId } }, {
+                has: [
+                    {
+                        category: {
+                            _id: matchSkillIds[2],
+                        },
+                        description: "Wow"
+                    }
+                ],
+                wants: [
+                    {
+                        category: {
+                            _id: matchSkillIds[1],
+                        },
+                        description: "Wow"
+                    }
+                ]
+            }, (err, raw) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .set("Authorization", matchToken)
+                .end((err, res) => {
+                    expect(res.body).to.have.property("success");
+                    expect(res.body).to.have.property("message");
+                    expect(res.body).to.not.have.property("matches");
+                    expect(res.body.success).to.equal(false);
+                    done();
+                });
+            });
+        });
+
+        it("Should return an error without authorization", (done) => {
+            chai.request(url)
+                .get("/api/users/matches")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401);
+                    done();
+                });
+        });
+    });
+
+    describe("/AUTH", () => {
         var authToken;
 
-        beforeEach((done)=>{
+        beforeEach((done) => {
             chai.request(url)
                 .post('/api/users/register')
                 .send(users[0])
@@ -289,37 +615,37 @@ describe("User API Tests", () => {
                 });
         });
 
-        it("Should pass for a valid token",(done)=>{
+        it("Should pass for a valid token", (done) => {
             chai.request(url)
-            .get("/api/users/auth")
-            .set("Authorization",authToken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                res.should.have.property("text");
-                res.text.should.equal("Token is valid! User name is: Mark Ripptoe");
-                done();
-            });
+                .get("/api/users/auth")
+                .set("Authorization", authToken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.should.have.property("text");
+                    res.text.should.equal("Token is valid! User name is: Mark Ripptoe");
+                    done();
+                });
         });
 
-        it("Should fail for an invalid token",(done)=>{
+        it("Should fail for an invalid token", (done) => {
             chai.request(url)
-            .get("/api/users/auth")
-            .set("Authorization",authToken+"cheese")
-            .end((err,res)=>{
-                should.exist(err);
-                err.status.should.eql(401);
-                done();
-            });
+                .get("/api/users/auth")
+                .set("Authorization", authToken + "cheese")
+                .end((err, res) => {
+                    should.exist(err);
+                    err.status.should.eql(401);
+                    done();
+                });
         });
 
-        it("Should fail for no token",(done)=>{
+        it("Should fail for no token", (done) => {
             chai.request(url)
-            .get("/api/users/auth")
-            .end((err,res)=>{
-                should.exist(err);
-                err.status.should.eql(401);
-                done();
-            });
+                .get("/api/users/auth")
+                .end((err, res) => {
+                    should.exist(err);
+                    err.status.should.eql(401);
+                    done();
+                });
         });
     });
 
@@ -466,14 +792,14 @@ describe("User API Tests", () => {
                 });
         });
     });
-    
-    describe("/HAS", () =>  {
+
+    describe("/HAS", () => {
         var skillIds = [];
         var hasToken;
 
-        beforeEach((done)=>{
+        beforeEach((done) => {
             var addSkills = new Promise((resolve) => {
-                Skill.insertMany(skills, (error,docs) => {
+                Skill.insertMany(skills, (error, docs) => {
                     Skill.find({}, { _id: true }, (err, res) => {
                         for (var i = 0; i < res.length; i++) {
                             skillIds.push(res[i]._id);
@@ -494,14 +820,14 @@ describe("User API Tests", () => {
             });
         });
 
-        afterEach((done)=>{
+        afterEach((done) => {
             Skill.remove({}, () => {
                 done();
             });
             skillIds = [];
         });
 
-        it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
+        it("Should return no skills when the logged in user doesn't have any skills", (done) => {
             chai.request(url)
             .get("/api/users/has")
             .set("Authorization",hasToken)
@@ -533,7 +859,7 @@ describe("User API Tests", () => {
             })
         });
 
-        it("Should return an error without proper authorization",(done) => {
+        it("Should return an error without proper authorization", (done) => {
             chai.request(url)
             .get("/api/users/has")
             .end((err,res)=>{
@@ -543,13 +869,13 @@ describe("User API Tests", () => {
         });
     });
 
-    describe("/WANTS", () =>  {
+    describe("/WANTS", () => {
         var skillIds = [];
         var wantToken;
 
-        beforeEach((done)=>{
+        beforeEach((done) => {
             var addSkills = new Promise((resolve) => {
-                Skill.insertMany(skills, (error,docs) => {
+                Skill.insertMany(skills, (error, docs) => {
                     Skill.find({}, { _id: true }, (err, res) => {
                         for (var i = 0; i < res.length; i++) {
                             skillIds.push(res[i]._id);
@@ -570,14 +896,14 @@ describe("User API Tests", () => {
             });
         });
 
-        afterEach((done)=>{
+        afterEach((done) => {
             Skill.remove({}, () => {
                 done();
             });
             skillIds = [];
         });
 
-        it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
+        it("Should return no skills when the logged in user doesn't have any skills", (done) => {
             chai.request(url)
             .get("/api/users/wants")
             .set("Authorization",wantToken)
@@ -611,7 +937,7 @@ describe("User API Tests", () => {
             })
         });
 
-        it("Should return an error without proper authorization",(done) => {
+        it("Should return an error without proper authorization", (done) => {
             chai.request(url)
             .get("/api/users/has")
             .end((err,res)=>{
@@ -675,7 +1001,7 @@ describe("User API Tests", () => {
                 });
         });
     });
-    
+
     describe("/UPDATE", () => {
         //before each update, shove a user to update in the database.
         var updateToken;
@@ -683,27 +1009,27 @@ describe("User API Tests", () => {
 
         beforeEach((done) => {
             var addSkills = new Promise((resolve) => {
-                Skill.insertMany(skills, (error,docs) => {
-                        for (var i = 0; i < docs.length; i++) {
-                            updateSkillIds.push(docs[i]._id);
-                        }
-                        resolve();
+                Skill.insertMany(skills, (error, docs) => {
+                    for (var i = 0; i < docs.length; i++) {
+                        updateSkillIds.push(docs[i]._id);
+                    }
+                    resolve();
                 });
             });
 
-            addSkills.then((resolve)=>{
+            addSkills.then((resolve) => {
                 chai.request(url)
-                .post('/api/users/register')
-                .send(users[0])
-                .end((err, res) => {
-                    updateToken = res.body.token;
-                    done();
-                });
+                    .post('/api/users/register')
+                    .send(users[0])
+                    .end((err, res) => {
+                        updateToken = res.body.token;
+                        done();
+                    });
             });
         });
 
-        afterEach((done)=>{
-            Skill.remove({},(error,docs)=>{
+        afterEach((done) => {
+            Skill.remove({}, (error, docs) => {
                 done();
             });
         });
@@ -712,20 +1038,22 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ wants: [
-                    {
-                        category: updateSkillIds[0],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[1],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[2],
-                        description: "Wow"
-                    }
-                ] })
+                .send({
+                    wants: [
+                        {
+                            category: updateSkillIds[0],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[1],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[2],
+                            description: "Wow"
+                        }
+                    ]
+                })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -740,20 +1068,22 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ has: [
-                    {
-                        category: updateSkillIds[0],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[1],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[2],
-                        description: "Wow"
-                    }
-                ] })
+                .send({
+                    has: [
+                        {
+                            category: updateSkillIds[0],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[1],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[2],
+                            description: "Wow"
+                        }
+                    ]
+                })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -768,20 +1098,22 @@ describe("User API Tests", () => {
             chai.request(url)
                 .put('/api/users/update')
                 .set("Authorization", updateToken)
-                .send({ has: [
-                    {
-                        category: updateSkillIds[0],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[1],
-                        description: "Wow"
-                    },
-                    {
-                        category: updateSkillIds[2],
-                        description: "Wow"
-                    }
-                ], about: "AAAAAAAAAAAAAAAAAAAAA" })
+                .send({
+                    has: [
+                        {
+                            category: updateSkillIds[0],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[1],
+                            description: "Wow"
+                        },
+                        {
+                            category: updateSkillIds[2],
+                            description: "Wow"
+                        }
+                    ], about: "AAAAAAAAAAAAAAAAAAAAA"
+                })
                 .end((err, res) => {
                     should.not.exist(err);
                     User.find({}, (err, res) => {
@@ -803,41 +1135,41 @@ describe("User API Tests", () => {
                 });
         });
     });
-    
+
     describe("/DELETE", () => {
         var deleteToken;
 
-            beforeEach((done) => {
-                chai.request(url)
-                    .post('/api/users/register')
-                    .send(users[0])
-                    .end((err, res) => {
-                        deleteToken = res.body.token;
-                        done();
-                    });
-            });
-
-        it("Should perform a delete with proper authorization",(done) => {
+        beforeEach((done) => {
             chai.request(url)
-            .delete("/api/users/delete")
-            .set("Authorization",deleteToken)
-            .end((err,res)=>{
-                should.not.exist(err);
-                User.find({},(err,res)=>{
-                    res.should.have.length(0);
+                .post('/api/users/register')
+                .send(users[0])
+                .end((err, res) => {
+                    deleteToken = res.body.token;
                     done();
                 });
-            });
+        });
+
+        it("Should perform a delete with proper authorization", (done) => {
+            chai.request(url)
+                .delete("/api/users/delete")
+                .set("Authorization", deleteToken)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    User.find({}, (err, res) => {
+                        res.should.have.length(0);
+                        done();
+                    });
+                });
         });
 
         it("Shouldn't perform a delete without authorization.", (done) => {
             chai.request(url)
-            .delete("/api/users/delete")
-            .end((err,res) => {
-                should.exist(err);
-                err.status.should.eql(401);
-                done();
-            });
+                .delete("/api/users/delete")
+                .end((err, res) => {
+                    should.exist(err);
+                    err.status.should.eql(401);
+                    done();
+                });
         });
     });
 });
