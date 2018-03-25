@@ -3,15 +3,15 @@ var jwt = require('jsonwebtoken');
 var ConfigClass = require('../config/main');
 const config = new ConfigClass();//See comments in config/main for an explanation
 
-// DATA MODELS
+// DATA MODELS (Data tier) //
 var Contract = require("../models/contract");
 
-// RETURN OBJ
-var contractsLogicObj = {};
+// RETURN OBJ //
+var contractsHandlers = {};
 
-// MIDDLEWARE
+// BUSINESS LOGIC MIDDLEWARE //
 
-contractsLogicObj.getAllUsersContracts = function(req, res, next) {
+contractsHandlers.getAllUsersContracts = function(req, res, next) {
     Contract.find(
         { 
             $or: [
@@ -31,7 +31,7 @@ contractsLogicObj.getAllUsersContracts = function(req, res, next) {
     );
 }
 
-contractsLogicObj.getUsersActiveContracts = function(req, res, next) {
+contractsHandlers.getUsersActiveContracts = function(req, res, next) {
     Contract.find(
         {
             $or: [
@@ -52,7 +52,7 @@ contractsLogicObj.getUsersActiveContracts = function(req, res, next) {
     );
 }
 
-contractsLogicObj.getUsersRecievedContracts = function(req, res, next) {
+contractsHandlers.getUsersRecievedContracts = function(req, res, next) {
     Contract.find(
         {
             $and: [
@@ -73,4 +73,4 @@ contractsLogicObj.getUsersRecievedContracts = function(req, res, next) {
 }
 
 // EXPORT
-module.exports = contractsLogicObj;
+module.exports = contractsHandlers;

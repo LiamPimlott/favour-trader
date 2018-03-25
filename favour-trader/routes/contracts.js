@@ -3,11 +3,13 @@ var router = express.Router();
 var devDebug = require('debug')('app:dev');
 var passport = require('passport');
 
-//LOGIC MIDDLEWARE
-var logic = require("../logic/contract.js");
+// HANDLERS (Logic tier) //
+var handlers = require("../handlers/contracts.js");
 
-// DATA MODEL
+// DATA MODEL (Data tier) //
 var Contract = require('../models/contract');
+
+// ENDPOINTS (Web tier) //
 
 // GET - ALL - get all contracts (admin)
 router.get('/all', function (req, res, next) {
@@ -24,7 +26,7 @@ router.get('/all', function (req, res, next) {
 // GET - ROOT - get all of a users contracts
 router.get('/',
     passport.authenticate('jwt', { session: false }),
-    logic.getAllUsersContracts,
+    handlers.getAllUsersContracts,
     function(req, res, next)
     {
         const contracts = req.contracts;
@@ -43,7 +45,7 @@ router.get('/',
 // GET - RECEIVED - get all contracts for the user which are currently 'Accepted'
 router.get('/active',
     passport.authenticate('jwt', { session: false }),
-    logic.getUsersActiveContracts,
+    handlers.getUsersActiveContracts,
     function(req, res, next)
     {
         const activeContracts = req.activeContracts;
@@ -62,7 +64,7 @@ router.get('/active',
 // GET - RECEIVED - get all contracts where user is the offeree & status is 'Pending'
 router.get('/received',
     passport.authenticate('jwt', { session: false }),
-    logic.getUsersRevievedContracts,
+    handlers.getUsersRecievedContracts,
     function(req, res, next)
     {
         const recievedContracts = req.recievedContracts;
