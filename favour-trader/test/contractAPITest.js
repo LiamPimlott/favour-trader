@@ -1146,9 +1146,108 @@ describe("Contract API Tests", () => {
     })
 
     describe("put /:id/status",(done)=>{
+        var contractIds = []
+        var invalidId = new ObjectID()
+
+        beforeEach((done)=>{
+            //We're logged in as user0. user0 is the offeror in 0, nothing in 1, and offeree in 2
+            Contract.insertMany([contracts[0],contracts[1],contracts[2]],(error,docs)=>{
+                for(var i = 0;i<docs.length;i++){
+                    contractIds.push(docs[i]._id)
+                }
+                done()
+            })
+        })
+
+        afterEach((done)=>{
+            contractIds = []
+            done()
+        })
+
+        it("Should return a success if the user sends over Accepted", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/status")
+                .set("Authorization", token)
+                .send({status:'Accepted'})
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.message).to.equal("Status updated!")
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.contract.status).to.equal("Accepted")
+                    done()
+                })
+        })
+
+        it("Should return a success if the user sends over Declined", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/status")
+                .set("Authorization", token)
+                .send({status:'Declined'})
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.message).to.equal("Status updated!")
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.contract.status).to.equal("Declined")
+                    done()
+                })
+        })
+
+        it("Should return a failure if the user sends over no status", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/status")
+                .set("Authorization", token)
+                .send({})
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("You must provide a new status.")
+                    done()
+                })
+        })
+
+        it("Should return a failure if the user sends over an invalid status", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/status")
+                .set("Authorization", token)
+                .send({status:'Status'})
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Invalid status provided.")
+                    done()
+                })
+        })
+
+        it("Should return a failure if the user is not the offeree", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0]+"/status")
+                .set("Authorization", token)
+                .send({status:'Accepted'})
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Sorry, you are not the Offeree.")
+                    done()
+                })
+        })
+
+        it("Should return a failure with an invalid id", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+invalidId+"/status")
+                .set("Authorization", token)
+                .send({status:'Accepted'})
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract not found.")
+                    done()
+                })
+        })
+
         it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
-                .get("/contract/"+contractIds[0]+"/status")
+                .put("/"+contractIds[2]+"/status")
+                .send({status:'Accepted'})
                 .end((err, res) => {
                     expect(err.status).to.equal(401)
                     done()
@@ -1157,8 +1256,9 @@ describe("Contract API Tests", () => {
 
         it("Should return an error without valid authorization", (done) => {
             chai.request(endpointUrl)
-                .get("/"+contractIds[0]+"/status")
+                .put("/"+contractIds[2]+"/status")
                 .set("Authorization", token+"010101001001")
+                .send({status:'Accepted'})
                 .end((err, res) => {
                     expect(err.status).to.equal(401)
                     done()

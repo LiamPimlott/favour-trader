@@ -180,7 +180,7 @@ router.put('/:id/status',
                 res.json({ success: false, message: "You must provide a new status."});
             } else if (newStatus !== 'Accepted' && newStatus !== 'Declined') {
                 res.json({ success: false, message: "Invalid status provided."});
-            }
+            } else {
             Contract.findByIdAndUpdate(contract._id,
                 { $set: { status: newStatus }},
                 { new: true }
@@ -197,6 +197,7 @@ router.put('/:id/status',
                     res.json({ success: true, message: "Status updated!", contract: updatedContract });
                 }
             });
+        }
         });
     }
 );
