@@ -150,5 +150,41 @@ contractsHandlers.createNewContract = function(req, res, next ) {
     });
 }
 
+contractsHandlers.updateContractStatus = function(req, res, next) {
+    Contract.findById(req.params.id, function (err, contract) {
+        const newStatus = req.body.status;
+        if (err) {
+            devDebug(err); // Log error.
+            next(err); // Forward to error handling middleware.
+        } else if (!contract) {
+            res.json({ success: false, message: "Contract not found."});
+        } else if ( contract.offeree.id != req.user.id ) {
+            res.json({ success: false, message: "Sorry, you are not the Offeree."});
+        } else if (!newStatus) {
+            res.json({ success: false, message: "You must provide a new status."});
+        } else if (newStatus !== 'Accepted' && newStatus !== 'Declined') {
+            res.json({ success: false, message: "Invalid status provided."});
+        }
+        Contract.findByIdAndUpdate(
+            contract._id,
+            { $set: { status: newStatus }},
+            { new: true }
+        ).
+        populate('offeror.favours').
+        populate('offeror.favours.skillId').
+        populate('offeree.favours').
+        populate('offeree.favours.skillId').
+        exec(function (err, updatedContract) {
+            if (err) {
+                devDebug(err); // Log error.
+                next(err); // Forward to error handling middleware.
+            } else {
+                req.updatedContract = updatedContract;
+                next();
+            }
+        });
+    });
+}
+
 // EXPORT
 module.exports = contractsHandlers;
