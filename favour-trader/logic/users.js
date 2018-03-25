@@ -200,7 +200,7 @@ usersLogicObj.getMatchedUsers = function(req, res, next) {
 			{
 				matches = User.find({ 
 					$and: [
-						{ "has.category": { $in: userWantsArray } },
+						{ "wants.category": { $in: userHasArray } },
 						{ _id: { $ne: user._id } },
 					]
 				})
@@ -209,7 +209,7 @@ usersLogicObj.getMatchedUsers = function(req, res, next) {
 			{
 				matches = User.find({ 
 					$and: [
-						{ "wants.category": { $in: userHasArray } },
+						{ "has.category": { $in: userWantsArray } },
 						{ _id: { $ne: user._id } },
 					]
 				})
