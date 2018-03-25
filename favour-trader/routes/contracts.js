@@ -37,7 +37,7 @@ router.get('/',
 				contracts: contracts
 			});
 		} else {
-			next();
+			next(); // Go to error handling
 		}
     }
 );
@@ -56,7 +56,7 @@ router.get('/active',
 				contracts: activeContracts
 			});
 		} else {
-			next();
+			next(); // Go to error handling
 		}
     }
 );
@@ -75,7 +75,7 @@ router.get('/received',
 				contracts: recievedContracts
 			});
 		} else {
-			next();
+			next(); // Go to error handling
 		}
     }
 );
@@ -93,29 +93,28 @@ router.get('/sent',
 				contracts: sentContracts
 			});
 		} else {
-			next();
+			next(); // Go to error handling
 		}
     }
 );
 
 // GET - Contract/ID - returns a contract by id.
-router.get('/contract/:id', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-    Contract.findById(req.params.id).
-    populate('offeror.favours').
-    populate('offeror.favours.skillId').
-    populate('offeree.favours').
-    populate('offeree.favours.skillId').
-    exec((err, foundTrade) => {
-        if (err) {
-            devDebug(err);
-            next(err);
-        } else if (!foundTrade) {
-            res.json({ success: false, message: "Trade does not exist."})
-        } else {
-            res.json({ success: true, message: "Trade retrieved.", trade: foundTrade});
-        }
-    });
-});
+router.get('/contract/:id',
+    passport.authenticate('jwt', { session: false }),
+    handle.getContractbyId,
+    function (req, res, next) {
+        const contract = req.contract;
+		if(contract) {
+			res.json({ 
+				success: true,
+				message: "Contract retrieved.",
+				contract: contract
+			});
+		} else {
+			next(); // Go to error handling
+		}
+    }
+);
 
 // POST - ROOT - create a contract
 router.post('/',
