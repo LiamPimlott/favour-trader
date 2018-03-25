@@ -405,97 +405,6 @@ var badContracts = [
         messages: []
     }
 ]
-
-var updatedContracts = [
-    {//contracts[0] - accepted
-        offeror: {
-            id: userIds[0],
-            favours: favours[0],
-            name: {
-                first: users[0].name.first,
-                last: users[0].name.last
-            },
-            requestTermination: false
-        },
-        offeree: {
-            id: userIds[2],
-            favours: favours[2],
-            name: {
-                first: users[2].name.first,
-                last: users[2].name.last
-            },
-            requestTermination: false
-        },
-        status: 'Accepted',
-        messages: []
-    },
-    {//contracts[1] - declined
-        offeror: {
-            id: userIds[0],
-            favours: favours[0],
-            name: {
-                first: users[0].name.first,
-                last: users[0].name.last
-            },
-            requestTermination: false
-        },
-        offeree: {
-            id: userIds[2],
-            favours: favours[2],
-            name: {
-                first: users[2].name.first,
-                last: users[2].name.last
-            },
-            requestTermination: false
-        },
-        status: 'Declined',
-        messages: []
-    },
-    {//contracts[2] - update messages
-        offeror: {
-            id: userIds[0],
-            favours: favours[0],
-            name: {
-                first: users[0].name.first,
-                last: users[0].name.last
-            },
-            requestTermination: false
-        },
-        offeree: {
-            id: userIds[2],
-            favours: favours[2],
-            name: {
-                first: users[2].name.first,
-                last: users[2].name.last
-            },
-            requestTermination: false
-        },
-        status: 'Pending',
-        messages: ["This is a message"]
-    },
-    {//contracts[3] - terminate
-        offeror: {
-            id: userIds[0],
-            favours: favours[0],
-            name: {
-                first: users[0].name.first,
-                last: users[0].name.last
-            },
-            requestTermination: true
-        },
-        offeree: {
-            id: userIds[2],
-            favours: favours[2],
-            name: {
-                first: users[2].name.first,
-                last: users[2].name.last
-            },
-            requestTermination: false
-        },
-        status: 'Pending',
-        messages: []
-    },
-]
 //END OF DATA
 //PROMISES
 var addUsers = users.map((user) => {
@@ -1083,14 +992,60 @@ describe("Contract API Tests", () => {
     describe("put /:id/terminate Test", (done) => {
         var contractIds = []
         var invalidId = new ObjectID()
+        var user2Token = null
+
+        before((done) => {
+            chai.request(baseUrl)
+                .post("/api/users/login")
+                .send({
+                    email: users[2].email,
+                    password: users[2].password
+                })
+                .end((err, res) => {
+                    if (err) {
+                        console.log(err)
+                    }
+                    user2Token = res.body.token
+                    done()
+                })
+        })
 
         beforeEach((done)=>{
-            Contract.insertMany([contracts[0],contracts[1]],(error,docs)=>{
+            Contract.insertMany([contracts[0],contracts[1],contracts[2]],(error,docs)=>{
                 for(var i = 0;i<docs.length;i++){
                     contractIds.push(docs[i]._id)
                 }
                 done()
             })
+        })
+
+        it("Should return successful if both users terminate the contract", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/terminate")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Waiting for other party to terminate.")
+                    chai.request(endpointUrl)
+                    .put("/"+contractIds[2]+"/terminate")
+                    .set("Authorization", user2Token)
+                    .end((err, res) => {
+                        expect(res.body.success).to.equal(true)
+                        expect(res.body.message).to.equal("Contract has been terminated/completed")
+                        done()
+                    })
+                })
+        })
+
+        it("Should return unsuccessful if the contract is not active", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+invalidId+"/terminate")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract not found.")
+                    done()
+                })
         })
 
         it("Should return unsuccessful without a valid id", (done) => {
@@ -1136,10 +1091,44 @@ describe("Contract API Tests", () => {
     })
 
     describe("get /contract/:id Test",(done)=>{
+        it("Should return an error without authorization", (done) => {
+            chai.request(endpointUrl)
+                .get("/"+contractIds[0])
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
 
+        it("Should return an error without valid authorization", (done) => {
+            chai.request(endpointUrl)
+                .get("/contract/"+contractIds[0])
+                .set("Authorization", token+"010101001001")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
     })
 
     describe("put /:id/status",(done)=>{
+        it("Should return an error without authorization", (done) => {
+            chai.request(endpointUrl)
+                .get("/contract/"+contractIds[0]+"/status")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
 
+        it("Should return an error without valid authorization", (done) => {
+            chai.request(endpointUrl)
+                .get("/"+contractIds[0]+"/status")
+                .set("Authorization", token+"010101001001")
+                .end((err, res) => {
+                    expect(err.status).to.equal(401)
+                    done()
+                })
+        })
     })
 })

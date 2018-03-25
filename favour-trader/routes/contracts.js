@@ -313,7 +313,7 @@ router.put('/:id/terminate',
                 res.json({ success: false, message: "Unauthorized."})
             } else if ( contract.status !== 'Accepted' ) {
                 res.json({ success: false, message: "Contract must be active."});
-            }
+            } else {
             const userRole = req.user.id == contract.offeror.id ? 'offeror' : 'offeree';
             contract[userRole].requestTermination = true;
             contract.save(function (err, updatedContract) {
@@ -344,6 +344,7 @@ router.put('/:id/terminate',
                     res.json({ success: false, message: "Waiting for other party to terminate.", contract: updatedContract });
                 }
             }); 
+        }
         }); 
     }
 );
