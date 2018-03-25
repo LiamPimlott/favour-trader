@@ -65,7 +65,7 @@ export default class Login extends React.Component {
                         </View>
 
                         <Button
-                            backgroundColor='#03A9F4'
+                            raised={true}
                             buttonStyle={styles.button}
                             title='Login'
                             onPress = { this.submit} />
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         marginLeft: 0,
         marginRight: 0,
-        marginBottom: 10
+        marginBottom: 10,
     },
     intro: {
         fontSize: 15,

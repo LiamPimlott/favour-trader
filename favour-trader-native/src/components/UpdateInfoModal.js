@@ -107,13 +107,21 @@ class UpdateInfoModal extends React.Component {
                                 onChangeText={(text) => {this.setState({about: text})}}
                             />
                         </View>
-                        <Button
-                            backgroundColor='#03A9F4'
-                            buttonStyle={styles.button}
-                            title='update Info'
-                            onPress={() => {
-                               this.update();
-                            }}/>
+                        <View style={styles.rowAlign}>
+                            <Button
+                                buttonStyle={styles.submitButton}
+                                title='update Info'
+                                onPress={() => {
+                                    this.update();
+                                }}/>
+                            <Button
+                                buttonStyle={styles.closeButton}
+                                title='Close'
+                                onPress={() => {
+                                    this.props.toggle();
+                                }}/>
+                        </View>
+
                         {this.state.missingFields ? (<Text>Missing Required Fields</Text>) : (<View />)}
                     </Card>
             </Modal>
@@ -123,12 +131,24 @@ class UpdateInfoModal extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    button: {
-        marginTop: 10,
+    submitButton: {
+        marginBottom: 15,
+        marginTop: 15,
+        width: 150,
+    },
+    closeButton: {
+        marginBottom: 15,
+        marginTop: 15,
+        width: 150,
+        backgroundColor: 'red'
     },
     input: {
         marginTop: 10,
         marginBottom: 15,
+    },
+    rowAlign: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     },
 });
 

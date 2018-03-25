@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {AppRegistry, SectionList, Image, StyleSheet, View, Text, TextInput, TouchableOpacity} from 'react-native';
-import {StackNavigator} from 'react-navigation';
-import {Button, Icon} from 'react-native-elements'
+import React, { Component } from 'react';
+import { AppRegistry, SectionList, Image, StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import { Button, Icon } from 'react-native-elements'
 import Drawer from '../components/Drawer.js';
 import AuthService from "../components/AuthService";
 import axios from 'axios';
@@ -45,7 +45,7 @@ export default class UserProfile extends React.Component {
 
     componentWillUnmount() {
         this.mounted = false;
-        this.setState({profileId: ''});
+        this.setState({ profileId: '' });
         if (this.props.navigation.state.params !== undefined &&
             this.props.navigation.state.params !== null &&
             this.props.navigation.state.params.profileID !== null) {
@@ -58,19 +58,19 @@ export default class UserProfile extends React.Component {
             this.setState({
                 profileId: this.props.navigation.state.params.profileID,
                 isCurrentUser: false,
-            }, this.fetchTrades);
+            }, this.fetchProfile);
         } else {
             const profile = await this.authService.getProfile();
             this.setState({
                 profileId: profile.id,
                 isCurrentUser: true,
-            }, this.fetchTrades);
+            }, this.fetchProfile);
         }
     }
 
 
-    async fetchTrades() {
-        const {profileId} = this.state;
+    async fetchProfile() {
+        const { profileId } = this.state;
         let endpoint = `http://favour-trader-test.appspot.com/api/users/${profileId}/profile/`;
         if (this.authService.loggedIn() && this.mounted) {
             const profile = await this.authService.getProfile();
@@ -111,34 +111,62 @@ export default class UserProfile extends React.Component {
                 })
         }
     }
+
+    handleNewSkillSave = (skillsType, newSkill) => {
+        this.fetchProfile().then(() => {
+            const body = {};
+            skillsType === 'has' ? body.has = newSkill.concat(this.state.has) : body.wants = newSkill.concat(this.state.wants);
+            this.authService.getToken().then(
+                (token) => {
+                    const config = {
+                        headers: {
+                            Authorization: token
+                        }
+                    };
+                    axios.put('http://favour-trader-test.appspot.com/api/users/update', body, config)
+                        .then((res) => {
+                            this.setState({
+                                has: res.data.user.has,
+                                wants: res.data.user.wants
+                            });
+                        })
+                }
+            )
+        })
+
+
+    }
+
     render() {
         const { navigate } = this.props.navigation;
         return (
             this.state.loaded ? (
                 <View>
-                    <ProfileCard isCurrentUser={this.state.isCurrentUser}
-                                 userProfile={this.state.overview}/>
-                    < ProfileSkills has={this.state.has} wants={this.state.wants}/>
+                    <ProfileCard updateUser={this.handleNewSkillSave}
+                        isCurrentUser={this.state.isCurrentUser}
+                        userProfile={this.state.overview} />
+                    < ProfileSkills isCurrentUser={this.state.isCurrentUser}  has={this.state.has} wants={this.state.wants} />
                     {
                         this.state.isCurrentUser ? (
                             <View></View>
                         ) : (
-                            <Button
-                                icon={<Text style={{color: 'white'}}>⇌</Text>}
-                                backgroundColor='#03A9F4'
-                                buttonStyle={styles.button}
-                                title='Offer Trade'
-                                onPress={() => {
-                                    navigate('CreateTrade', {
-                                        requestableFavours: this.state.has,
-                                        recipientFirstName: this.state.overview.firstName,
-                                        recipientLastName: this.state.overview.lastName,
-                                        recipientId: this.state.profileId,
-                                    })
-                                }} />
-                        )
+                                <Button
+                                    icon={<Text style={{ color: 'white' }}>⇌</Text>}
+                                    backgroundColor='#03A9F4'
+                                    buttonStyle={styles.button}
+                                    title='Offer Trade'
+                                    onPress={() => {
+                                        navigate('CreateTrade', {
+                                            requestableFavours: this.state.has,
+                                            recipientFirstName: this.state.overview.firstName,
+                                            recipientLastName: this.state.overview.lastName,
+                                            recipientId: this.state.profileId,
+                                        })
+                                    }} />
+
+                            )
                     }
-                </View>) : (<View/>)
+                </View>) : (<View />)
 
         );
     }
