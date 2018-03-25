@@ -157,45 +157,16 @@ router.put('/:id/status',
 router.put('/:id/offeror/favours',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
-        Contract.findById(req.params.id, function (err, contract) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else if (!contract) {
-                res.json({ success: false, message: "Contract not found."});
-            } else if ( contract.offeror.id != req.user.id ) {
-                res.json({ success: false, message: "Sorry, you are not the offeror."})
-            } 
-            contract.offeror.favours = req.body.updatedFavours;
-            contract.save(function(err, updatedContract) {
-                if (err) {
-                    devDebug(err);
-                    next(err);
-                }
-                Contract.findById(updatedContract._id).
-                populate('offeror.favours').
-                populate('offeror.favours.skillId').
-                populate('offeree.favours').
-                populate('offeree.favours.skillId').
-                exec((err, foundContract) => {
-                    if (err) {
-                        devDebug(err);
-                        next(err);
-                    } else if (!foundContract) {
-                        res.json({ success: false, message: "Trade does not exist."})
-                    } else {
-                        res.json({
-                            success: true,
-                            message: "Offeror favours updated.",
-                            favours: {
-                                offeror: foundContract.offeror.favours,
-                                offeree: foundContract.offeree.favours
-                            },
-                        });
-                    }
-                });
+        const successfullyUpdatedFavours = req.successfullyUpdatedFavours;
+		if(successfullyUpdatedFavours) {
+            res.json({
+                success: true,
+                message: "Offeror favours updated.",
+                favours: successfullyUpdatedFavours,
             });
-        });
+		} else {
+			next(); // Go to error handling
+		}
     }
 );
 
@@ -203,45 +174,16 @@ router.put('/:id/offeror/favours',
 router.put('/:id/offeree/favours',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
-        Contract.findById(req.params.id, function (err, contract) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else if (!contract) {
-                res.json({ success: false, message: "Contract not found."});
-            } else if ( contract.offeree.id != req.user.id ) {
-                res.json({ success: false, message: "Sorry, you are not the offeree."})
-            } 
-            contract.offeree.favours = req.body.updatedFavours;
-            contract.save(function(err, updatedContract) {
-                if (err) {
-                    devDebug(err);
-                    next(err);
-                }
-                Contract.findById(updatedContract._id).
-                populate('offeror.favours').
-                populate('offeror.favours.skillId').
-                populate('offeree.favours').
-                populate('offeree.favours.skillId').
-                exec((err, foundContract) => {
-                    if (err) {
-                        devDebug(err);
-                        next(err);
-                    } else if (!foundContract) {
-                        res.json({ success: false, message: "Trade does not exist."})
-                    } else {
-                        res.json({
-                            success: true,
-                            message: "Offeror favours updated.",
-                            favours: {
-                                offeror: foundContract.offeror.favours,
-                                offeree: foundContract.offeree.favours
-                            },
-                        });
-                    }
-                });
+        const successfullyUpdatedFavours = req.successfullyUpdatedFavours;
+		if(successfullyUpdatedFavours) {
+            res.json({
+                success: true,
+                message: "Offeree favours updated.",
+                favours: successfullyUpdatedFavours,
             });
-        });
+		} else {
+			next(); // Go to error handling
+		}
     }
 );
 

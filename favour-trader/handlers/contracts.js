@@ -186,5 +186,81 @@ contractsHandlers.updateContractStatus = function(req, res, next) {
     });
 }
 
+contractsHandlers.updateOfferorFavours = function(req, res, next) {
+    Contract.findById(req.params.id, function (err, contract) {
+        if (err) {
+            devDebug(err); // Log error.
+            next(err); // Forward to error handling middleware.
+        } else if (!contract) {
+            res.json({ success: false, message: "Contract not found."});
+        } else if ( contract.offeror.id != req.user.id ) {
+            res.json({ success: false, message: "Sorry, you are not the offeror."})
+        } 
+        contract.offeror.favours = req.body.updatedFavours;
+        contract.save(function(err, updatedContract) {
+            if (err) {
+                devDebug(err); // Log error.
+                next(err); // Forward to error handling middleware.
+            } else {
+                Contract.findById(updatedContract._id).
+                populate('offeror.favours').
+                populate('offeror.favours.skillId').
+                populate('offeree.favours').
+                populate('offeree.favours.skillId').
+                exec((err, foundUpdatedContract) => {
+                    if (err) {
+                        devDebug(err); // Log error.
+                        next(err); // Forward to error handling middleware.
+                    } else {
+                        req.successfullyUpdatedFavours = {
+                            offeror: foundUpdatedContract.offeror.favours,
+                            offeree: foundUpdatedContract.offeree.favours
+                        };
+                        next();
+                    }
+                });
+            }
+        });
+    });
+}
+
+contractsHandlers.updateOffereeFavours = function(req, res, next) {
+    Contract.findById(req.params.id, function (err, contract) {
+        if (err) {
+            devDebug(err); // Log error.
+            next(err); // Forward to error handling middleware.
+        } else if (!contract) {
+            res.json({ success: false, message: "Contract not found."});
+        } else if ( contract.offeree.id != req.user.id ) {
+            res.json({ success: false, message: "Sorry, you are not the offeree."})
+        } 
+        contract.offeree.favours = req.body.updatedFavours;
+        contract.save(function(err, updatedContract) {
+            if (err) {
+                devDebug(err); // Log error.
+                next(err); // Forward to error handling middleware.
+            } else {
+                Contract.findById(updatedContract._id).
+                populate('offeror.favours').
+                populate('offeror.favours.skillId').
+                populate('offeree.favours').
+                populate('offeree.favours.skillId').
+                exec((err, foundUpdatedContract) => {
+                    if (err) {
+                        devDebug(err); // Log error.
+                        next(err); // Forward to error handling middleware.
+                    } else {
+                        req.successfullyUpdatedFavours = {
+                            offeror: foundUpdatedContract.offeror.favours,
+                            offeree: foundUpdatedContract.offeree.favours
+                        };
+                        next();
+                    }
+                });
+            }
+        });
+    });
+}
+
 // EXPORT
 module.exports = contractsHandlers;
