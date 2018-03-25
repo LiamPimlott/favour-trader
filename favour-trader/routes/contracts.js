@@ -62,23 +62,19 @@ router.get('/active',
 // GET - RECEIVED - get all contracts where user is the offeree & status is 'Pending'
 router.get('/received',
     passport.authenticate('jwt', { session: false }),
+    logic.getUsersRevievedContracts,
     function(req, res, next)
     {
-        Contract.find(
-            {
-                $and: [
-                    { 'offeree.id': req.user.id },
-                    { 'status': 'Pending' }
-                ]
-            },
-            function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
+        const recievedContracts = req.recievedContracts;
+		if(recievedContracts) {
+			res.json({ 
+				success: true,
+				message: "All user's received contracts retrieved.",
+				contracts: recievedContracts
+			});
+		} else {
+			next();
+		}
     }
 );
 
