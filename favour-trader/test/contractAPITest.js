@@ -483,7 +483,7 @@ describe("Contract API Tests", () => {
                 addSkills().then((skillsResult) => {
                     Promise.all(addUsers).then((userResults) => {
                         login().then((loginResult) => {
-                                console.log(loginResult)
+                                //console.log(loginResult)
                                 done()
                             })
                     })
@@ -508,13 +508,14 @@ describe("Contract API Tests", () => {
     })
 
     describe("get / Test", (done) => {
+
         it("Should return nothing if current user hasn't made any contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/")
                 .set("Authorization", token)
                 .end((err, res) => {
                     expect(err).to.equal(null)
-                    expect(res.body).to.have.lengthOf(0)
+                    expect(res.body.contracts).to.have.lengthOf(0)
                     done()
                 })
         })
@@ -527,7 +528,7 @@ describe("Contract API Tests", () => {
                 .set("Authorization", token)
                     .end((err, res) => {
                     expect(err).to.equal(null)
-                    expect(res.body).to.have.lengthOf(1)
+                    expect(res.body.contracts).to.have.lengthOf(1)
                     done()
                 })
             })
@@ -540,7 +541,7 @@ describe("Contract API Tests", () => {
                 .set("Authorization", token)
                     .end((err, res) => {
                     expect(err).to.equal(null)
-                    expect(res.body).to.have.lengthOf(3)
+                    expect(res.body.contracts).to.have.lengthOf(3)
                     done()
                 })
             })
