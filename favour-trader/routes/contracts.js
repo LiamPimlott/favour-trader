@@ -138,7 +138,7 @@ router.post('/',
 // PUT - ACCEPT/DECLINE TRADE - Changes the trade's status to "Accepted" or "Declined" if requested by offeree
 router.put('/:id/status',
     passport.authenticate('jwt', {session: false}),
-    handle.updatedContractStatus,
+    handle.updateContractStatus,
     function (req, res, next) {
         const newContract = req.newContract;
 		if(newContract) {
