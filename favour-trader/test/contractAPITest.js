@@ -1091,9 +1091,43 @@ describe("Contract API Tests", () => {
     })
 
     describe("get /contract/:id Test",(done)=>{
+        var contractIds = []
+
+        before((done)=>{
+            Contract.insertMany([contracts[0],contracts[1],contracts[2]],(error,docs)=>{
+                for(var i = 0;i<docs.length;i++){
+                    contractIds.push(docs[i]._id)
+                }
+                done()
+            })
+        })
+
+        it("Should the return contract", (done) => {
+            chai.request(endpointUrl)
+                .get("/contract/"+contractIds[0])
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.message).to.equal("Trade retrieved.")
+                    expect(res.body.trade._id).to.equal(String(contractIds[0]))
+                    done()
+                })
+        })
+
+        it("Should return an error with an improper id", (done) => {
+            chai.request(endpointUrl)
+                .get("/contract/"+invalidId)
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Trade does not exist.")
+                    done()
+                })
+        })
+
         it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
-                .get("/"+contractIds[0])
+                .get("/contract/"+contractIds[0])
                 .end((err, res) => {
                     expect(err.status).to.equal(401)
                     done()
