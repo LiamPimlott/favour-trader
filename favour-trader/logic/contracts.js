@@ -31,5 +31,26 @@ contractsLogicObj.getAllUsersContracts = function(req, res, next) {
     );
 }
 
+contractsLogicObj.getUsersActiveContracts = function(req, res, next) {
+    Contract.find(
+        {
+            $or: [
+                { 'offeror.id': req.user.id },
+                { 'offeree.id': req.user.id }
+            ],
+            'status': 'Accepted',
+        },
+        function (err, activeContracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                req.activeContracts = activeContracts;
+                next();
+            }
+        }
+    );
+}
+
 // EXPORT
 module.exports = contractsLogicObj;

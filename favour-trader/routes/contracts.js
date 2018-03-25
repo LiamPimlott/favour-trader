@@ -43,24 +43,19 @@ router.get('/',
 // GET - RECEIVED - get all contracts for the user which are currently 'Accepted'
 router.get('/active',
     passport.authenticate('jwt', { session: false }),
+    logic.getUsersActiveContracts,
     function(req, res, next)
     {
-        Contract.find(
-            {
-                $or: [
-                    { 'offeror.id': req.user.id },
-                    { 'offeree.id': req.user.id }
-                ],
-                'status': 'Accepted',
-            },
-            function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
+        const activeContracts = req.activeContracts;
+		if(activeContracts) {
+			res.json({ 
+				success: true,
+				message: "All user's active contracts retrieved.",
+				contracts: activeContracts
+			});
+		} else {
+			next();
+		}
     }
 );
 
