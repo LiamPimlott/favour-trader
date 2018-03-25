@@ -187,7 +187,7 @@ var favours = [
         description: "Wanky Face (eww)",
         completed: false
      },
-     {
+     {//favours[3]
         skillId: skillIds[0],
         description: "Cranky Face",
         completed: true
@@ -854,7 +854,21 @@ describe("Contract API Tests", () => {
             done()
         })
 
-        it("Should return an error without a valid id", (done) => {
+        it("Should return an success if user is the offeror", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[0]+"/offeror/favours")
+                .set("Authorization", token)
+                .send({updatedFavours: favours[3]})
+                .end((err, res) => {
+                    var body = JSON.parse(res.text)
+                    expect(body.success).to.equal(true)
+                    expect(body.message).to.equal("Offeror favours updated.")
+                    expect(body.favours.offeror[0].completed).to.equal(true)
+                    done()
+                })
+        })
+
+        it("Should return a failure without a valid id", (done) => {
             chai.request(endpointUrl)
                 .put("/"+invalidId+"/offeror/favours")
                 .set("Authorization", token)
@@ -866,7 +880,7 @@ describe("Contract API Tests", () => {
                 })
         })
 
-        it("Should return unsuccessful if you aren't involved in a contract", (done) => {
+        it("Should return a failure if you aren't involved in a contract", (done) => {
             chai.request(endpointUrl)
                 .put("/"+contractIds[1]+"/offeror/favours")
                 .set("Authorization", token)
@@ -878,7 +892,7 @@ describe("Contract API Tests", () => {
                 })
         })
 
-        it("Should return unsuccessful if you aren't the offeror in a contract", (done) => {
+        it("Should return a failure if you aren't the offeror in a contract", (done) => {
             chai.request(endpointUrl)
                 .put("/"+contractIds[2]+"/offeror/favours")
                 .set("Authorization", token)
@@ -929,6 +943,20 @@ describe("Contract API Tests", () => {
         afterEach((done)=>{
             contractIds = []
             done()
+        })
+
+        it("Should return an success if user is the offeree", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/offeree/favours")
+                .set("Authorization", token)
+                .send({updatedFavours: favours[3]})
+                .end((err, res) => {
+                    var body = JSON.parse(res.text)
+                    expect(body.success).to.equal(true)
+                    expect(body.message).to.equal("Offeror favours updated.")
+                    expect(body.favours.offeree[0].completed).to.equal(true)
+                    done()
+                })
         })
 
         it("Should return an error without a valid id", (done) => {
