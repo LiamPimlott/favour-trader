@@ -4,7 +4,7 @@ var devDebug = require('debug')('app:dev');
 var passport = require('passport');
 
 // HANDLERS (Logic tier) //
-var handlers = require("../handlers/contracts.js");
+var handle = require("../handlers/contracts.js");
 
 // DATA MODEL (Data tier) //
 var Contract = require('../models/contract');
@@ -26,7 +26,7 @@ router.get('/all', function (req, res, next) {
 // GET - ROOT - get all of a users contracts
 router.get('/',
     passport.authenticate('jwt', { session: false }),
-    handlers.getAllUsersContracts,
+    handle.getAllUsersContracts,
     function(req, res, next)
     {
         const contracts = req.contracts;
@@ -45,7 +45,7 @@ router.get('/',
 // GET - RECEIVED - get all contracts for the user which are currently 'Accepted'
 router.get('/active',
     passport.authenticate('jwt', { session: false }),
-    handlers.getUsersActiveContracts,
+    handle.getUsersActiveContracts,
     function(req, res, next)
     {
         const activeContracts = req.activeContracts;
@@ -64,7 +64,7 @@ router.get('/active',
 // GET - RECEIVED - get all contracts where user is the offeree & status is 'Pending'
 router.get('/received',
     passport.authenticate('jwt', { session: false }),
-    handlers.getUsersRecievedContracts,
+    handle.getUsersRecievedContracts,
     function(req, res, next)
     {
         const recievedContracts = req.recievedContracts;

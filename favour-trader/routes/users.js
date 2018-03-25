@@ -7,7 +7,7 @@ var devDebug = require('debug')('app:dev');
 var passport = require('passport');
 
 // HANDLERS (Logic tier) //
-var handlers = require("../handlers/users.js");
+var handle = require("../handlers/users.js");
 
 // DATA MODELS (Data Tier) //
 var User = require('../models/user');
@@ -36,7 +36,7 @@ router.get('/auth',
 // GET - USERS - returns the currently logged in user's profile.
 router.get('/profile',
 	passport.authenticate('jwt', { session: false }),
-	handlers.getCurrentUserProfile,
+	handle.getCurrentUserProfile,
 	function (req, res, next) {
 		const userProfile = req.userProfile;
 		if(userProfile) {
@@ -53,7 +53,7 @@ router.get('/profile',
 // GET - USERS/ID - returns a user's profile by their id.
 router.get('/:id/profile',
 	passport.authenticate('jwt', { session: false }),
-	handlers.getProfileById,
+	handle.getProfileById,
 	function (req, res, next) {
 		const foundUser = req.foundUser;
 		if(foundUser) {
@@ -70,7 +70,7 @@ router.get('/:id/profile',
 // POST - HAS - returns the currently logged in user's has.
 router.get('/has',
 	passport.authenticate('jwt', { session: false }),
-	handlers.getCurrentUserHas,
+	handle.getCurrentUserHas,
 	function (req, res, next) {
 		const userHas = req.userHas 
 		if(userHas) {
@@ -87,7 +87,7 @@ router.get('/has',
 // POST - WANTS - returns the currently logged in user's wants.
 router.get('/wants',
 	passport.authenticate('jwt', { session: false }),
-	handlers.getCurrentUserWants,
+	handle.getCurrentUserWants,
 	function (req, res, next) {
 		const userWants = req.userWants 
 		if(userWants) {
@@ -103,8 +103,8 @@ router.get('/wants',
 
 // POST - REGISTER - Create a new user with a unique email.
 router.post('/register', 
-	handlers.createNewUserFromBody,
-	handlers.registerNewUser,
+	handle.createNewUserFromBody,
+	handle.registerNewUser,
 	function(req, res, next) {
 		const newUserToken = req.token;
 		if(newUserToken) {
@@ -120,7 +120,7 @@ router.post('/register',
 
 // POST - LOGIN - authenticate user and return a JWT.
 router.post('/login',
-	handlers.logUserIn,
+	handle.logUserIn,
 	function(req, res, next) {
 		const loginToken = req.token;
 		if(loginToken) {
@@ -137,7 +137,7 @@ router.post('/login',
 // PUT - UPDATE - updates a user profile with provided fields
 router.put('/update',
 	passport.authenticate('jwt', { session: false }),
-	handlers.updateUser,
+	handle.updateUser,
 	function(req, res, next) {
 		const updatedUser = req.updatedUser;
 		if(updatedUser) {
@@ -154,7 +154,7 @@ router.put('/update',
 // GET - MATCHES - returns a json object containing all the users your has and wants line up with.
 router.get('/matches',
 	passport.authenticate('jwt', { session: false }),
-	handlers.getMatchedUsers,
+	handle.getMatchedUsers,
 	function(req, res, next) {
 		const matchedUsers = req.matchedUsers;
 		if(matchedUsers){
