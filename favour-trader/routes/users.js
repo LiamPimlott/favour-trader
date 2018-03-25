@@ -6,6 +6,9 @@ var router = express.Router();
 var devDebug = require('debug')('app:dev');
 var passport = require('passport');
 
+//LOGIC MIDDLEWARE
+var middleware = require("../logic/users.js");
+
 // DATA MODELS
 var User = require('../models/user');
 
@@ -21,243 +24,147 @@ router.get('/all', function(req, res, next) {
 	});
 });
 
-// GET - AUTH - tests if a token passed is valid
-router.get('/auth', passport.authenticate('jwt', { session: false }), function(req, res) {
-	res.send('Token is valid! User name is: ' + req.user.name.first + ' ' + req.user.name.last);
-});
+// GET - AUTH - Test if a token passed in is valid.
+router.get('/auth',
+	passport.authenticate('jwt', { session: false }),
+	function(req, res) {
+		res.send('Token is valid! User name is: ' + req.user.name.first + ' ' + req.user.name.last);
+	});
 
 // GET - USERS - returns the currently logged in user's profile.
-router.get('/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-	User.findById(req.user.id).
-	select('name address email about has wants').
-	populate('has.category').
-	populate('wants.category'). 
-	exec( (err, foundUser) => {
-		if (err) {
-			devDebug(err);
-			next(err);
-		} else if (!foundUser) {
-			res.json({ success: false, message: "User does not exist."})
+router.get('/profile',
+	passport.authenticate('jwt', { session: false }),
+	middleware.getCurrentUserProfile,
+	function (req, res, next) {
+		const userProfile = req.userProfile;
+		if(userProfile) {
+			res.json({ 
+				success: true,
+				message: "Your profile has been retrieved.",
+				user: userProfile
+			});
 		} else {
-			res.json({ success: true, message: "User profile retrieved.", user: foundUser});
+			next();
 		}
 	});
-});
 
 // GET - USERS/ID - returns a user's profile by their id.
-router.get('/:id/profile', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-	User.findById(req.params.id).
-	select('name address about has wants').
-	populate('has.category').
-	populate('wants.category'). 
-	exec( (err, foundUser) => {
-		if (err) {
-			devDebug(err);
-			next(err);
-		} else if (!foundUser) {
-			res.json({ success: false, message: "User does not exist."})
+router.get('/:id/profile',
+	passport.authenticate('jwt', { session: false }),
+	middleware.getProfileById,
+	function (req, res, next) {
+		const foundUser = req.foundUser;
+		if(foundUser) {
+			res.json({ 
+				success: true,
+				message: "User profile retrieved.",
+				user: foundUser
+			});
 		} else {
-			res.json({ success: true, message: "User profile retrieved.", user: foundUser});
+			next();
 		}
 	});
-});
 
 // POST - HAS - returns the currently logged in user's has.
-router.post('/has', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-	User.findById(req.user.id).
-	select('has').
-	populate('has.category').
-	exec( (err, userHas) => {
-		if (err) {
-			devDebug(err);
-			next(err);
+router.get('/has',
+	passport.authenticate('jwt', { session: false }),
+	middleware.getCurrentUserHas,
+	function (req, res, next) {
+		const userHas = req.userHas 
+		if(userHas) {
+			res.json({
+				success: true,
+				message: "User's has skills retrieved.",
+				user: userHas
+			});
 		} else {
-			res.json({ success: true, message: "User's has skills retrieved.", user: userHas});
+			next();
 		}
 	});
-});
 
 // POST - WANTS - returns the currently logged in user's wants.
-router.post('/wants', passport.authenticate('jwt', { session: false }), function (req, res, next) {
-	User.findById(req.user.id).
-	select('wants').
-	populate('wants.category').
-	exec( (err, userWants) => {
-		if (err) {
-			devDebug(err);
-			next(err);
+router.get('/wants',
+	passport.authenticate('jwt', { session: false }),
+	middleware.getCurrentUserWants,
+	function (req, res, next) {
+		const userWants = req.userWants 
+		if(userWants) {
+			res.json({
+				success: true,
+				message: "User's wanted skills retrieved.",
+				user: userWants
+			});
 		} else {
-			res.json({ success: true, message: "User's wanted skills retrieved.", user: userWants});
+			next();
 		}
-	})
-});
+	});
 
 // POST - REGISTER - Create a new user with a unique email.
-router.post('/register', function(req, res) {
-	if (!req.body.email || !req.body.password) {
-		res.json({ success: false, message: "Please enter an email and password to register."})
-	} else {
-		var newUser = new User({
-			email: req.body.email,
-			password: req.body.password,
-			name: {
-				first: req.body.firstName,
-				last: req.body.lastName
-			},
-			address: {
-                country: '-',
-                state: '-',
-                city: '-',
-			}
-		});
-		// attempt to save the new user
-		newUser.save(function(err, user) {
-			if (err) {
-				devDebug(err);
-				res.json({ success: false, message: "Email already exists or required fields missing.", error: err});
-			} else {
-				const userPayload = {
-					id: user._id,
-					email: user.email,
-					name: user.name,
-					role: user.role
-				};
-				const token = jwt.sign(userPayload, config.jwt.secret, {
-					expiresIn: 1800 // in seconds
-				});
-				res.json({
-					success: true,
-					message: 'Successfully created new user.',
-					token: 'Bearer ' + token,
-				});
-			}
-		})
-	}
-});
+router.post('/register', 
+	middleware.createNewUserFromBody,
+	middleware.registerNewUser,
+	function(req, res, next) {
+		const newUserToken = req.token;
+		if(newUserToken) {
+			res.json({
+				success: true,
+				message: 'Successfully created new user.',
+				token: ('Bearer ' + newUserToken)
+			});
+		} else {
+			next();
+		}
+	});
 
 // POST - LOGIN - authenticate user and return a JWT.
-router.post('/login', function(req, res) {
-	User.findOne({ email: req.body.email }, function(err, user) {
-		if (err) {
-			devDebug(err);
-			next(err);
-		}
-		if (!user) {
-			res.json({ success: false, message: 'User not found.'});
+router.post('/login',
+	middleware.logUserIn,
+	function(req, res, next) {
+		const loginToken = req.token;
+		if(loginToken) {
+			res.json({
+				success: true,
+				message: 'Login successful.',
+				token: ('Bearer ' + loginToken)
+			});
 		} else {
-			// Check if password matches
-			user.comparePassword(req.body.password, function(err, isMatch) {
-				if (err) {
-					devDebug(err);
-					next(err);
-				} else if (isMatch && !err) {
-					const userPayload = {
-						id: user._id,
-						email: user.email,
-						name: user.name,
-						role: user.role
-					};
-					// Create the token. (note, should this have err handling?)
-					var token = jwt.sign(userPayload, config.jwt.secret, {
-						expiresIn: 1800 // in seconds
-					});
-					res.json({ 
-						success: true,
-						message: "Login successful.",
-						token: 'Bearer ' + token,
-					})
-				} else {
-					res.json({ success: false, message: "Incorrect password."});
-				}
-			})
+			next();
 		}
-	})
-})
+	});
 
 // PUT - UPDATE - updates a user profile with provided fields
-router.put('/update', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-	User.findByIdAndUpdate(req.user.id, req.body, {new: true})
-	.populate('has.category')
-	.populate('wants.category')
-	.exec((err, updatedUser) => {
-		if (err) {
-			devDebug(err);
-			next(err);
-		} else {
-			devDebug("Returning updated user: " + updatedUser);
+router.put('/update',
+	passport.authenticate('jwt', { session: false }),
+	middleware.updateUser,
+	function(req, res, next) {
+		const updatedUser = req.updatedUser;
+		if(updatedUser) {
 			res.json({
 				success: true,
 				message: "User updated.",
 				user: updatedUser
 			});
+		} else {
+			next();
 		}
 	});
-});
 
 // GET - MATCHES - returns a json object containing all the users your has and wants line up with.
-router.get('/matches', passport.authenticate('jwt', { session: false }), function(req, res, next) {
-	User.findById(req.user.id, 'wants has', (err, user) => {
-		if (err) {
-			devDebug(err);
-			next(err);
+router.get('/matches',
+	passport.authenticate('jwt', { session: false }),
+	middleware.getMatchedUsers,
+	function(req, res, next) {
+		const matchedUsers = req.matchedUsers;
+		if(matchedUsers){
+			res.json({
+				success: true,
+				message: "User matches found.",
+				matches: req.matchedUsers,
+			});
 		} else {
-			const hasFilter = req.query.hasFilter;
-			const wantsFilter = req.query.wantsFilter;
-			const userHasArray = user.has.map( skill => {
-				return skill.category;
-			});
-			const userWantsArray = user.wants.map( skill => {
-				return skill.category;
-			});
-			let matches;
-			if(hasFilter == 'true' && wantsFilter == 'false')
-			{
-				matches = User.find({ 
-					$and: [
-						{ "has.category": { $in: userWantsArray } },
-						{ _id: { $ne: user._id } },
-					]
-				})
-			}
-			else if(wantsFilter == 'true' && hasFilter == 'false')
-			{
-				matches = User.find({ 
-					$and: [
-						{ "wants.category": { $in: userHasArray } },
-						{ _id: { $ne: user._id } },
-					]
-				})
-			} else {
-				matches = User.find({ 
-					$and: [
-						{ "has.category": { $in: userWantsArray } },
-						{ "wants.category": { $in: userHasArray } },
-						{ _id: { $ne: user._id } },
-					]
-				})
-			}
-			matches.
-				select('name address email about has wants').
-				populate('has.category').
-				populate('wants.category');
-				
-			matches.exec( (err, matchedUsers) => {
-				if (err) {
-					devDebug(err);
-					next(err);
-				} else if (matchedUsers.length <= 0) {
-					res.json({ success: false, message: "Sorry, you dont have any matches :(\nTry updating your desired skills."});
-				} else {
-					res.json({
-						success: true,
-						message: "User matches found.",
-						matches: matchedUsers,
-					});
-				}
-			});
+			next();
 		}
-	});
- });
+ 	});
 
  // DELETE - DELETE - deletes the user associated with the provided token from the db.
 router.delete('/delete', passport.authenticate('jwt', { session: false }), function(req, res) {
