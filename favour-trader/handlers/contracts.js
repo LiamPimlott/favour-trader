@@ -119,33 +119,13 @@ contractsHandlers.getContractbyId = function(req, res, next) {
 }
 
 contractsHandlers.createNewContract = function(req, res, next ) {
-    const newContract = new Contract({
-        offeror: {
-            id: req.body.offeror.id,
-            favours: req.body.offeror.favours,
-            name: {
-                first: req.body.offeror.name.first,
-                last: req.body.offeror.name.last,
-            },
-        },
-        offeree: {
-            id: req.body.offeree.id,
-            favours: req.body.offeree.favours,
-            name: {
-                first: req.body.offeree.name.first,
-                last: req.body.offeree.name.last,
-            },
-        },
-        messages: req.body.messages
-    });
-    newContract.save({}, function (err, newContract) {
+    Contract.create(req.body, function(err, newContract) {
         if (err) {
-            devDebug(err);
-            res.status = 400;
-            res.json({success: false, message: "Required fields are missing."});
+            devDebug(err); // Log error.
+            next(err); // Forward to error handling middleware.
         } else {
             req.newContract = newContract
-            next(newContract);
+            next();
         }
     });
 }

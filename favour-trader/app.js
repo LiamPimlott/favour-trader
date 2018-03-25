@@ -69,9 +69,16 @@ app.use(function (err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = process.env.APPENV === 'development' ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.send('Error');
+    let text = 'Error';
+
+    // Set status and message.
+    if(err.name === 'ValidationError'){
+        res.status(400);
+        text = 'Required fields are missing.';
+    } else {
+        res.status(err.status || 500);
+    }
+    res.send(text);
 });
 
 module.exports = app;

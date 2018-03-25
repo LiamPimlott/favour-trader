@@ -508,7 +508,6 @@ describe("Contract API Tests", () => {
     })
 
     describe("get / Test", (done) => {
-
         it("Should return nothing if current user hasn't made any contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/")
@@ -574,12 +573,12 @@ describe("Contract API Tests", () => {
             .set("Authorization", token)
             .send(contracts[0])
                 .end((err, res) => {
-                expect(err).to.equal(null)
-                expect(res.status).to.equal(200)
-                expect(res.body.offeror.id).to.equal(String(contracts[0].offeror.id))
-                expect(res.body.offeree.id).to.equal(String(contracts[0].offeree.id))
-                expect(res.body.status).to.equal('Pending')
-                done()
+                    expect(err).to.equal(null)
+                    expect(res.status).to.equal(200)
+                    expect(res.body.contract.offeror.id).to.equal(String(contracts[0].offeror.id))
+                    expect(res.body.contract.offeree.id).to.equal(String(contracts[0].offeree.id))
+                    expect(res.body.contract.status).to.equal('Pending')
+                    done()
             })
         })
 
@@ -589,11 +588,10 @@ describe("Contract API Tests", () => {
             .set("Authorization", token)
             .send(badContracts[0])
                 .end((err, res) => {
-                expect(err).to.equal(null)
-                expect(res.status).to.equal(400)
-                expect(res.message).to.equal("Required fields are missing.")
-                expect(res.succes).to.equal(false)
-                done()
+                    expect(err.name).to.equal('Error')
+                    expect(res.status).to.equal(400)
+                    expect(res.text).to.equal("Required fields are missing.")
+                    done()
             })
         })
 
@@ -603,11 +601,10 @@ describe("Contract API Tests", () => {
             .set("Authorization", token)
             .send(badContracts[1])
                 .end((err, res) => {
-                expect(err).to.equal(null)
-                expect(res.status).to.equal(400)
-                expect(res.message).to.equal("Required fields are missing.")
-                expect(res.succes).to.equal(false)
-                done()
+                    expect(err)
+                    expect(res.status).to.equal(400)
+                    expect(res.text).to.equal("Required fields are missing.")
+                    done()
             })
         })
 
@@ -617,25 +614,22 @@ describe("Contract API Tests", () => {
             .set("Authorization", token)
             .send(badContracts[2])
                 .end((err, res) => {
-                expect(err).to.equal(null)
-                expect(res.status).to.equal(400)
-                expect(res.message).to.equal("Required fields are missing.")
-                expect(res.succes).to.equal(false)
-                done()
+                    expect(err)
+                    expect(res.status).to.equal(400)
+                    expect(res.text).to.equal("Required fields are missing.")
+                    done()
             })
         })
 
-        it("Should say required fields are missing when we have no favour in offeror", (done) => {
+        it("Should still create when we have no favours for a party", (done) => {
             chai.request(endpointUrl)
             .post('/')
             .set("Authorization", token)
             .send(badContracts[3])
                 .end((err, res) => {
-                expect(err).to.equal(null)
-                expect(res.status).to.equal(400)
-                expect(res.message).to.equal("Required fields are missing.")
-                expect(res.succes).to.equal(false)
-                done()
+                    expect(err).to.equal(null)
+                    expect(res.status).to.equal(200)
+                    done()
             })
         })
 
@@ -645,11 +639,10 @@ describe("Contract API Tests", () => {
             .set("Authorization", token)
             .send(badContracts[4])
                 .end((err, res) => {
-                expect(err).to.equal(null)
-                expect(res.status).to.equal(400)
-                expect(res.message).to.equal("Required fields are missing.")
-                expect(res.succes).to.equal(false)
-                done()
+                    expect(err)
+                    expect(res.status).to.equal(400)
+                    expect(res.text).to.equal("Required fields are missing.")
+                    done()
             })
         })
 
