@@ -90,7 +90,7 @@ router.get('/sent',
 			res.json({ 
 				success: true,
 				message: "All user's sent contracts retrieved.",
-				contracts: sentContracts
+				trade: sentContracts
 			});
 		} else {
 			next(); // Go to error handling
@@ -119,36 +119,19 @@ router.get('/contract/:id',
 // POST - ROOT - create a contract
 router.post('/',
     passport.authenticate('jwt', { session: false }),
+    handle.createNewContract,
     function (req, res, next)
     {
-        const newContract = new Contract({
-            offeror: {
-                id: req.body.offeror.id,
-                favours: req.body.offeror.favours,
-                name: {
-                    first: req.body.offeror.name.first,
-                    last: req.body.offeror.name.last,
-                },
-            },
-            offeree: {
-                id: req.body.offeree.id,
-                favours: req.body.offeree.favours,
-                name: {
-                    first: req.body.offeree.name.first,
-                    last: req.body.offeree.name.last,
-                },
-            },
-            messages: req.body.messages
-        });
-        newContract.save({}, function (err, contract) {
-            if (err) {
-                devDebug(err);
-                res.status = 400;
-                res.json({success: false, message: "Required fields are missing."});
-            } else {
-                res.json(contract);
-            }
-        });
+        const newContract = req.newContract;
+		if(newContract) {
+			res.json({ 
+				success: true,
+				message: "Contract retrieved.",
+				contract: newContract
+			});
+		} else {
+			next(); // Go to error handling
+		}
     }
 );
 
