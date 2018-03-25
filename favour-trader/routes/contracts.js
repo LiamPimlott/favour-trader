@@ -3,7 +3,10 @@ var router = express.Router();
 var devDebug = require('debug')('app:dev');
 var passport = require('passport');
 
-// Data Model
+//LOGIC MIDDLEWARE
+var logic = require("../logic/contract.js");
+
+// DATA MODEL
 var Contract = require('../models/contract');
 
 // GET - ALL - get all contracts (admin)
@@ -21,20 +24,19 @@ router.get('/all', function (req, res, next) {
 // GET - ROOT - get all of a users contracts
 router.get('/',
     passport.authenticate('jwt', { session: false }),
+    logic.getAllUsersContracts,
     function(req, res, next)
     {
-        Contract.find({ 
-            $or: [
-                { 'offeror.id': req.user.id },
-                { 'offeree.id': req.user.id }
-            ]}, function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
+        const contracts = req.contracts;
+		if(contracts) {
+			res.json({ 
+				success: true,
+				message: "All user's contracts retrieved.",
+				contracts: contracts
+			});
+		} else {
+			next();
+		}
     }
 );
 
