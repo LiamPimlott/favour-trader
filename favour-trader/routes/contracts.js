@@ -191,52 +191,20 @@ router.put('/:id/offeree/favours',
 router.put('/:id/terminate',
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
-        Contract.findById(req.params.id, function (err, contract) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else if (!contract) {
-                res.json({ success: false, message: "Contract not found."});
-            } else if (
-                contract.offeror.id != req.user.id && 
-                contract.offeree.id != req.user.id
-            ){
-                devDebug("OFFEROR: "+contract.offeror.id+ " OFFERee: "+contract.offeree.id+ " ID!!: "+req.user.id);
-                res.json({ success: false, message: "Unauthorized."})
-            } else if ( contract.status !== 'Accepted' ) {
-                res.json({ success: false, message: "Contract must be active."});
-            }
-            const userRole = req.user.id == contract.offeror.id ? 'offeror' : 'offeree';
-            contract[userRole].requestTermination = true;
-            contract.save(function (err, updatedContract) {
-                if(err) {
-                    devDebug(err);
-                    next(err);
-                } else if(
-                    updatedContract.offeror.requestTermination && 
-                    updatedContract.offeree.requestTermination
-                ){
-                    let completed = true;
-                    updatedContract.offeror.favours.forEach(function (favour) {
-                        if(!favour.completed){ completed = false; }
-                    });
-                    updatedContract.offeree.favours.forEach(function (favour) {
-                        if(!favour.completed){ completed = false; }
-                    });
-                    const endStatus = completed ? 'Completed' : 'Terminated';
-                    updatedContract.status = endStatus;
-                    updatedContract.save(function (err, terminatedContract) {
-                        if(err){
-                            devDebug(err);
-                            next(err);
-                        }
-                        res.json({ success: true, message: "Contract has been terminated/completed", contract: terminatedContract });
-                    });
-                } else {
-                    res.json({ success: false, message: "Waiting for other party to terminate.", contract: updatedContract });
-                }
-            }); 
-        }); 
+        const waitingOnOtherParty = req.waitingOnOtherParty;
+        const updatedContract = req.updatedContract;
+        if(waitingOnOtherParty !== undefined && updatedContract) {
+            const responseMessage = waitingOnOtherParty ? 
+            "Waiting for other party to terminate." :
+            "Contract has been terminated/completed";
+            res.json({ 
+                success: true,
+                message: responseMessage,
+                contract: updatedContract
+            });
+        } else {
+            next(); // Goto error handling
+        }
     }
 );
 
