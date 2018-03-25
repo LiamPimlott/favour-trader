@@ -293,7 +293,7 @@ var contracts = [
         status: 'Declined',
         messages: []
     },
-    {//all zeroes
+    {//contracts[4] all zeroes
         offeror: {
             id: userIds[0],
             favours: favours[0],
@@ -314,7 +314,29 @@ var contracts = [
         },
         status: 'Pending',
         messages: []
-    }
+    },
+    {//contracts[5] - pending contract between user2 and user0
+        offeror: {
+            id: userIds[2],
+            favours: favours[1],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },  
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Pending',
+        messages: []
+    },
 ]
 
 var badContracts = [
@@ -687,14 +709,14 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("get /received Test", (done) => {
+    describe.only("get /received Test", (done) => {
         it("Should return nothing if the user has no contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/received")
                 .set("Authorization", token)
                 .end((err, res) => {
                     expect(err).to.equal(null)
-                    expect(res.body).to.have.a.lengthOf(0)
+                    expect(res.body.contracts).to.have.a.lengthOf(0)
                     done()
                 })
         })
@@ -706,33 +728,33 @@ describe("Contract API Tests", () => {
                     .set("Authorization", token)
                     .end((err, res) => {
                         expect(err).to.equal(null)
-                        expect(res.body).to.have.a.lengthOf(0)
+                        expect(res.body.contracts).to.have.a.lengthOf(0)
                         done()
                     })
             })
         })
 
         it("Should return 1 contract if the user has one initiated by someone else.", (done) => {
-            Contract.insertMany([contracts[2]], (error, docs) => {
+            Contract.insertMany([contracts[5]], (error, docs) => {
                 chai.request(endpointUrl)
                     .get("/received")
                     .set("Authorization", token)
                     .end((err, res) => {
                         expect(err).to.equal(null)
-                        expect(res.body).to.have.a.lengthOf(1)
+                        expect(res.body.contracts).to.have.a.lengthOf(1)
                         done()
                     })
             })
         })
 
         it("Should return 1 contract if the user has one initiated by someone else and also ones they initiated.", (done) => {
-            Contract.insertMany([contracts[0],contracts[2]], (error, docs) => {
+            Contract.insertMany([contracts[0],contracts[5]], (error, docs) => {
                 chai.request(endpointUrl)
                     .get("/received")
                     .set("Authorization", token)
                     .end((err, res) => {
                         expect(err).to.equal(null)
-                        expect(res.body).to.have.a.lengthOf(1)
+                        expect(res.body.contracts).to.have.a.lengthOf(1)
                         done()
                     })
             })

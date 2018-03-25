@@ -42,7 +42,7 @@ export default class Trades extends React.Component {
                     };
 
                     axios.get(endpoint, config)
-                        .then(res => res.data)
+                        .then(res => res.data.contracts)
                         .then(contracts => {
                             if (this.mounted) {
                                 this.setState({
