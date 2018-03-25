@@ -87,7 +87,12 @@ export default class Trades extends React.Component {
                         title={`${item.offeror.name.first} ⇋ ${item.offeree.name.first}`}
                         subtitle={`This trade is currently ${item.status.toLowerCase()}`}
                         avatar={{ uri: 'https://cdn.onlinewebfonts.com/svg/img_104784.png' }}
-                    // Add onPress prop to navigate to trade when it exists
+                        onPress={() => {
+                            this.props.navigation.navigate('TradeOverview', {
+                                trade: item,
+                                userId: this.state.userId
+                            });
+                        }}
                     />
                 )}
                 keyExtractor={item => item._id}
@@ -99,6 +104,7 @@ export default class Trades extends React.Component {
     render() {
         const { trades } = this.state;
         const { navigate } = this.props.navigation;
+
         return (
             <View>
                 <Picker selectedValue={this.state.source}

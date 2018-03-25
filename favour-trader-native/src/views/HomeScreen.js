@@ -95,7 +95,7 @@ export default class HomeScreen extends React.Component {
                     <Picker.Item label="Filter the Matches" value="0"/>
                     <Picker.Item label="What I Want" value="wants"/>
                     <Picker.Item label="What I Have" value="has"/>
-                    <Picker.Item label="Perfect Matches" value="perfect"/>
+                    <Picker.Item label="All of the above!" value="perfect"/>
                 </Picker>
                 <Divider style={styles.divider}/>
                 {
