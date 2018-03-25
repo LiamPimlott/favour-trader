@@ -72,5 +72,25 @@ contractsHandlers.getUsersRecievedContracts = function(req, res, next) {
     );
 }
 
+contractsHandlers.getUsersSentContracts = function(req, res, next) {
+    Contract.find(
+        {
+            $and: [
+                { 'offeror.id': req.user.id },
+                { 'status': 'Pending' }
+            ]
+        },
+        function (err, sentContracts) {
+            if (err) {
+                devDebug(err);
+                next(err);
+            } else {
+                req.sentContracts = sentContracts;
+                next();
+            }
+        }
+    );
+}
+
 // EXPORT
 module.exports = contractsHandlers;

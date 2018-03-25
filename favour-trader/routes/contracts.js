@@ -85,21 +85,16 @@ router.get('/sent',
     passport.authenticate('jwt', { session: false }),
     function(req, res, next)
     {
-        Contract.find(
-            {
-                $and: [
-                    { 'offeror.id': req.user.id },
-                    { 'status': 'Pending' }
-                ]
-            },
-            function (err, contracts) {
-            if (err) {
-                devDebug(err);
-                next(err);
-            } else {
-                res.json(contracts);
-            }
-        });
+        const sentContracts = req.sentContracts;
+		if(sentContracts) {
+			res.json({ 
+				success: true,
+				message: "All user's sent contracts retrieved.",
+				contracts: sentContracts
+			});
+		} else {
+			next();
+		}
     }
 );
 
