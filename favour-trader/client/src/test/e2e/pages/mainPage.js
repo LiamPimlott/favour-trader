@@ -15,19 +15,21 @@ module.exports = {
     showButtons() {
         I.seeElement(this.buttons.search);
         I.moveCursorTo(this.buttons.search);
-        I.seeElement(this.buttons.perfectMatch);
     },
     clickPerfectMatch() {
+        this.showButtons();
         I.seeElement(this.buttons.perfectMatch);
         I.click(this.buttons.perfectMatch);
         I.seeCurrentUrlEquals('/');
     },
     clickWhatIHave() {
+        this.showButtons();
         I.seeElement(this.buttons.whatIHave);
         I.click(this.buttons.whatIHave);
         I.seeCurrentUrlEquals('/filterHas');
     },
     clickWhatIWant() {
+        this.showButtons();
         I.seeElement(this.buttons.whatIWant);
         I.click(this.buttons.whatIWant);
         I.seeCurrentUrlEquals('/filterWants');

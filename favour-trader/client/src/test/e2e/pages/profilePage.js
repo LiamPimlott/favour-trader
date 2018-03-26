@@ -21,34 +21,33 @@ module.exports = {
         I.fillField("#state", "Manitoba");
         I.fillField("#city", "Winnipeg");
         I.fillField("#postalCode", "R3T 2N2");
-        I.click('Save');
-        I.waitForDetached("Save", 3);
+        I.click("Save Profile");
+        I.waitForDetached("Save Profile", 3);
         I.see("Manitoba");
         I.see("Winnipeg");
     },
-    addSkillIHave() {
+    addSkillIHave(category = 'Dancing', description = "Disco") {
         I.waitForText("New Skill", 5);
         I.click("New Skill");
         I.click("Skills I Have");
         I.click("//div[contains(text(),'Select a Category')]");
-        I.click("//li[contains(text(), 'Dancing')]");
-        I.fillField("#description","Disco");
-        I.click('Save');
-        I.waitForDetached("Save", 3);
-        I.see("CK");
-        I.see("Disco");
+        I.click("//li[contains(text(), '" + category + "')]");
+        I.fillField("#description", description);
+        I.click("Save Skill");
+        I.waitForDetached("Save Skill", 3);
+        I.click("//div[contains(text(), 'Skills I Have')]")
+        I.see(description);
     },
-    addSkillINeed() {
+    addSkillINeed(category = 'Programming', description = "I suck at React") {
         I.waitForText("New Skill", 5);
         I.click("New Skill");
         I.click("Skills I Need");
         I.click("//div[contains(text(),'Select a Category')]");
-        I.click("//li[contains(text(), 'Programming')]");
-        I.fillField("#description","I suck at React");
-        I.click('Save');
-        I.waitForDetached("Save", 3);
-        I.see("CK");
-        I.click("//*[contains(text(), 'Skills I Need')]");
-        I.see("I suck at React");
+        I.click("//li[contains(text(), '" + category + "')]");
+        I.fillField("#description", description);
+        I.click('Save Skill');
+        I.waitForDetached("Save Skill", 3);
+        I.click("//div[contains(text(), 'Skills I Need')]");
+        I.see(description);
     }
 };
