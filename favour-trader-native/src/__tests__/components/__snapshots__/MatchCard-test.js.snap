@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing MatchCard component renders as expected 1`] = `
+<View
+  key="testId"
+>
+  <Card
+    title="undefined "
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flex": 1,
+          "justifyContent": "center",
+        }
+      }
+    >
+      <Avatar
+        activeOpacity={0.7}
+        editButton={
+          Object {
+            "iconColor": "#fff",
+            "iconName": "mode-edit",
+            "iconType": "material",
+            "size": null,
+            "style": null,
+            "underlayColor": "#000",
+          }
+        }
+        large={true}
+        onEditPress={null}
+        rounded={true}
+        showEditButton={false}
+        source={
+          Object {
+            "uri": "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+          }
+        }
+      />
+    </View>
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "fontSize": 20,
+          "marginBottom": 10,
+          "textAlign": "center",
+        }
+      }
+    />
+    <Button
+      TouchableComponent={[Function]}
+      backgroundColor="#03A9F4"
+      buttonStyle={
+        Object {
+          "borderRadius": 0,
+          "marginBottom": 10,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "width": 300,
+        }
+      }
+      clear={false}
+      disabled={false}
+      icon={
+        <Icon
+          color="white"
+          name="account-circle"
+          raised={false}
+          reverse={false}
+          reverseColor="white"
+          size={24}
+          underlayColor="white"
+        />
+      }
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      title="View Profile"
+    />
+    <Button
+      TouchableComponent={[Function]}
+      backgroundColor="#03A9F4"
+      buttonStyle={
+        Object {
+          "borderRadius": 0,
+          "marginBottom": 10,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "width": 300,
+        }
+      }
+      clear={false}
+      disabled={false}
+      icon={
+        <Icon
+          color="white"
+          name="info"
+          raised={false}
+          reverse={false}
+          reverseColor="white"
+          size={24}
+          underlayColor="white"
+        />
+      }
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      title="Review Skills"
+    />
+  </Card>
+  <View />
+</View>
+`;

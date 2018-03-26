@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing FavourMessageInput component renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "flexDirection": "column",
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+  />
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "justifyContent": "center",
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      multiline={true}
+      numberOfLines={5}
+      onChangeText={[Function]}
+      placeholder="Enter your message here"
+      style={
+        Object {
+          "borderColor": "black",
+          "borderRadius": 2,
+          "borderWidth": 1,
+          "height": 400,
+          "marginTop": 10,
+          "textAlignVertical": "top",
+          "width": 310,
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "marginTop": 10,
+        "paddingLeft": 10,
+        "paddingRight": 10,
+      }
+    }
+  >
+    <Button
+      TouchableComponent={[Function]}
+      buttonStyle={
+        Object {
+          "backgroundColor": "rgba(92, 99,216, 1)",
+          "borderColor": "transparent",
+          "borderRadius": 5,
+          "borderWidth": 0,
+          "height": 45,
+          "width": 125,
+        }
+      }
+      clear={false}
+      containerStyle={
+        Object {
+          "marginTop": 20,
+        }
+      }
+      disabled={false}
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      title="← Offered Favours"
+    />
+    <Button
+      TouchableComponent={[Function]}
+      buttonStyle={
+        Object {
+          "backgroundColor": "rgba(92, 99,216, 1)",
+          "borderColor": "transparent",
+          "borderRadius": 5,
+          "borderWidth": 0,
+          "height": 45,
+          "width": 125,
+        }
+      }
+      clear={false}
+      containerStyle={
+        Object {
+          "marginTop": 20,
+        }
+      }
+      disabled={false}
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      title="Request Trade"
+    />
+  </View>
+</View>
+`;

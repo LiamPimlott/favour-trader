@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing ReviewSkillsModal component renders as expected 1`] = `
+<Component
+  animationType="slide"
+  hardwareAccelerated={false}
+  onRequestClose={[Function]}
+  transparent={false}
+  visible={true}
+>
+  <View
+    style={
+      Object {
+        "marginTop": 22,
+      }
+    }
+  >
+    <View>
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        Has Skills
+      </Text>
+      <List
+        containerStyle={
+          Object {
+            "marginBottom": 20,
+          }
+        }
+      />
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+      >
+        Want Skills
+      </Text>
+      <List
+        containerStyle={
+          Object {
+            "marginBottom": 20,
+          }
+        }
+      />
+      <Button
+        TouchableComponent={[Function]}
+        buttonStyle={
+          Object {
+            "borderRadius": 3,
+          }
+        }
+        clear={false}
+        disabled={false}
+        iconRight={false}
+        loadingProps={
+          Object {
+            "color": "white",
+            "size": "small",
+          }
+        }
+        onPress={[Function]}
+        title="Close"
+      />
+    </View>
+  </View>
+</Component>
+`;
