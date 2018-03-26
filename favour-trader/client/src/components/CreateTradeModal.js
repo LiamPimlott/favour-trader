@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Fade } from 'reactstrap';
-import { Card, Icon, Button } from 'antd';
+import { Card, Icon, Button, message } from 'antd';
 import axios from 'axios';
 import SelectableSkill from './SelectableSkill.js';
 import './CreateTradeModal.css';
@@ -10,7 +10,7 @@ const initialState = {
     requestableSkills: [],
     requestedSkills: [],
     offeredSkills: [],
-    message: '',
+    tradeMessage: '',
     redirect: false,
     failedAttempt: false,
 };
@@ -35,8 +35,6 @@ class CreateTradeModal extends Component {
 
     componentWillMount() {
         const { authService } = this.props;
-        const userProfile = this.props.authService.getProfile();
-        const userEmail = userProfile.email;
         this.mounted = true;
         const config = {
             headers: {
@@ -46,9 +44,7 @@ class CreateTradeModal extends Component {
             }
         };
 
-        axios.get('/api/users/has', {
-            email: userEmail,
-        }, config)
+        axios.get('/api/users/has', config)
             .then(res => res.data.user)
             .then((user) => {
                 if (this.mounted) {
@@ -68,7 +64,7 @@ class CreateTradeModal extends Component {
             requestableSkills: [],
             requestedSkills: [],
             offeredSkills: [],
-            message: '',
+            tradeMessage: '',
             redirect: false,
             failedAttempt: false,
         });
@@ -172,7 +168,7 @@ class CreateTradeModal extends Component {
 
     submit() {
         const { authService, offereeId, username, lastName } = this.props;
-        const { requestedSkills, offeredSkills, message } = this.state;
+        const { requestedSkills, offeredSkills, tradeMessage } = this.state;
         const user = authService.getProfile();
         const url = '/api/contracts/';
         const body = {
@@ -192,7 +188,7 @@ class CreateTradeModal extends Component {
                     last: lastName,
                 },
             },
-            messages: message,
+            messages: tradeMessage,
         };
         const headers = {
             'Accept': 'application/json',
@@ -203,10 +199,7 @@ class CreateTradeModal extends Component {
         axios.post(url, body, { headers })
             .then(res => {
                 if (res.status !== '200') {
-                    // TODO: Redirect when we know where to redirect to
-                    // this.setState({
-                    //     redirect: true,
-                    // });
+                    message.success('Contract created!');
                     this.props.toggle();
                 } else {
                     this.setState({
@@ -284,7 +277,7 @@ class CreateTradeModal extends Component {
                         </div>
                         <Card>
                             <textarea className={'messageBox'}
-                                      id={'message'}
+                                      id={'tradeMessage'}
                                       placeholder={'enter your message here'}
                                       onChange={this.handleChange} />
                         </Card>
@@ -326,11 +319,6 @@ class CreateTradeModal extends Component {
                     </ModalFooter>
                 );
         }
-    }
-
-    renderRedirect() {
-        // TODO: Redirect to "contract overview" when that exists
-        // return <Redirect to={''}/>
     }
 
     render() {
