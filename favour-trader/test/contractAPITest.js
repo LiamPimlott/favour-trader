@@ -359,6 +359,50 @@ var contracts = [
         status: 'Accepted',
         messages: []
     },
+    {//contracts[7] - accepted contract between user2 and user0, user 2 has requested termination
+        offeror: {
+            id: userIds[2],
+            favours: favours[1],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },  
+            requestTermination: true
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Accepted',
+        messages: []
+    },
+    {//contracts[8] - accepted contract between user2 and user0
+        offeror: {
+            id: userIds[2],
+            favours: favours[1],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },  
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Accepted',
+        messages: []
+    },
 ]
 
 var badContracts = [
@@ -520,7 +564,7 @@ function clearDB() {
 //END OF PROMISES
 
 //TESTS
-describe("Contract API Tests", () => {
+describe.only("Contract API Tests", () => {
     before((done) => {
         connect().then((connectionResult) => {
             clearDB().then((clearDBResult) => {
@@ -710,7 +754,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe.only("get /active Test", (done) => {
+    describe("get /active Test", (done) => {
 
         it("Should return correct message", (done) => {
             chai.request(endpointUrl)
@@ -959,7 +1003,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("put /:id/offeror/favours Test", (done) => {
+    describe.skip("put /:id/offeror/favours Test", (done) => {
         var contractIds = []
         var invalidId = new ObjectID()
 
@@ -1050,7 +1094,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("put /:id/offeree/favours Test", (done) => {
+    describe.skip("put /:id/offeree/favours Test", (done) => {
         var contractIds = []
         var invalidId = new ObjectID()
 
@@ -1158,49 +1202,50 @@ describe("Contract API Tests", () => {
                         console.log(err)
                     }
                     user2Token = res.body.token
-                    done()
-                })
-        })
 
-        beforeEach((done)=>{
-            Contract.insertMany([contracts[0],contracts[1],contracts[2]],(error,docs)=>{
-                for(var i = 0;i<docs.length;i++){
-                    contractIds.push(docs[i]._id)
-                }
-                done()
-            })
-        })
-
-        it("Should return successful if both users terminate the contract", (done) => {
-            chai.request(endpointUrl)
-                .put("/"+contractIds[2]+"/terminate")
-                .set("Authorization", token)
-                .end((err, res) => {
-                    expect(res.body.success).to.equal(false)
-                    expect(res.body.message).to.equal("Waiting for other party to terminate.")
-                    chai.request(endpointUrl)
-                    .put("/"+contractIds[2]+"/terminate")
-                    .set("Authorization", user2Token)
-                    .end((err, res) => {
-                        expect(res.body.success).to.equal(true)
-                        expect(res.body.message).to.equal("Contract has been terminated/completed")
+                    Contract.insertMany([contracts[7], contracts[8], contracts[0]],(error,docs)=>{
+                        for(var i = 0;i<docs.length;i++){
+                            contractIds.push(docs[i]._id)
+                        }
                         done()
                     })
                 })
         })
 
-        it("Should return unsuccessful if the contract is not active", (done) => {
+        it("Should terminate/complete contract", (done) => {
             chai.request(endpointUrl)
-                .put("/"+invalidId+"/terminate")
+                .put("/"+contractIds[0]+"/terminate")
                 .set("Authorization", token)
                 .end((err, res) => {
-                    expect(res.body.success).to.equal(false)
-                    expect(res.body.message).to.equal("Contract not found.")
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.message).to.equal("Contract has been terminated/completed.")
                     done()
                 })
         })
 
-        it("Should return unsuccessful without a valid id", (done) => {
+        it.skip("Should notify of other party approval needed", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[1]+"/terminate")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(true)
+                    expect(res.body.message).to.equal("Waiting for other party to terminate.")
+                    done()
+                })
+        })
+
+        it.skip("Should return unsuccessful if the contract is not active", (done) => {
+            chai.request(endpointUrl)
+                .put("/"+contractIds[2]+"/terminate")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(res.body.success).to.equal(false)
+                    expect(res.body.message).to.equal("Contract must be active.")
+                    done()
+                })
+        })
+
+        it("Should return not without a valid id", (done) => {
             chai.request(endpointUrl)
                 .put("/"+invalidId+"/terminate")
                 .set("Authorization", token)
@@ -1242,7 +1287,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("get /contract/:id Test",(done)=>{
+    describe.only("get /contract/:id Test",(done)=>{
         var contractIds = []
 
         before((done)=>{

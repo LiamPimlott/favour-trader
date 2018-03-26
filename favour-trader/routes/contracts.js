@@ -156,6 +156,7 @@ router.put('/:id/status',
 
 // PUT - UPDATE OFFEROR FAVOURS - update the offeror's favours for a contract.
 router.put('/:id/offeror/favours',
+    handle.updateOfferorFavours,
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
         const successfullyUpdatedFavours = req.successfullyUpdatedFavours;
@@ -173,6 +174,7 @@ router.put('/:id/offeror/favours',
 
 // PUT - UPDATE OFFEREE FAVOURS - update the offeree's favours for a contract.
 router.put('/:id/offeree/favours',
+    handle.updateOffereeFavours,
     passport.authenticate('jwt', { session: false }),
     function (req, res, next) {
         const successfullyUpdatedFavours = req.successfullyUpdatedFavours;
@@ -191,13 +193,14 @@ router.put('/:id/offeree/favours',
 // PUT - CID - REQUEST TERMINATION - request to change contract status to complete/terminate. (depending on completion of favours)
 router.put('/:id/terminate',
     passport.authenticate('jwt', { session: false }),
+    handle.terminationRequest,
     function (req, res, next) {
         const waitingOnOtherParty = req.waitingOnOtherParty;
         const updatedContract = req.updatedContract;
         if(waitingOnOtherParty !== undefined && updatedContract) {
             const responseMessage = waitingOnOtherParty ? 
             "Waiting for other party to terminate." :
-            "Contract has been terminated/completed";
+            "Contract has been terminated/completed.";
             res.json({ 
                 success: true,
                 message: responseMessage,

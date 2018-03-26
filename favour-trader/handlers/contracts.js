@@ -256,42 +256,43 @@ contractsHandlers.terminationRequest = function(req, res, next) {
             res.json({ success: false, message: "Unauthorized."})
         } else if ( contract.status !== 'Accepted' ) {
             res.json({ success: false, message: "Contract must be active."});
+        } else {
+            const userRole = (req.user.id == contract.offeror.id) ? 'offeror' : 'offeree';
+            contract[userRole].requestTermination = true;
+            contract.save(function (err, updatedContract) {
+                if(err) {
+                    devDebug(err); // Log error.
+                    next(err); // Forward to error handling middleware.
+                } else if (
+                    updatedContract.offeror.requestTermination && 
+                    updatedContract.offeree.requestTermination
+                ) {
+                    let completed = true;
+                    updatedContract.offeror.favours.forEach(function (favour) {
+                        if(!favour.completed){ completed = false; }
+                    });
+                    updatedContract.offeree.favours.forEach(function (favour) {
+                        if(!favour.completed){ completed = false; }
+                    });
+                    const endStatus = completed ? 'Completed' : 'Terminated';
+                    updatedContract.status = endStatus;
+                    updatedContract.save(function (err, terminatedContract) {
+                        if(err){
+                            devDebug(err); // Log error.
+                            next(err); // Forward to error handling middleware.
+                        } else {
+                            req.waitingOnOtherParty = false;
+                            req.updatedContract = terminatedContract;
+                            next();
+                        }
+                    });
+                } else {
+                    req.waitingOnOtherParty = true;
+                    req.updatedContract = updatedContract;
+                    next();
+                }
+            }); 
         }
-        const userRole = (req.user.id == contract.offeror.id) ? 'offeror' : 'offeree';
-        contract[userRole].requestTermination = true;
-        contract.save(function (err, updatedContract) {
-            if(err) {
-                devDebug(err); // Log error.
-                next(err); // Forward to error handling middleware.
-            } else if (
-                updatedContract.offeror.requestTermination && 
-                updatedContract.offeree.requestTermination
-            ) {
-                let completed = true;
-                updatedContract.offeror.favours.forEach(function (favour) {
-                    if(!favour.completed){ completed = false; }
-                });
-                updatedContract.offeree.favours.forEach(function (favour) {
-                    if(!favour.completed){ completed = false; }
-                });
-                const endStatus = completed ? 'Completed' : 'Terminated';
-                updatedContract.status = endStatus;
-                updatedContract.save(function (err, terminatedContract) {
-                    if(err){
-                        devDebug(err); // Log error.
-                        next(err); // Forward to error handling middleware.
-                    } else {
-                        req.waitingOnOtherParty = false;
-                        req.updatedContract = terminatedContract;
-                        next();
-                    }
-                });
-            } else {
-                req.waitingOnOtherParty = true;
-                req.updatedContract = updatedContract;
-                next();
-            }
-        }); 
     }); 
 }
 
