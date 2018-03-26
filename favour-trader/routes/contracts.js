@@ -104,12 +104,12 @@ router.get('/contract/:id',
     passport.authenticate('jwt', { session: false }),
     handle.getContractbyId,
     function (req, res, next) {
-        const contract = req.contract;
-		if(contract) {
+        const foundContract = req.foundContract;
+		if(foundContract) {
 			res.json({ 
 				success: true,
 				message: "Contract retrieved.",
-				contract: contract
+				contract: foundContract
 			});
 		} else {
 			next(); // Go to error handling

@@ -1299,19 +1299,19 @@ describe.only("Contract API Tests", () => {
             })
         })
 
-        it("Should the return contract", (done) => {
+        it("Should return contract", (done) => {
             chai.request(endpointUrl)
                 .get("/contract/"+contractIds[0])
                 .set("Authorization", token)
                 .end((err, res) => {
                     expect(res.body.success).to.equal(true)
-                    expect(res.body.message).to.equal("Trade retrieved.")
-                    expect(res.body.trade._id).to.equal(String(contractIds[0]))
+                    expect(res.body.message).to.equal("Contract retrieved.")
+                    expect(res.body.contract._id).to.equal(String(contractIds[0]))
                     done()
                 })
         })
 
-        it("Should return an error with an improper id", (done) => {
+        it("Should return unsuccessfull with an improper id", (done) => {
             chai.request(endpointUrl)
                 .get("/contract/"+invalidId)
                 .set("Authorization", token)
