@@ -5,6 +5,7 @@ import { mount, configure } from 'enzyme';
 import AuthServiceMock from '../components/AuthServiceMock.js';
 import moxios from "moxios";
 import Adapter from "enzyme-adapter-react-16/build/index";
+import { BrowserRouter } from 'react-router-dom';
 
 var authServiceMock, wrapper;
 
@@ -12,7 +13,10 @@ beforeEach(function () {
     configure({ adapter: new Adapter() });
     moxios.install();
     authServiceMock = new AuthServiceMock();
-    wrapper = mount(<Main authService={authServiceMock} />);
+    wrapper = mount(
+        <BrowserRouter>
+            <Main authService={authServiceMock} />
+        </BrowserRouter>);
 });
 
 afterEach(function () {
@@ -23,11 +27,14 @@ afterEach(function () {
 
 
 it('renders correctly', () => {
-  var authServiceMock = new AuthServiceMock();
-  const tree = renderer
-    .create(<Main authService={authServiceMock}/>)
-    .toJSON();
-  expect(tree).toMatchSnapshot();
+    var authServiceMock = new AuthServiceMock();
+    const tree = renderer
+        .create(
+            <BrowserRouter>
+                <Main authService={authServiceMock} />
+            </BrowserRouter>)
+        .toJSON();
+    expect(tree).toMatchSnapshot();
 });
 
 it('verify Main Page', function () {
