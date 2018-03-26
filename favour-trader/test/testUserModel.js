@@ -6,9 +6,7 @@ let chai = require("chai");
 let expect = chai.expect;
 let should = chai.should();
 
-
 describe('User Validation Error.', function () {
-
     it('should throw all required validation errors', function (done) {
         let user = new User();
         user.validate((err) => {

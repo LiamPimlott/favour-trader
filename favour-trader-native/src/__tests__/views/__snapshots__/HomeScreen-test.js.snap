@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Login component renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+    }
+  }
+>
+  <Picker
+    mode="dialog"
+    onValueChange={[Function]}
+    selectedValue=""
+    style={
+      Object {
+        "width": 300,
+      }
+    }
+  >
+    <PickerItem
+      label="Filter the Matches"
+      value="0"
+    />
+    <PickerItem
+      label="What I Want"
+      value="wants"
+    />
+    <PickerItem
+      label="What I Have"
+      value="has"
+    />
+    <PickerItem
+      label="Perfect Matches"
+      value="perfect"
+    />
+  </Picker>
+  <Divider
+    style={
+      Object {
+        "backgroundColor": "grey",
+        "height": 1,
+        "width": 300,
+      }
+    }
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+  >
+    No matches found or Update selection from picker!
+  </Text>
+</View>
+`;
