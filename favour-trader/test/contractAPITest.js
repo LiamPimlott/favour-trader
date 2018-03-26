@@ -689,6 +689,29 @@ describe("Contract API Tests", () => {
     })
 
     describe("get /active Test", (done) => {
+
+        it("Should return correct message", (done) => {
+            chai.request(endpointUrl)
+                .get("/active")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.message).to.equal("All user's active contracts retrieved.")
+                    done()
+                })
+        })
+
+        it("Should return nothing if the user has no contracts", (done) => {
+            chai.request(endpointUrl)
+                .get("/active")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.contracts).to.have.a.lengthOf(0)
+                    done()
+                })
+        })
+
         it("Should return an error without authorization", (done) => {
             chai.request(endpointUrl)
             .get("/active")
@@ -710,6 +733,18 @@ describe("Contract API Tests", () => {
     })
 
     describe.only("get /received Test", (done) => {
+        
+        it("Should return correct message", (done) => {
+            chai.request(endpointUrl)
+                .get("/received")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.message).to.equal("All user's received contracts retrieved.")
+                    done()
+                })
+        })
+        
         it("Should return nothing if the user has no contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/received")
@@ -781,13 +816,25 @@ describe("Contract API Tests", () => {
     })
 
     describe("get /sent Test", (done) => {
+         
+        it("Should return correct message", (done) => {
+            chai.request(endpointUrl)
+                .get("/sent")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.message).to.equal("All user's sent contracts retrieved.")
+                    done()
+                })
+        })
+
         it("Should return nothing if the user has no contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/sent")
                 .set("Authorization", token)
                 .end((err, res) => {
                     expect(err).to.equal(null)
-                    expect(res.body).to.have.a.lengthOf(0)
+                    expect(res.body.contracts).to.have.a.lengthOf(0)
                     done()
                 })
         })
@@ -799,7 +846,7 @@ describe("Contract API Tests", () => {
                     .set("Authorization", token)
                     .end((err, res) => {
                         expect(err).to.equal(null)
-                        expect(res.body).to.have.a.lengthOf(1)
+                        expect(res.body.contracts).to.have.a.lengthOf(1)
                         done()
                     })
             })
@@ -812,7 +859,7 @@ describe("Contract API Tests", () => {
                     .set("Authorization", token)
                     .end((err, res) => {
                         expect(err).to.equal(null)
-                        expect(res.body).to.have.a.lengthOf(0)
+                        expect(res.body.contracts).to.have.a.lengthOf(0)
                         done()
                     })
             })
@@ -825,7 +872,7 @@ describe("Contract API Tests", () => {
                     .set("Authorization", token)
                     .end((err, res) => {
                         expect(err).to.equal(null)
-                        expect(res.body).to.have.a.lengthOf(1)
+                        expect(res.body.contracts).to.have.a.lengthOf(1)
                         done()
                     })
             })

@@ -83,6 +83,7 @@ router.get('/received',
 // GET - SENT - get all contracts where user is the offeror & status is 'Pending'
 router.get('/sent',
     passport.authenticate('jwt', { session: false }),
+    handle.getUsersSentContracts,
     function(req, res, next)
     {
         const sentContracts = req.sentContracts;
@@ -90,7 +91,7 @@ router.get('/sent',
 			res.json({ 
 				success: true,
 				message: "All user's sent contracts retrieved.",
-				trade: sentContracts
+				contracts: sentContracts
 			});
 		} else {
 			next(); // Go to error handling
