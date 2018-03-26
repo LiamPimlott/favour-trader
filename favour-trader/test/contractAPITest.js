@@ -564,7 +564,7 @@ function clearDB() {
 //END OF PROMISES
 
 //TESTS
-describe.only("Contract API Tests", () => {
+describe("Contract API Tests", () => {
     before((done) => {
         connect().then((connectionResult) => {
             clearDB().then((clearDBResult) => {
@@ -596,6 +596,18 @@ describe.only("Contract API Tests", () => {
     })
 
     describe("get / Test", (done) => {
+
+        it("Should return correct message", (done) => {
+            chai.request(endpointUrl)
+                .get("/")
+                .set("Authorization", token)
+                .end((err, res) => {
+                    expect(err).to.equal(null)
+                    expect(res.body.message).to.equal("All user's contracts retrieved.")
+                    done()
+                })
+        })
+
         it("Should return nothing if current user hasn't made any contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/")

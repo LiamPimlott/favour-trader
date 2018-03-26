@@ -413,7 +413,7 @@ describe("User API Tests", () => {
             });
         });
 
-        it("Should return a user who has a skill the current user wants", (done) => {
+        it("Should return no users when the current user sets the hasFilter to true and only has want matches.", (done) => {
             User.update({ _id: { $ne: dummyUserId } }, {
                 wants: [
                     {
@@ -429,14 +429,15 @@ describe("User API Tests", () => {
                         .set("Authorization", matchToken)
                         .query({ hasFilter: true, wantsFilter: false })
                         .end((err, res) => {
-                            res.body.should.have.property("matches");
-                            expect(res.body.matches).to.have.a.lengthOf(1);
+                            res.body.should.have.property("success");
+                            expect(res.body).to.have.property("message");
+                            expect(res.body.success).to.equal(false);
                             done();
                         })
             });
         });
 
-        it("Should return a user who wants a skill the current user has", (done) => {
+        it("Should return no users when the current user sets the wantFilter to true and only has 'has' matches.", (done) => {
             User.update({ _id: { $ne: dummyUserId } }, {
                 has: [
                     {
@@ -454,15 +455,13 @@ describe("User API Tests", () => {
                 .end((err, res) => {
                     expect(res.body).to.have.property("success");
                     expect(res.body).to.have.property("message");
-                    expect(res.body).to.have.property("matches");
-                    expect(res.body.success).to.equal(true);
-                    expect(res.body.matches).to.have.a.lengthOf(1);
+                    expect(res.body.success).to.equal(false);
                     done();
                 });
             });
         });
 
-        it("Should return no users when the current user sets the hasFilter to true and only has want matches.", (done) => {
+        it.skip("Should return a user who has a skill the current user wants ", (done) => {
             User.update({ _id: { $ne: dummyUserId } }, {
                 has: [
                     {
@@ -488,14 +487,14 @@ describe("User API Tests", () => {
                 .end((err, res) => {
                     expect(res.body).to.have.property("success");
                     expect(res.body).to.have.property("message");
-                    expect(res.body).to.not.have.property("matches");
-                    expect(res.body.success).to.equal(false);
+                    expect(res.body).to.have.property("matches");
+                    expect(res.body.success).to.equal(true);
                     done();
                 });
             });
         });
 
-        it("Should return no users when the current user sets the wantFilter to true and only has 'has' matches.", (done) => {
+        it.skip("Should return a user who wants a skill the current user has", (done) => {
             User.update({ _id: { $ne: dummyUserId } }, {
                 has: [
                     {
@@ -521,8 +520,8 @@ describe("User API Tests", () => {
                 .end((err, res) => {
                     expect(res.body).to.have.property("success");
                     expect(res.body).to.have.property("message");
-                    expect(res.body).to.not.have.property("matches");
-                    expect(res.body.success).to.equal(false);
+                    expect(res.body).to.have.property("matches");
+                    expect(res.body.success).to.equal(true);
                     done();
                 });
             });
