@@ -21,8 +21,9 @@ class FilterWants extends Main {
             .catch( (err) => {
                 console.log(err);
             });
+        } else {
+            this.setState({ redirect: true });
         }
-        // else should redirect to login page
     }
 }
 
