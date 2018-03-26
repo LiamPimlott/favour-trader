@@ -9,12 +9,13 @@ import Trades from '../views/Trades.js';
 import CreateTrade from '../views/CreateTrade.js';
 import UserProfile from '../views/UserProfile.js';
 import CurrentUserProfile from '../views/CurrentUserProfile.js';
+import TradeOverview from '../views/TradeOverview.js';
 
 const DrawerScreens = DrawerNavigator({
     Login: {
         screen: Login,
         navigationOptions: {
-            header: null, // Login page should not show the navigation
+            header: null,
             drawerLabel: () => null,
         },
     },
@@ -28,7 +29,8 @@ const DrawerScreens = DrawerNavigator({
         screen: Signup,
         navigationOptions: {
             title: 'Signup',
-			      header: null, // Signup page should not show the navigation
+                  header: null,
+                  drawerLabel: () => null,
         },
     },
     Trades: {
@@ -54,6 +56,13 @@ const DrawerScreens = DrawerNavigator({
         screen: CreateTrade,
         navigationOptions: {
             title: 'Create Trade',
+            drawerLabel: () => null,
+        },
+    },
+    TradeOverview: {
+        screen: TradeOverview,
+        navigationOptions: {
+            title: 'Trade Overview',
             drawerLabel: () => null,
         },
     },

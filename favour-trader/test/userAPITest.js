@@ -503,7 +503,7 @@ describe("User API Tests", () => {
 
         it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
             chai.request(url)
-            .post("/api/users/has")
+            .get("/api/users/has")
             .set("Authorization",hasToken)
             .end((err,res)=>{
                 should.not.exist(err);
@@ -519,7 +519,7 @@ describe("User API Tests", () => {
         it("Should return two skills when the logged in user has two skills", (done) => {
             User.update({}, { has: [skillIds[0], skillIds[1]] }, { multi: true }, (err, res) => {
                 chai.request(url)
-                    .post("/api/users/has")
+                    .get("/api/users/has")
                     .set("Authorization", hasToken)
                     .end((err, res) => {
                         should.not.exist(err);
@@ -535,7 +535,7 @@ describe("User API Tests", () => {
 
         it("Should return an error without proper authorization",(done) => {
             chai.request(url)
-            .post("/api/users/has")
+            .get("/api/users/has")
             .end((err,res)=>{
                 should.exist(err);
                 done();
@@ -579,7 +579,7 @@ describe("User API Tests", () => {
 
         it("Should return no skills when the logged in user doesn't have any skills",(done)=>{
             chai.request(url)
-            .post("/api/users/wants")
+            .get("/api/users/wants")
             .set("Authorization",wantToken)
             .end((err,res)=>{
                 should.not.exist(err);
@@ -596,7 +596,7 @@ describe("User API Tests", () => {
         it("Should return two wants when the logged in user has two wants", (done) => {
             User.update({}, { wants: [skillIds[0], skillIds[1]] }, { multi: true }, (err, res) => {
                 chai.request(url)
-                    .post("/api/users/wants")
+                    .get("/api/users/wants")
                     .set("Authorization", wantToken)
                     .end((err, res) => {
                         should.not.exist(err);
@@ -613,7 +613,7 @@ describe("User API Tests", () => {
 
         it("Should return an error without proper authorization",(done) => {
             chai.request(url)
-            .post("/api/users/has")
+            .get("/api/users/has")
             .end((err,res)=>{
                 should.exist(err);
                 done();
