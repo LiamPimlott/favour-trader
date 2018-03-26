@@ -155,6 +155,8 @@ export default class UserProfile extends React.Component {
                                     backgroundColor='#03A9F4'
                                     buttonStyle={styles.button}
                                     title='Offer Trade'
+                                    accessible={true}
+                                    accessibilityLabel={'offerTrade'}
                                     onPress={() => {
                                         navigate('CreateTrade', {
                                             requestableFavours: this.state.has,

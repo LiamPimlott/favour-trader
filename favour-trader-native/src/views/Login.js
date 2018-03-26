@@ -72,9 +72,10 @@ class Login extends React.Component {
                             raised={true}
                             buttonStyle={styles.button}
                             title='Login'
+                            onPress = { this.submit} 
                             accessible={true}
-                            accessibilityLabel="Login"
-                            onPress = { this.submit} />
+                            accessibilityLabel={'Login'}
+                            />
 
                     <Divider style={styles.divider}/>
                     <View style={styles.footerView}>
@@ -83,7 +84,10 @@ class Login extends React.Component {
                             clear={true}
                             titleStyle={{ color: "#03A9F4" }}
                             title='Sign Up'
-                            onPress = { () => navigate('Signup') } />
+                            onPress = { () => navigate('Signup') } 
+                            accessible={true}
+                            accessibilityLabel={'Signup'}
+                            />
                     </View>
                 </Card>
             </KeyboardAvoidingView>
