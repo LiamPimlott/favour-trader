@@ -10,7 +10,7 @@ const initialState = {
     requestableSkills: [],
     requestedSkills: [],
     offeredSkills: [],
-    message: '',
+    tradeMessage: '',
     redirect: false,
     failedAttempt: false,
 };
@@ -68,7 +68,7 @@ class CreateTradeModal extends Component {
             requestableSkills: [],
             requestedSkills: [],
             offeredSkills: [],
-            message: '',
+            tradeMessage: '',
             redirect: false,
             failedAttempt: false,
         });
@@ -172,7 +172,7 @@ class CreateTradeModal extends Component {
 
     submit() {
         const { authService, offereeId, username, lastName } = this.props;
-        const { requestedSkills, offeredSkills, message } = this.state;
+        const { requestedSkills, offeredSkills, tradeMessage } = this.state;
         const user = authService.getProfile();
         const url = '/api/contracts/';
         const body = {
@@ -192,7 +192,7 @@ class CreateTradeModal extends Component {
                     last: lastName,
                 },
             },
-            messages: message,
+            messages: tradeMessage,
         };
         const headers = {
             'Accept': 'application/json',
@@ -281,7 +281,7 @@ class CreateTradeModal extends Component {
                         </div>
                         <Card>
                             <textarea className={'messageBox'}
-                                      id={'message'}
+                                      id={'tradeMessage'}
                                       placeholder={'enter your message here'}
                                       onChange={this.handleChange} />
                         </Card>
