@@ -4,7 +4,7 @@ import {Divider, Button, Card, Icon, ListItem} from 'react-native-elements'
 import AuthService from "../components/AuthService";
 import axios from 'axios';
 import MatchCard from "../components/MatchCard";
-import {hook, wrap} from 'cavy';
+
 
 class HomeScreen extends React.Component {
     constructor() {
@@ -116,8 +116,7 @@ class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Button title={this.state.matches} onPress={this.toggleFilterMenu} buttonStyle={styles.button}
-                        ref={this.props.generateTestHook('HomeScreen.Picker')}/>
+                <Button title={this.state.matches} onPress={this.toggleFilterMenu} buttonStyle={styles.button}/>
                 {
                     this.state.toggleFilter ? (
                         <Modal
@@ -180,4 +179,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default hook(HomeScreen);
+export default HomeScreen;

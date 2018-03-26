@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing ProfileCard component renders as expected 1`] = `
+<View>
+  <Card
+    title=" "
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "justifyContent": "center",
+          "marginBottom": 20,
+          "marginTop": 20,
+        }
+      }
+    >
+      <Avatar
+        activeOpacity={0.7}
+        editButton={
+          Object {
+            "iconColor": "#fff",
+            "iconName": "mode-edit",
+            "iconType": "material",
+            "size": null,
+            "style": null,
+            "underlayColor": "#000",
+          }
+        }
+        large={true}
+        onEditPress={null}
+        rounded={true}
+        showEditButton={false}
+        source={
+          Object {
+            "uri": "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+          }
+        }
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-between",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "flex-start",
+          }
+        }
+      >
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+        >
+          City: 
+        </Text>
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+        >
+          State: 
+        </Text>
+        <Text
+          accessible={true}
+          allowFontScaling={true}
+          ellipsizeMode="tail"
+        >
+          Country: 
+        </Text>
+      </View>
+      <View
+        style={
+          Object {
+            "alignItems": "flex-end",
+          }
+        }
+      >
+        <View />
+      </View>
+    </View>
+  </Card>
+  <View />
+  <View />
+</View>
+`;
