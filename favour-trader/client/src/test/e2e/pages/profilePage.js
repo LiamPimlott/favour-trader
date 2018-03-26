@@ -23,7 +23,6 @@ module.exports = {
         I.fillField("#postalCode", "R3T 2N2");
         I.click('Save');
         I.waitForDetached("Save", 3);
-        I.see("CK");
         I.see("Manitoba");
         I.see("Winnipeg");
     },

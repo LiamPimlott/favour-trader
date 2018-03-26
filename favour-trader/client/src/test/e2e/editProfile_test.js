@@ -1,4 +1,4 @@
-Feature('Edit Profile');
+/*Feature('Edit Profile');
 
 Scenario('Change Address @changeAddress', (I, loginPage, profilePage) => {
     I.amOnPage('/');
@@ -20,3 +20,4 @@ Scenario('Add Skills I Need @addSkillINeed', (I, loginPage, profilePage) => {
     profilePage.navigateToMyProfilePage();
     profilePage.addSkillINeed();
 });
+*/
