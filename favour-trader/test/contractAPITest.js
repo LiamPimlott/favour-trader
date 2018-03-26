@@ -1003,7 +1003,7 @@ describe.only("Contract API Tests", () => {
         })
     })
 
-    describe.skip("put /:id/offeror/favours Test", (done) => {
+    describe("put /:id/offeror/favours Test", (done) => {
         var contractIds = []
         var invalidId = new ObjectID()
 
@@ -1094,7 +1094,7 @@ describe.only("Contract API Tests", () => {
         })
     })
 
-    describe.skip("put /:id/offeree/favours Test", (done) => {
+    describe("put /:id/offeree/favours Test", (done) => {
         var contractIds = []
         var invalidId = new ObjectID()
 
@@ -1121,7 +1121,7 @@ describe.only("Contract API Tests", () => {
                 .end((err, res) => {
                     var body = JSON.parse(res.text)
                     expect(body.success).to.equal(true)
-                    expect(body.message).to.equal("Offeror favours updated.")
+                    expect(body.message).to.equal("Offeree favours updated.")
                     expect(body.favours.offeree[0].completed).to.equal(true)
                     done()
                 })
@@ -1287,7 +1287,7 @@ describe.only("Contract API Tests", () => {
         })
     })
 
-    describe.only("get /contract/:id Test",(done)=>{
+    describe("get /contract/:id Test",(done)=>{
         var contractIds = []
 
         before((done)=>{
@@ -1348,7 +1348,7 @@ describe.only("Contract API Tests", () => {
 
         beforeEach((done)=>{
             //We're logged in as user0. user0 is the offeror in 0, nothing in 1, and offeree in 2
-            Contract.insertMany([contracts[0],contracts[1],contracts[2]],(error,docs)=>{
+            Contract.insertMany([contracts[0], contracts[1], contracts[2]],(error,docs)=>{
                 for(var i = 0;i<docs.length;i++){
                     contractIds.push(docs[i]._id)
                 }

@@ -141,8 +141,8 @@ router.put('/:id/status',
     passport.authenticate('jwt', {session: false}),
     handle.updateContractStatus,
     function (req, res, next) {
-        const newContract = req.newContract;
-		if(newContract) {
+        const updatedContract = req.updatedContract;
+		if(updatedContract) {
             res.json({
                 success: true,
                 message: "Status updated!",
@@ -156,8 +156,8 @@ router.put('/:id/status',
 
 // PUT - UPDATE OFFEROR FAVOURS - update the offeror's favours for a contract.
 router.put('/:id/offeror/favours',
-    handle.updateOfferorFavours,
     passport.authenticate('jwt', { session: false }),
+    handle.updateOfferorFavours,
     function (req, res, next) {
         const successfullyUpdatedFavours = req.successfullyUpdatedFavours;
 		if(successfullyUpdatedFavours) {
@@ -174,8 +174,8 @@ router.put('/:id/offeror/favours',
 
 // PUT - UPDATE OFFEREE FAVOURS - update the offeree's favours for a contract.
 router.put('/:id/offeree/favours',
-    handle.updateOffereeFavours,
     passport.authenticate('jwt', { session: false }),
+    handle.updateOffereeFavours,
     function (req, res, next) {
         const successfullyUpdatedFavours = req.successfullyUpdatedFavours;
 		if(successfullyUpdatedFavours) {

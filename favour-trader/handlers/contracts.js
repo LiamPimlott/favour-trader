@@ -144,25 +144,26 @@ contractsHandlers.updateContractStatus = function(req, res, next) {
             res.json({ success: false, message: "You must provide a new status."});
         } else if (newStatus !== 'Accepted' && newStatus !== 'Declined') {
             res.json({ success: false, message: "Invalid status provided."});
+        } else {
+            Contract.findByIdAndUpdate(
+                contract._id,
+                { $set: { status: newStatus }},
+                { new: true }
+            ).
+            populate('offeror.favours').
+            populate('offeror.favours.skillId').
+            populate('offeree.favours').
+            populate('offeree.favours.skillId').
+            exec(function (err, updatedContract) {
+                if (err) {
+                    devDebug(err); // Log error.
+                    next(err); // Forward to error handling middleware.
+                } else {
+                    req.updatedContract = updatedContract;
+                    next();
+                }
+            });
         }
-        Contract.findByIdAndUpdate(
-            contract._id,
-            { $set: { status: newStatus }},
-            { new: true }
-        ).
-        populate('offeror.favours').
-        populate('offeror.favours.skillId').
-        populate('offeree.favours').
-        populate('offeree.favours.skillId').
-        exec(function (err, updatedContract) {
-            if (err) {
-                devDebug(err); // Log error.
-                next(err); // Forward to error handling middleware.
-            } else {
-                req.updatedContract = updatedContract;
-                next();
-            }
-        });
     });
 }
 
@@ -175,32 +176,33 @@ contractsHandlers.updateOfferorFavours = function(req, res, next) {
             res.json({ success: false, message: "Contract not found."});
         } else if ( contract.offeror.id != req.user.id ) {
             res.json({ success: false, message: "Sorry, you are not the offeror."})
-        } 
-        contract.offeror.favours = req.body.updatedFavours;
-        contract.save(function(err, updatedContract) {
-            if (err) {
-                devDebug(err); // Log error.
-                next(err); // Forward to error handling middleware.
-            } else {
-                Contract.findById(updatedContract._id).
-                populate('offeror.favours').
-                populate('offeror.favours.skillId').
-                populate('offeree.favours').
-                populate('offeree.favours.skillId').
-                exec((err, foundUpdatedContract) => {
-                    if (err) {
-                        devDebug(err); // Log error.
-                        next(err); // Forward to error handling middleware.
-                    } else {
-                        req.successfullyUpdatedFavours = {
-                            offeror: foundUpdatedContract.offeror.favours,
-                            offeree: foundUpdatedContract.offeree.favours
-                        };
-                        next();
-                    }
-                });
-            }
-        });
+        } else {
+            contract.offeror.favours = req.body.updatedFavours;
+            contract.save(function(err, updatedContract) {
+                if (err) {
+                    devDebug(err); // Log error.
+                    next(err); // Forward to error handling middleware.
+                } else {
+                    Contract.findById(updatedContract._id).
+                    populate('offeror.favours').
+                    populate('offeror.favours.skillId').
+                    populate('offeree.favours').
+                    populate('offeree.favours.skillId').
+                    exec((err, foundUpdatedContract) => {
+                        if (err) {
+                            devDebug(err); // Log error.
+                            next(err); // Forward to error handling middleware.
+                        } else {
+                            req.successfullyUpdatedFavours = {
+                                offeror: foundUpdatedContract.offeror.favours,
+                                offeree: foundUpdatedContract.offeree.favours
+                            };
+                            next();
+                        }
+                    });
+                }
+            });
+        }
     });
 }
 
@@ -213,32 +215,33 @@ contractsHandlers.updateOffereeFavours = function(req, res, next) {
             res.json({ success: false, message: "Contract not found."});
         } else if ( contract.offeree.id != req.user.id ) {
             res.json({ success: false, message: "Sorry, you are not the offeree."})
-        } 
-        contract.offeree.favours = req.body.updatedFavours;
-        contract.save(function(err, updatedContract) {
-            if (err) {
-                devDebug(err); // Log error.
-                next(err); // Forward to error handling middleware.
-            } else {
-                Contract.findById(updatedContract._id).
-                populate('offeror.favours').
-                populate('offeror.favours.skillId').
-                populate('offeree.favours').
-                populate('offeree.favours.skillId').
-                exec((err, foundUpdatedContract) => {
-                    if (err) {
-                        devDebug(err); // Log error.
-                        next(err); // Forward to error handling middleware.
-                    } else {
-                        req.successfullyUpdatedFavours = {
-                            offeror: foundUpdatedContract.offeror.favours,
-                            offeree: foundUpdatedContract.offeree.favours
-                        };
-                        next();
-                    }
-                });
-            }
-        });
+        } else {
+            contract.offeree.favours = req.body.updatedFavours;
+            contract.save(function(err, updatedContract) {
+                if (err) {
+                    devDebug(err); // Log error.
+                    next(err); // Forward to error handling middleware.
+                } else {
+                    Contract.findById(updatedContract._id).
+                    populate('offeror.favours').
+                    populate('offeror.favours.skillId').
+                    populate('offeree.favours').
+                    populate('offeree.favours.skillId').
+                    exec((err, foundUpdatedContract) => {
+                        if (err) {
+                            devDebug(err); // Log error.
+                            next(err); // Forward to error handling middleware.
+                        } else {
+                            req.successfullyUpdatedFavours = {
+                                offeror: foundUpdatedContract.offeror.favours,
+                                offeree: foundUpdatedContract.offeree.favours
+                            };
+                            next();
+                        }
+                    });
+                }
+            });
+        }
     });
 }
 
