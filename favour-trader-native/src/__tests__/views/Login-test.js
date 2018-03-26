@@ -55,8 +55,9 @@ describe('Testing Login component', () => {
         const navigation = { navigate: jest.fn() };
         let tree = renderer.create(<Login navigation={navigation}/>).toJSON()
 
-        expect(findById(tree, 'Invalidate username')).toBeUndefined()
-        expect(findById(tree, 'Invalidate password')).toBeUndefined()
+        //Possible Typos
+        expect(findById(tree, 'E-mali Addres')).toBeUndefined()
+        expect(findById(tree, 'Passward')).toBeUndefined()
     })
 
 });

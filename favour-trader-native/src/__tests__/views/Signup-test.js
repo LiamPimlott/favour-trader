@@ -54,9 +54,11 @@ describe('Testing SignUp component', () => {
         const navigation = { navigate: jest.fn() };
         let tree = renderer.create(<SignUp/>).toJSON()
 
-        expect(findById(tree, 'Invalidate username ')).toBeUndefined()
-        expect(findById(tree, 'Invalidate password')).toBeUndefined()
-        expect(findById(tree, 'Invalidate last name')).toBeUndefined()
-        expect(findById(tree, 'Invalidate first name')).toBeUndefined()
+        //Possible Typos
+        expect(findById(tree, 'E-mali Addres')).toBeUndefined()
+        expect(findById(tree, 'Passward')).toBeUndefined()
+        expect(findById(tree, 'Rast neme')).toBeUndefined()
+        expect(findById(tree, 'Firsd nama')).toBeUndefined()
+
     })
 });
