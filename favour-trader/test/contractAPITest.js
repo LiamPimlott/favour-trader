@@ -1202,14 +1202,23 @@ describe.only("Contract API Tests", () => {
                         console.log(err)
                     }
                     user2Token = res.body.token
-
-                    Contract.insertMany([contracts[7], contracts[8], contracts[0]],(error,docs)=>{
-                        for(var i = 0;i<docs.length;i++){
-                            contractIds.push(docs[i]._id)
-                        }
-                        done()
-                    })
+                    done()
                 })
+        })
+
+        beforeEach((done)=>{
+            //We're logged in as user0. user0 is the 
+            Contract.insertMany([contracts[7], contracts[8], contracts[0], contracts[1]],(error,docs)=>{
+                for(var i = 0;i<docs.length;i++){
+                    contractIds.push(docs[i]._id)
+                }
+                done()
+            })
+        })
+
+        afterEach((done)=>{
+            contractIds = []
+            done()
         })
 
         it("Should terminate/complete contract", (done) => {
@@ -1223,7 +1232,7 @@ describe.only("Contract API Tests", () => {
                 })
         })
 
-        it.skip("Should notify of other party approval needed", (done) => {
+        it("Should notify of other party approval needed", (done) => {
             chai.request(endpointUrl)
                 .put("/"+contractIds[1]+"/terminate")
                 .set("Authorization", token)
@@ -1234,7 +1243,7 @@ describe.only("Contract API Tests", () => {
                 })
         })
 
-        it.skip("Should return unsuccessful if the contract is not active", (done) => {
+        it("Should return unsuccessful if the contract is not active", (done) => {
             chai.request(endpointUrl)
                 .put("/"+contractIds[2]+"/terminate")
                 .set("Authorization", token)
@@ -1258,11 +1267,11 @@ describe.only("Contract API Tests", () => {
 
         it("Should return unsuccessful if you aren't involved in a contract", (done) => {
             chai.request(endpointUrl)
-                .put("/"+contractIds[1]+"/terminate")
+                .put("/"+contractIds[3]+"/terminate")
                 .set("Authorization", token)
                 .end((err, res) => {
                     expect(res.body.success).to.equal(false)
-                    expect(res.body.message).to.equal("Contract not found.")
+                    expect(res.body.message).to.equal("Unauthorized.")
                     done()
                 })
         })
