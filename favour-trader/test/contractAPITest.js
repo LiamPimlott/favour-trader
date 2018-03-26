@@ -337,6 +337,28 @@ var contracts = [
         status: 'Pending',
         messages: []
     },
+    {//contracts[6] - accepted contract between user2 and user0
+        offeror: {
+            id: userIds[2],
+            favours: favours[1],
+            name: {
+                first: users[2].name.first,
+                last: users[2].name.last
+            },  
+            requestTermination: false
+        },
+        offeree: {
+            id: userIds[0],
+            favours: favours[0],
+            name: {
+                first: users[0].name.first,
+                last: users[0].name.last
+            },
+            requestTermination: false
+        },
+        status: 'Accepted',
+        messages: []
+    },
 ]
 
 var badContracts = [
@@ -688,7 +710,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe("get /active Test", (done) => {
+    describe.only("get /active Test", (done) => {
 
         it("Should return correct message", (done) => {
             chai.request(endpointUrl)
@@ -701,6 +723,32 @@ describe("Contract API Tests", () => {
                 })
         })
 
+        it("Should return 1 contract", (done) => {
+            Contract.insertMany([contracts[2]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/active")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body.contracts).to.have.a.lengthOf(1)
+                        done()
+                    })
+            })
+        })
+
+        it("Should return more than one contract", (done) => {
+            Contract.insertMany([contracts[2], contracts[6]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/active")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body.contracts).to.have.a.lengthOf(2)
+                        done()
+                    })
+            })
+        })
+
         it("Should return nothing if the user has no contracts", (done) => {
             chai.request(endpointUrl)
                 .get("/active")
@@ -710,6 +758,19 @@ describe("Contract API Tests", () => {
                     expect(res.body.contracts).to.have.a.lengthOf(0)
                     done()
                 })
+        })
+
+        it("Should return nothing if user has no active contracts", (done) => {
+            Contract.insertMany([contracts[5]], (error, docs) => {
+                chai.request(endpointUrl)
+                    .get("/active")
+                    .set("Authorization", token)
+                    .end((err, res) => {
+                        expect(err).to.equal(null)
+                        expect(res.body.contracts).to.have.a.lengthOf(0)
+                        done()
+                    })
+            })
         })
 
         it("Should return an error without authorization", (done) => {
@@ -732,7 +793,7 @@ describe("Contract API Tests", () => {
         })
     })
 
-    describe.only("get /received Test", (done) => {
+    describe("get /received Test", (done) => {
         
         it("Should return correct message", (done) => {
             chai.request(endpointUrl)
