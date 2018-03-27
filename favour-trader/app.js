@@ -1,6 +1,3 @@
-// Google cloud debugging
-require('@google-cloud/debug-agent').start();
-
 // NPM PACKAGES (Some of these may end up getting removed eg. pug, favicon...etc)
 const express = require('express');
 const app = express();
