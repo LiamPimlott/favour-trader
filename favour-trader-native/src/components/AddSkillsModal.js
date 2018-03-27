@@ -39,6 +39,8 @@ class AddSKillsModal extends React.Component {
                         leftIcon={<Text>⇌</Text>}
                         key={item._id}
                         title={item.skill}
+                        accessible={true}
+                        accessibilityLabel={`${item.skill}+ ' skill'`}
                         onPress={() => {
                             this.toggleSelection.call(this, item._id)
                         }}
@@ -86,11 +88,15 @@ class AddSKillsModal extends React.Component {
                             title={"Save Skills"}
                             onPress={this.save}
                             buttonStyle={styles.submitButton}
+                            accessible={true}
+                            accessibilityLabel={'Save Skills'}
                         />
                         <Button
                             title={"Close"}
                             onPress={this.close}
                             buttonStyle={styles.closeButton}
+                            accessible={true}
+                            accessibilityLabel={'Close'}
                         />
                     </View>
                 </Modal>

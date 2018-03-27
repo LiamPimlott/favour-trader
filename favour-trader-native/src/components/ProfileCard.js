@@ -142,12 +142,16 @@ class ProfileCard extends React.Component {
                                             backgroundColor='#03A9F4'
                                             buttonStyle={styles.button}
                                             title='Update Info'
+                                            accessible={true}
+                                            accessibilityLabel={'updateInfo'}
                                             onPress={this.toggleUpdateInfoModal} />
                                         <Button
                                             icon={<Icon name={'add-circle'} color={'white'} />}
                                             backgroundColor='#03A9F4'
                                             buttonStyle={styles.button}
                                             title='Add Skills'
+                                            accessible={true}
+                                            accessibilityLabel={'addSkills'}
                                             onPress={this.toggleAddSkillsModal} />
                                     </View>
                                 ) : (<View />)

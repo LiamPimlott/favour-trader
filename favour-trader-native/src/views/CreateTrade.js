@@ -236,6 +236,8 @@ export default class HomeScreen extends Component {
                         data={offerableFavours}
                         onCancel={() => navigate('Home')}
                         onSubmit={this.setOfferedFavours}
+                        accessible={true}
+                        accessibilityLabel={`What will you do for ${recipientFirstName}?`}
                         initialSelected={offeredFavours}
                     />
                 );
@@ -248,6 +250,8 @@ export default class HomeScreen extends Component {
                         onCancel={() => this.setState({
                             currentStep: 1,
                         })}
+                        accessible={true}
+                        accessibilityLabel={`What would you like ${recipientFirstName} to do for you?`}
                         initialSelected={requestedFavours}
                     />
                 );
@@ -258,6 +262,8 @@ export default class HomeScreen extends Component {
                         onChangeText={this.setTradeMessage}
                         message={tradeMessage || ''}
                         onSubmit={this.submitTrade}
+                        accessible={true}
+                        accessibilityLabel={`Add a message for ${recipientFirstName} (optional)?`}
                         onCancel={() => this.setState({
                             currentStep: 2,
                         })}

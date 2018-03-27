@@ -52,6 +52,8 @@ exports[`Testing FavourList component renders as expected 1`] = `
   >
     <Button
       TouchableComponent={[Function]}
+      accessibilityLabel="Previous"
+      accessible={true}
       buttonStyle={
         Object {
           "backgroundColor": "rgba(92, 99,216, 1)",
@@ -81,6 +83,8 @@ exports[`Testing FavourList component renders as expected 1`] = `
     />
     <Button
       TouchableComponent={[Function]}
+      accessibilityLabel="Continue"
+      accessible={true}
       buttonStyle={
         Object {
           "backgroundColor": "rgba(92, 99,216, 1)",

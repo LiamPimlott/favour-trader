@@ -33,6 +33,8 @@ class MatchCard extends React.Component{
                         icon={<Icon name={'account-circle'} color={'white'} />}
                         backgroundColor='#03A9F4'
                         buttonStyle={styles.button}
+                        accessible={true}
+                        accessibilityLabel={`${match.name.first}` + ' ' + `${match.name.last}` + ' profile'}
                         title='View Profile' 
                         onPress = {this.props.passUserID.bind(this,match._id)}/>
                     <Button
@@ -40,6 +42,8 @@ class MatchCard extends React.Component{
                         backgroundColor='#03A9F4'
                         buttonStyle={styles.button}
                         title='Review Skills'
+                        accessible={true}
+                        accessibilityLabel={`${match.name.first}` + ' ' + `${match.name.last}` + ' skills'}
                         onPress={() => {
                             this.setModalVisible(!this.state.modalVisible, match.has, match.wants);
                         }}

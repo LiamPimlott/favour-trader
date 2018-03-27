@@ -46,6 +46,8 @@ exports[`Testing ReviewSkillsModal component renders as expected 1`] = `
       />
       <Button
         TouchableComponent={[Function]}
+        accessibilityLabel="Close"
+        accessible={true}
         buttonStyle={
           Object {
             "borderRadius": 3,

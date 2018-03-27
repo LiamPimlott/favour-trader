@@ -5,7 +5,6 @@ import AuthService from "../components/AuthService";
 import axios from 'axios';
 import MatchCard from "../components/MatchCard";
 
-
 class HomeScreen extends React.Component {
     constructor() {
         super();
@@ -101,6 +100,8 @@ class HomeScreen extends React.Component {
             <ListItem
                 key={i}
                 title={item}
+                accessible={true}
+                accessibilityLabel={`${item}`}
                 onPress={() => { this.updateFilter(item) }}
             />
         )
@@ -132,6 +133,8 @@ class HomeScreen extends React.Component {
                                     style={{marginTop: '20'}}
                                     title={"Close"}
                                     buttonStyle={styles.button}
+                                    accessible={true}
+                                    accessibilityLabel={'close'}
                                     onPress={() => {
                                         this.setState({toggleFilter: false})
                                     }}

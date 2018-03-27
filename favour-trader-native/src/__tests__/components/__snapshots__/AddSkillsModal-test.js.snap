@@ -61,6 +61,8 @@ exports[`Testing AddSkillsModal component renders as expected 1`] = `
     >
       <Button
         TouchableComponent={[Function]}
+        accessibilityLabel="Save Skills"
+        accessible={true}
         buttonStyle={
           Object {
             "marginBottom": 15,
@@ -82,6 +84,8 @@ exports[`Testing AddSkillsModal component renders as expected 1`] = `
       />
       <Button
         TouchableComponent={[Function]}
+        accessibilityLabel="Close"
+        accessible={true}
         buttonStyle={
           Object {
             "backgroundColor": "red",

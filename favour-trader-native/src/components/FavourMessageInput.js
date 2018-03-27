@@ -34,6 +34,8 @@ export default class FavourMessageInput extends Component {
                         numberOfLines={5}
                         onChangeText={(message) => this._onChangeText(message)}
                         value={this.props.message}
+                        accessible={true}
+                        accessibilityLabel={'enterMessage'}
                         style={{
                             height: 400,
                             width: 310,
@@ -57,6 +59,8 @@ export default class FavourMessageInput extends Component {
                             borderWidth: 0,
                             borderRadius: 5
                         }}
+                        accessible={true}
+                        accessibilityLabel={'Offered Favours'}
                         containerStyle={{ marginTop: 20 }}
                     />
                     <Button
@@ -70,6 +74,8 @@ export default class FavourMessageInput extends Component {
                             borderWidth: 0,
                             borderRadius: 5
                         }}
+                        accessible={true}
+                        accessibilityLabel={'Request Trade'}
                         containerStyle={{ marginTop: 20 }}
                     />
                 </View>
