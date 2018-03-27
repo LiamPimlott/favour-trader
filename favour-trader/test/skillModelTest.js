@@ -27,11 +27,13 @@ function connect(){
 function saveSkill(){
     return new Promise((resolve,reject)=>{
         skills[0].save((err,res)=>{
+            console.log("Done")
             if(err){
                 console.log(err)
                 reject()
+            } else {
+                resolve()
             }
-            resolve()
         })
     })
 }
@@ -51,9 +53,13 @@ function clearDB(){
 }
 
 
-describe.only("Skill Model Tests",(done)=>{
+describe("Skill Model Tests",(done)=>{
     before((done)=>{
-        connect().then(saveSkill()).then(done())
+        connect().then((result)=>{
+            saveSkill().then((result)=>{
+                done()
+            })
+        })
     })
 
     it("Should successfully validate a unique skill",(done)=>{

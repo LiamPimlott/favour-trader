@@ -73,8 +73,8 @@ function connect() {
 function addUsers() {
     return new Promise((resolve, reject) => {
         User.insertMany(users, (error, docs) => {
-            if (err) {
-                console.log(err)
+            if (error) {
+                console.log(error)
                 reject()
             }
             else {
@@ -87,8 +87,8 @@ function addUsers() {
 function addSkills() {
     return new Promise((resolve, reject) => {
         Skill.insertMany(skills, (error, docs) => {
-            if (err) {
-                console.log(err)
+            if (error) {
+                console.log(error)
                 reject()
             }
             else {
@@ -167,7 +167,10 @@ describe("Contract Model Tests", (done) => {
     })
 
     after((done)=>{
-        clearDB().then(done())
+        clearDB().then((result)=>{
+            mongoose.disconnect()
+            done()
+        })
     })
 
 })
