@@ -1,0 +1,26 @@
+{
+  "output": "./output",
+  "helpers": {
+    "Appium": {
+      "appiumVersion": "1.7.2",
+      "app": "C:\\software-engineering-2-group-8\\favour-trader-native\\myapp2.apk",
+      "platform": "Android",
+      "device": "Android Emulator"
+    }
+  },
+  "include": {
+    "I": "./steps_file.js",
+    "loginPage": "./acceptance/pages/login.js",
+    "signUpPage": "./acceptance/pages/SignUp.js",
+    "homePage": "./acceptance/pages/Home.js",
+    "userProfilePage": "./acceptance/pages/userProfile.js",
+    "offerTradePage": "./acceptance/pages/OfferTrade.js"
+  },
+  "mocha": {},
+  "bootstrap": false,
+  "teardown": null,
+  "hooks": [],
+  "tests": "./acceptance/*_test.js",
+  "timeout": 10000,
+  "name": "favour-trader-native"
+}

@@ -1,6 +1,7 @@
 node_modules
 .idea
 .env
+app.yaml
 ~.bashrc
 ~.bash_profile.bash
 *.swp

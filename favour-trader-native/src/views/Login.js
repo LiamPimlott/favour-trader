@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Alert, Image } from 'react-native';
+import { StyleSheet, View, Text, KeyboardAvoidingView, Alert } from 'react-native';
 import AuthService from "../components/AuthService";
 import { Input, Icon, Button, Card, Divider } from 'react-native-elements';
 
-export default class Login extends React.Component {
-    constructor() {
+class Login extends React.Component {
+    constructor(){
         super();
         this.state = {
             failedAttempt: false,
@@ -25,7 +25,7 @@ export default class Login extends React.Component {
                     this.setState({
                         failedAttempt: true,
                     });
-                    if (this.state.failedAttempt) {
+                    if(this.state.failedAttempt){
                         this.renderErrorText(res.message);
                     }
                 }
@@ -39,48 +39,55 @@ export default class Login extends React.Component {
         Alert.alert('Invalid Login', message);
     }
 
-    render() {
+    render(){
         const { navigate } = this.props.navigation;
-        return (
+        return(
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <Card
-                    title={'Welcome to Favour ⇋ Trader'}>
-                    <Text style={styles.intro}>Login to start trading!</Text>
-                    <View style={styles.input}>
-                        <Input
-                            accessibilityLabel="Email"
-                            placeholder='E-mail Address'
-                            leftIcon={<Icon name='mail-outline' />}
-                            autoCapitalize={'none'}
-                            onChangeText={(text) => this.setState({ email: text })}
-                        />
-                    </View>
-                    <View style={styles.input}>
-                        <Input
-                            accessibilityLabel="Password"
-                            placeholder='Password'
-                            leftIcon={<Icon name='lock-outline' />}
-                            autoCapitalize={'none'}
-                            secureTextEntry={true}
-                            onChangeText={(text) => this.setState({ password: text })}
-                        />
-                    </View>
+                    <Card
+                        title={'Welcome to Favour ⇋ Trader'}>
+                        <Text style={styles.intro}>Login to start trading!</Text>
+                        <View style={styles.input}>
+                            <Input
+                                placeholder='E-mail Address'
+                                leftIcon={ <Icon name='mail-outline' /> }
+                                autoCapitalize={'none'}
+                                accessible={true}
+                                accessibilityLabel="Email-Address"
+                                onChangeText={(text) => this.setState({email: text})}
+                            />
+                        </View>
+                        <View style={styles.input}>
+                            <Input
+                                placeholder='Password'
+                                leftIcon={ <Icon name='lock-outline' /> }
+                                autoCapitalize={'none'}
+                                secureTextEntry={true}
+                                accessible={true}
+                                accessibilityLabel="Password"
+                                onChangeText={(text) => this.setState({password: text})}
+                            />
+                        </View>
 
-                    <Button
-                        accessibilityLabel="Login"
-                        raised={true}
-                        buttonStyle={styles.button}
-                        title='Login'
-                        onPress={this.submit} />
+                        <Button
+                            raised={true}
+                            buttonStyle={styles.button}
+                            title='Login'
+                            onPress = { this.submit} 
+                            accessible={true}
+                            accessibilityLabel={'Login'}
+                            />
 
-                    <Divider style={styles.divider} />
+                    <Divider style={styles.divider}/>
                     <View style={styles.footerView}>
-                        <Text style={{ textAlign: 'center' }}>No account?</Text>
+                        <Text style={{textAlign: 'center'}}>No account?</Text>
                         <Button
                             clear={true}
                             titleStyle={{ color: "#03A9F4" }}
                             title='Sign Up'
-                            onPress={() => navigate('Signup')} />
+                            onPress = { () => navigate('Signup') } 
+                            accessible={true}
+                            accessibilityLabel={'Signup'}
+                            />
                     </View>
                 </Card>
             </KeyboardAvoidingView>
@@ -123,3 +130,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     }
 });
+
+export default Login;

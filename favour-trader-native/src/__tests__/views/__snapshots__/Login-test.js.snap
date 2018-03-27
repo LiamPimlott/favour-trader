@@ -39,6 +39,8 @@ exports[`Testing Login component renders as expected 1`] = `
       }
     >
       <Input
+        accessibilityLabel="Email-Address"
+        accessible={true}
         autoCapitalize="none"
         leftIcon={
           <Icon
@@ -64,6 +66,8 @@ exports[`Testing Login component renders as expected 1`] = `
       }
     >
       <Input
+        accessibilityLabel="Password"
+        accessible={true}
         autoCapitalize="none"
         leftIcon={
           <Icon
@@ -83,6 +87,8 @@ exports[`Testing Login component renders as expected 1`] = `
     </View>
     <Button
       TouchableComponent={[Function]}
+      accessibilityLabel="Login"
+      accessible={true}
       buttonStyle={
         Object {
           "borderRadius": 0,
@@ -138,6 +144,8 @@ exports[`Testing Login component renders as expected 1`] = `
       </Text>
       <Button
         TouchableComponent={[Function]}
+        accessibilityLabel="Signup"
+        accessible={true}
         buttonStyle={
           Object {
             "borderRadius": 3,

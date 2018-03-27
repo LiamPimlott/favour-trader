@@ -12,7 +12,7 @@ const EditUserOverview = Form.create()(
       <Modal
         visible={visible}
         title="Update your profile"
-        okText="Save"
+        okText="Save Profile"
         onCancel={onCancel}
         onOk={onSave}
         confirmLoading={confirmUpdate}

@@ -15,7 +15,7 @@ const NewSkillModal = Form.create()(
       <Modal
         visible={visible}
         title="Add A New Skill To Your Profile"
-        okText="Save"
+        okText="Save Skill"
         onCancel={onCancel}
         onOk={onSave}
         confirmLoading={confirmNew}

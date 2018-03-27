@@ -5,7 +5,7 @@ Scenario('User already exist', (I, signupPage) => {
     I.click("//a[@href='/create-account']");
     signupPage.fillsignUpForm('ismail', 'acceptance', 'acceptance@test.com', 'password');
     signupPage.submitForm();
-    I.waitForText('Email already exists or required fields missing.');
+    I.waitForText('Email already exists or required fields missing.', 3);
     I.see('Email already exists or required fields missing.')
 });
 

@@ -3,6 +3,8 @@
 exports[`Testing Trades component renders as expected 1`] = `
 <View>
   <Picker
+    accessibilityLabel="active + ' trade picker'"
+    accessible={true}
     mode="dialog"
     onValueChange={[Function]}
     selectedValue="active"

@@ -65,6 +65,8 @@ export default class FavourList extends Component {
                     <Button
                         title={'← Previous'}
                         onPress={this._onCancel}
+                        accessible={true}
+                        accessibilityLabel={'Previous'}
                         buttonStyle={{
                             backgroundColor: "rgba(92, 99,216, 1)",
                             width: 125,
@@ -78,6 +80,8 @@ export default class FavourList extends Component {
                     <Button
                         title={'Continue →'}
                         onPress={this._onSubmit}
+                        accessible={true}
+                        accessibilityLabel={'Continue'}
                         buttonStyle={{
                             backgroundColor: "rgba(92, 99,216, 1)",
                             width: 125,
