@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing FavourList component renders as expected 1`] = `
+<View>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+  >
+    What will you do for Test user?
+  </Text>
+  <List
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#7851a9",
+        "flex": 1,
+        "justifyContent": "center",
+      }
+    }
+  >
+    <FlatList
+      data="Test skill 1"
+      disableVirtualization={false}
+      extraData={
+        Object {
+          "selected": "Test skill 2",
+        }
+      }
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      numColumns={1}
+      onEndReachedThreshold={2}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      updateCellsBatchingPeriod={50}
+      windowSize={21}
+    />
+  </List>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "marginTop": 10,
+        "paddingLeft": 10,
+        "paddingRight": 10,
+      }
+    }
+  >
+    <Button
+      TouchableComponent={[Function]}
+      buttonStyle={
+        Object {
+          "backgroundColor": "rgba(92, 99,216, 1)",
+          "borderColor": "transparent",
+          "borderRadius": 5,
+          "borderWidth": 0,
+          "height": 45,
+          "width": 125,
+        }
+      }
+      clear={false}
+      containerStyle={
+        Object {
+          "marginTop": 20,
+        }
+      }
+      disabled={false}
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      title="← Previous"
+    />
+    <Button
+      TouchableComponent={[Function]}
+      buttonStyle={
+        Object {
+          "backgroundColor": "rgba(92, 99,216, 1)",
+          "borderColor": "transparent",
+          "borderRadius": 5,
+          "borderWidth": 0,
+          "height": 45,
+          "width": 125,
+        }
+      }
+      clear={false}
+      containerStyle={
+        Object {
+          "marginTop": 20,
+        }
+      }
+      disabled={false}
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      title="Continue →"
+    />
+  </View>
+</View>
+`;

@@ -3,15 +3,15 @@ var jwt = require('jsonwebtoken');
 var ConfigClass = require('../config/main');
 const config = new ConfigClass();//See comments in config/main for an explanation
 
-// DATA MODELS
+// DATA MODELS 
 var User = require("../models/user");
 
 // RETURN OBJ
-var usersLogicObj = {};
+var usersHandlers = {};
 
-// MIDDLEWARE
+// BUSINESS LOGIC MIDDLEWARE
 
-usersLogicObj.getCurrentUserProfile = function(req, res, next) {
+usersHandlers.getCurrentUserProfile = function(req, res, next) {
 	User.findById(req.user.id).
 	select('name address email about has wants').
 	populate('has.category').
@@ -29,7 +29,7 @@ usersLogicObj.getCurrentUserProfile = function(req, res, next) {
 	});
 }
 
-usersLogicObj.getProfileById = function(req, res, next) {
+usersHandlers.getProfileById = function(req, res, next) {
 	User.findById(req.params.id).
 	select('name address about has wants').
 	populate('has.category').
@@ -47,7 +47,7 @@ usersLogicObj.getProfileById = function(req, res, next) {
 	});
 }
 
-usersLogicObj.getCurrentUserHas = function(req, res, next) {
+usersHandlers.getCurrentUserHas = function(req, res, next) {
 	User.findById(req.user.id).
 	select('has').
 	populate('has.category').
@@ -62,7 +62,7 @@ usersLogicObj.getCurrentUserHas = function(req, res, next) {
 	});
 }
 
-usersLogicObj.getCurrentUserWants = function(req, res, next) {
+usersHandlers.getCurrentUserWants = function(req, res, next) {
 	User.findById(req.user.id).
 	select('wants').
 	populate('wants.category').
@@ -77,7 +77,7 @@ usersLogicObj.getCurrentUserWants = function(req, res, next) {
 	})
 }
 
-usersLogicObj.createNewUserFromBody = function(req, res, next) {
+usersHandlers.createNewUserFromBody = function(req, res, next) {
 	if (!req.body.email || !req.body.password) {
 		res.json({ success: false, message: "Please enter an email and password to register."});
 	} else if (!req.body.firstName || !req.body.lastName) {
@@ -100,7 +100,7 @@ usersLogicObj.createNewUserFromBody = function(req, res, next) {
 	}
 }
 
-usersLogicObj.registerNewUser = function(req, res, next) {
+usersHandlers.registerNewUser = function(req, res, next) {
 	// attempt to save the new user
 	const newUser = req.newUser;
 	devDebug("IN REGISTER MIDDLEWARE: " + req.newUser);
@@ -127,7 +127,7 @@ usersLogicObj.registerNewUser = function(req, res, next) {
 	}
 }
 
-usersLogicObj.logUserIn = function(req, res, next) {
+usersHandlers.logUserIn = function(req, res, next) {
 	if(!req.body.email){
 		res.json({ success: false, message: "No email provided."});
 	} else if (!req.body.password) {
@@ -166,7 +166,7 @@ usersLogicObj.logUserIn = function(req, res, next) {
 	}
 }
 
-usersLogicObj.updateUser = function(req, res, next) {
+usersHandlers.updateUser = function(req, res, next) {
 	User.findByIdAndUpdate(req.user.id, req.body, {new: true})
 	.populate('has.category')
 	.populate('wants.category')
@@ -181,7 +181,7 @@ usersLogicObj.updateUser = function(req, res, next) {
 	});
 }
 
-usersLogicObj.getMatchedUsers = function(req, res, next) {
+usersHandlers.getMatchedUsers = function(req, res, next) {
     User.findById(req.user.id, 'wants has', (err, user) => {
 		if (err) {
 			devDebug(err);
@@ -200,7 +200,7 @@ usersLogicObj.getMatchedUsers = function(req, res, next) {
 			{
 				matches = User.find({ 
 					$and: [
-						{ "has.category": { $in: userWantsArray } },
+						{ "wants.category": { $in: userHasArray } },
 						{ _id: { $ne: user._id } },
 					]
 				})
@@ -209,7 +209,7 @@ usersLogicObj.getMatchedUsers = function(req, res, next) {
 			{
 				matches = User.find({ 
 					$and: [
-						{ "wants.category": { $in: userHasArray } },
+						{ "has.category": { $in: userWantsArray } },
 						{ _id: { $ne: user._id } },
 					]
 				})
@@ -242,4 +242,4 @@ usersLogicObj.getMatchedUsers = function(req, res, next) {
 }
 
 // EXPORT
-module.exports = usersLogicObj;
+module.exports = usersHandlers;

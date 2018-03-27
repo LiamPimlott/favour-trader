@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing HomeScreen component renders as expected 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 1,
+    }
+  }
+>
+  <Button
+    TouchableComponent={[Function]}
+    buttonStyle={
+      Object {
+        "borderRadius": 0,
+        "marginBottom": 10,
+        "marginLeft": 0,
+        "marginRight": 0,
+        "marginTop": 10,
+        "width": 300,
+      }
+    }
+    clear={false}
+    disabled={false}
+    iconRight={false}
+    loadingProps={
+      Object {
+        "color": "white",
+        "size": "small",
+      }
+    }
+    onPress={[Function]}
+    title="Select Filter"
+  />
+  <View />
+  <Divider
+    style={
+      Object {
+        "backgroundColor": "grey",
+        "height": 1,
+        "width": 300,
+      }
+    }
+  />
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+  >
+    No matches found or Update selection from picker!
+  </Text>
+</View>
+`;

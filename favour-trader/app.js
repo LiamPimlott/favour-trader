@@ -32,9 +32,6 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 // point express to our static create-react-app bundle
 app.use(express.static(path.join(__dirname, 'client/build')));
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
 // passport config
 app.use(passport.initialize());
 require('./config/passport')(passport);
@@ -72,9 +69,16 @@ app.use(function (err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = process.env.APPENV === 'development' ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+    let text = 'Error';
+
+    // Set status and message.
+    if(err.name === 'ValidationError'){
+        res.status(400);
+        text = 'Required fields are missing.';
+    } else {
+        res.status(err.status || 500);
+    }
+    res.send(text);
 });
 
 module.exports = app;
