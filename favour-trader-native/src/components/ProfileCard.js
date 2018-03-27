@@ -1,15 +1,17 @@
-import React, {Component} from 'react';
-import {StyleSheet, View, Text,} from 'react-native';
-import {Card, Avatar, Button, Icon} from 'react-native-elements'
+import React, { Component } from 'react';
+import { StyleSheet, View, Text, } from 'react-native';
+import { Card, Avatar, Button, Icon } from 'react-native-elements'
 import axios from 'axios';
 import AuthService from "./AuthService";
 import UpdateInfoModal from './UpdateInfoModal';
+import AddSKillsModal from './AddSkillsModal';
 
 class ProfileCard extends React.Component {
     constructor() {
         super();
         this.state = {
             isOpen: false,
+            isSkillToggleOpen: false,
             firstName: '',
             lastName: '',
             country: '',
@@ -17,19 +19,23 @@ class ProfileCard extends React.Component {
             city: '',
             postalCode: '',
             about: '',
+            skillCategories: null,
+            gotAllSkills: false,
         };
         this.authService = new AuthService();
         this.toggleUpdateInfoModal = this.toggleUpdateInfoModal.bind(this);
+        this.toggleAddSkillsModal = this.toggleAddSkillsModal.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
+        this.getAllSkills = this.getAllSkills.bind(this);
     }
 
     updateInfo(firstName,
-               lastName,
-               postalCode,
-               city,
-               state,
-               country,
-               about) {
+        lastName,
+        postalCode,
+        city,
+        state,
+        country,
+        about) {
         this.authService.getToken().then(
             (token) => {
                 const config = {
@@ -67,10 +73,22 @@ class ProfileCard extends React.Component {
             });
     }
 
+    getAllSkills() {
+        axios.get("https://favour-trader.appspot.com/api/skills/all")
+            .then(res => res.data)
+            .then(categories => this.setState({
+                skillCategories: categories,
+                gotAllSkills: 'true'
+            }))
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
 
     componentWillMount() {
         this.mounted = true;
-        let {userProfile} = this.props;
+        let { userProfile } = this.props;
         this.setState({
             firstName: userProfile.firstName,
             lastName: userProfile.lastName,
@@ -80,7 +98,7 @@ class ProfileCard extends React.Component {
             postalCode: userProfile.postalCode,
             about: userProfile.about
         });
-
+        this.getAllSkills();
     }
 
     componentWillUnmount() {
@@ -88,11 +106,16 @@ class ProfileCard extends React.Component {
     }
 
     toggleUpdateInfoModal() {
-        this.setState({isOpen: true});
+        this.setState({ isOpen: !this.state.isOpen });
+    }
+
+    toggleAddSkillsModal() {
+        this.setState({ isSkillToggleOpen: !this.state.isSkillToggleOpen });
     }
 
     render() {
         return (
+
             <View>
                 <Card
                     title={this.state.firstName + ' ' + this.state.lastName}>
@@ -100,36 +123,59 @@ class ProfileCard extends React.Component {
                         <Avatar
                             large
                             rounded
-                            source={{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"}}
+                            source={{ uri: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg" }}
                             activeOpacity={0.7}
                         />
                     </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                        <View style={{alignItems: 'flex-start'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ alignItems: 'flex-start' }}>
                             <Text>City: {this.state.city}</Text>
                             <Text>State: {this.state.state}</Text>
                             <Text>Country: {this.state.country}</Text>
                         </View>
-                        <View style={{alignItems: 'flex-end'}}>
+                        <View style={{ alignItems: 'flex-end' }}>
                             {
                                 this.props.isCurrentUser ? (
-                                    <Button
-                                        icon={<Icon name={'info'} color={'white'}/>}
-                                        backgroundColor='#03A9F4'
-                                        buttonStyle={styles.button}
-                                        title='Update Info'
-                                        onPress={this.toggleUpdateInfoModal}/>
-                                ) : (<View/>)
+                                    <View>
+                                        <Button
+                                            icon={<Icon name={'info'} color={'white'} />}
+                                            backgroundColor='#03A9F4'
+                                            buttonStyle={styles.button}
+                                            title='Update Info'
+                                            onPress={this.toggleUpdateInfoModal} />
+                                        <Button
+                                            icon={<Icon name={'add-circle'} color={'white'} />}
+                                            backgroundColor='#03A9F4'
+                                            buttonStyle={styles.button}
+                                            title='Add Skills'
+                                            onPress={this.toggleAddSkillsModal} />
+                                    </View>
+                                ) : (<View />)
                             }
                         </View>
                     </View>
                 </Card>
                 {
                     this.state.isOpen ?
-                        (<UpdateInfoModal isOpen={this.state.isOpen} updateInfo={this.updateInfo}
-                                          toggle={this.toggleUpdateInfoModal} userProfile={this.props.userProfile}/>)
+                        (<UpdateInfoModal
+                            isOpen={this.state.isOpen}
+                            updateInfo={this.updateInfo}
+                            toggle={this.toggleUpdateInfoModal}
+                            userProfile={this.props.userProfile} />)
                         :
-                        (<View/>)
+                        (<View />)
+                }
+                {
+                    this.state.isSkillToggleOpen && this.state.gotAllSkills ?
+                        (<AddSKillsModal
+                            isOpen={this.state.isSkillToggleOpen}
+                            addSkill={this.addSkill}
+                            categories={this.state.skillCategories}
+                            toggle={this.toggleAddSkillsModal}
+                            onSubmit={this.props.updateUser}
+                            userProfile={this.props.userProfile} />)
+                        :
+                        (<View />)
                 }
             </View>
         )
@@ -150,6 +196,7 @@ const styles = StyleSheet.create({
     },
     button: {
         marginTop: 10,
+        borderRadius: 100,
     }
 
 });

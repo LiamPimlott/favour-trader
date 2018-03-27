@@ -47,13 +47,13 @@ class SidePanelContent extends Component {
 
             if (!!userProfile && userProfile.email) {
                 const userEmail = userProfile.email;
-                axios.post('/api/users/has', {
+                axios.get('/api/users/has', {
                     email: userEmail,
                 }, config)
                 .then(res => res.data.user)
                 .then(user => this.setState({ hasSkills: user.has }));
 
-                axios.post('/api/users/wants', {
+                axios.get('/api/users/wants', {
                     email: userEmail,
                 }, config)
                 .then(res => res.data.user)

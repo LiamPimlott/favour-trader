@@ -4,7 +4,7 @@ import AuthService from "../components/AuthService";
 import { Input, Icon, Button, Card, Divider } from 'react-native-elements';
 
 export default class Login extends React.Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
             failedAttempt: false,
@@ -25,7 +25,7 @@ export default class Login extends React.Component {
                     this.setState({
                         failedAttempt: true,
                     });
-                    if(this.state.failedAttempt){
+                    if (this.state.failedAttempt) {
                         this.renderErrorText(res.message);
                     }
                 }
@@ -39,45 +39,48 @@ export default class Login extends React.Component {
         Alert.alert('Invalid Login', message);
     }
 
-    render(){
+    render() {
         const { navigate } = this.props.navigation;
-        return(
+        return (
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                    <Card
-                        title={'Welcome to Favour ⇋ Trader'}>
-                        <Text style={styles.intro}>Login to start trading!</Text>
-                        <View style={styles.input}>
-                            <Input
-                                placeholder='E-mail Address'
-                                leftIcon={ <Icon name='mail-outline' /> }
-                                autoCapitalize={'none'}
-                                onChangeText={(text) => this.setState({email: text})}
-                            />
-                        </View>
-                        <View style={styles.input}>
-                            <Input
-                                placeholder='Password'
-                                leftIcon={ <Icon name='lock-outline' /> }
-                                autoCapitalize={'none'}
-                                secureTextEntry={true}
-                                onChangeText={(text) => this.setState({password: text})}
-                            />
-                        </View>
+                <Card
+                    title={'Welcome to Favour ⇋ Trader'}>
+                    <Text style={styles.intro}>Login to start trading!</Text>
+                    <View style={styles.input}>
+                        <Input
+                            accessibilityLabel="Email"
+                            placeholder='E-mail Address'
+                            leftIcon={<Icon name='mail-outline' />}
+                            autoCapitalize={'none'}
+                            onChangeText={(text) => this.setState({ email: text })}
+                        />
+                    </View>
+                    <View style={styles.input}>
+                        <Input
+                            accessibilityLabel="Password"
+                            placeholder='Password'
+                            leftIcon={<Icon name='lock-outline' />}
+                            autoCapitalize={'none'}
+                            secureTextEntry={true}
+                            onChangeText={(text) => this.setState({ password: text })}
+                        />
+                    </View>
 
-                        <Button
-                            backgroundColor='#03A9F4'
-                            buttonStyle={styles.button}
-                            title='Login'
-                            onPress = { this.submit} />
+                    <Button
+                        accessibilityLabel="Login"
+                        raised={true}
+                        buttonStyle={styles.button}
+                        title='Login'
+                        onPress={this.submit} />
 
-                    <Divider style={styles.divider}/>
+                    <Divider style={styles.divider} />
                     <View style={styles.footerView}>
-                        <Text style={{textAlign: 'center'}}>No account?</Text>
+                        <Text style={{ textAlign: 'center' }}>No account?</Text>
                         <Button
                             clear={true}
                             titleStyle={{ color: "#03A9F4" }}
                             title='Sign Up'
-                            onPress = { () => navigate('Signup') } />
+                            onPress={() => navigate('Signup')} />
                     </View>
                 </Card>
             </KeyboardAvoidingView>
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         marginLeft: 0,
         marginRight: 0,
-        marginBottom: 10
+        marginBottom: 10,
     },
     intro: {
         fontSize: 15,
