@@ -74,10 +74,9 @@ Notes for working on this repository:
 - Any changes must pass the TravisCI builds. (These are automaticly ran via github integrations).
 
 ### Running client accpetance tests:
-- In the /favour-trader folder, run node dbrefresh.js with  NODE_ENV=acceptance in the .env file
-- First, start the server and client like in Option 1 using NODE_ENV=acceptance
-- in /favour-trader/client, run npm run e2etests
+- In the /favour-trader folder, run `node dbrefresh.js` with  `NODE_ENV=acceptance` in the .env file
+- First, start the server and client like in Option 1 using `NODE_ENV=acceptance`
+- in /favour-trader/client, run `npm run e2etests`
 
 Note: the dbrefresh script sometimes doesn't add the skills into MongoDB, causing the tests to fail. If you encounter
 the test failing when selecting a skill, try running the dbrefresh script again.
-
