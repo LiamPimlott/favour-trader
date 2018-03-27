@@ -9,11 +9,9 @@ module.exports = {
     },
 
     createTrade(skillOffered, skillRequested) {
-        I.tap(skillOffered);
-        I.tap("Continue");
+        I.tap("Continue →");
         I.tap(skillRequested);
-        I.tap("Continue");
+        I.tap("Continue →");
         I.tap("Request Trade");
     },
-
 }

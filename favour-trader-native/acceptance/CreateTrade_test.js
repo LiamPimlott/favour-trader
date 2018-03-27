@@ -12,7 +12,7 @@ let randomEmail = null;
 Feature('CreateTrade');
 
 Scenario('new User should be able to Create Trade @createTrade',
-    (I, signUpPage, loginPage, homePage, userProfilePage) => {
+    (I, signUpPage, loginPage, homePage, userProfilePage, offerTradePage) => {
     let random = makeid();
     I.wait(5);
     randomEmail = "email"+random+"@gmail.com";
@@ -23,12 +23,18 @@ Scenario('new User should be able to Create Trade @createTrade',
     userProfilePage.updateInfo("Firstname");
     userProfilePage.updateSkill('Painting');
     userProfilePage.goToHome();
-    homePage.filterMatches('wants');
+    homePage.filterMatches('has');
+    I.wait(4);
+    homePage.goToMatchProfile("~Clark Kent profile");
+    I.tap('Offer Trade');
+    offerTradePage.createTrade("Painting", "Painting");
+    I.wait(4);
 });
 
-Scenario('new User should be able to Create Trade @test',
-    (I, signUpPage, loginPage, userProfilePage) => {
+Scenario('Existing User should be able to see Trades @sent',
+    (I, signUpPage, loginPage, userProfilePage, homePage) => {
         I.wait(5);
         loginPage.login("example@gmail.com", "password");
-        userProfilePage.goToHome();
+        homePage.goToMyTrades();
+        
     });

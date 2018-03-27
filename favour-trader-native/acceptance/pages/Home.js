@@ -26,5 +26,10 @@ module.exports = {
         I.tap("My Profile");
     },
 
+    goToMyTrades(){
+        I.tap("MENU");
+        I.tap("My Trades");
+    }
+
 
 };
