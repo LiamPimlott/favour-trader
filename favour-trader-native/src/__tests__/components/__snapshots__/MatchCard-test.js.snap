@@ -53,6 +53,8 @@ exports[`Testing MatchCard component renders as expected 1`] = `
     />
     <Button
       TouchableComponent={[Function]}
+      accessibilityLabel="undefined  profile"
+      accessible={true}
       backgroundColor="#03A9F4"
       buttonStyle={
         Object {
@@ -88,6 +90,8 @@ exports[`Testing MatchCard component renders as expected 1`] = `
     />
     <Button
       TouchableComponent={[Function]}
+      accessibilityLabel="undefined  skills"
+      accessible={true}
       backgroundColor="#03A9F4"
       buttonStyle={
         Object {

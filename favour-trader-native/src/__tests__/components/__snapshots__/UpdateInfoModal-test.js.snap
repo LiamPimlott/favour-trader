@@ -19,6 +19,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         style={Object {}}
       >
         <Input
+          accessibilityLabel="firstName"
+          accessible={true}
           defaultValue=""
           onChangeText={[Function]}
           placeholder="First Name"
@@ -33,6 +35,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         }
       >
         <Input
+          accessibilityLabel="lastName"
+          accessible={true}
           defaultValue=""
           onChangeText={[Function]}
           placeholder="Last Name"
@@ -47,6 +51,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         }
       >
         <Input
+          accessibilityLabel="country"
+          accessible={true}
           defaultValue=""
           onChangeText={[Function]}
           placeholder="Country"
@@ -61,6 +67,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         }
       >
         <Input
+          accessibilityLabel="state"
+          accessible={true}
           defaultValue=""
           onChangeText={[Function]}
           placeholder="State"
@@ -75,6 +83,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         }
       >
         <Input
+          accessibilityLabel="city"
+          accessible={true}
           defaultValue=""
           onChangeText={[Function]}
           placeholder="City"
@@ -89,6 +99,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         }
       >
         <Input
+          accessibilityLabel="postalCode"
+          accessible={true}
           defaultValue=""
           onChangeText={[Function]}
           placeholder="Postal Code"
@@ -103,6 +115,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         }
       >
         <Input
+          accessibilityLabel="about"
+          accessible={true}
           defaultValue=""
           onChangeText={[Function]}
           placeholder="About"
@@ -118,6 +132,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
       >
         <Button
           TouchableComponent={[Function]}
+          accessibilityLabel="updateInfo"
+          accessible={true}
           buttonStyle={
             Object {
               "marginBottom": 15,
@@ -139,6 +155,8 @@ exports[`Testing UpdateInfoModal component renders as expected 1`] = `
         />
         <Button
           TouchableComponent={[Function]}
+          accessibilityLabel="close"
+          accessible={true}
           buttonStyle={
             Object {
               "backgroundColor": "red",
