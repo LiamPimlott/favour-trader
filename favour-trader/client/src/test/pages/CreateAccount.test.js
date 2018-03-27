@@ -78,11 +78,3 @@ it('should verify error validation messages on invalidate fields', function () {
     expect(wrapper.find('.ant-form-explain').get(1).props.children).toBe("Last name is too short!");
     expect(wrapper.find('.ant-form-explain').get(2).props.children).toBe("The input is not valid E-mail!");
 });
-
-it.skip('should error on invalid submission', function () {
-    firstNameInput.simulate('change', { target: {name: 'firstName', value: 'Ismail'}});
-    lastNameInput.simulate('change', { target: {name: 'lastName', value: 'ismail'}});
-    emailInput.simulate('change', { target: {name: 'email', value: 'example@gmail.com'}});
-    passwordInput.simulate('change', { target: {name: 'password', value: 'password'}});
-    submitBtn.simulate('click');
-}); 
