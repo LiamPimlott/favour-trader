@@ -1,0 +1,166 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Login component renders as expected 1`] = `
+<KeyboardAvoidingView
+  behavior="padding"
+  keyboardVerticalOffset={0}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "transparent",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <Card
+    title="Welcome to Favour ⇋ Trader"
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+      style={
+        Object {
+          "fontSize": 15,
+          "marginBottom": 10,
+          "textAlign": "center",
+        }
+      }
+    >
+      Login to start trading!
+    </Text>
+    <View
+      style={
+        Object {
+          "marginBottom": 15,
+          "marginTop": 10,
+        }
+      }
+    >
+      <Input
+        autoCapitalize="none"
+        leftIcon={
+          <Icon
+            color="black"
+            name="mail-outline"
+            raised={false}
+            reverse={false}
+            reverseColor="white"
+            size={24}
+            underlayColor="white"
+          />
+        }
+        onChangeText={[Function]}
+        placeholder="E-mail Address"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "marginBottom": 15,
+          "marginTop": 10,
+        }
+      }
+    >
+      <Input
+        autoCapitalize="none"
+        leftIcon={
+          <Icon
+            color="black"
+            name="lock-outline"
+            raised={false}
+            reverse={false}
+            reverseColor="white"
+            size={24}
+            underlayColor="white"
+          />
+        }
+        onChangeText={[Function]}
+        placeholder="Password"
+        secureTextEntry={true}
+      />
+    </View>
+    <Button
+      TouchableComponent={[Function]}
+      buttonStyle={
+        Object {
+          "borderRadius": 0,
+          "marginBottom": 10,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "width": 300,
+        }
+      }
+      clear={false}
+      disabled={false}
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      raised={true}
+      title="Login"
+    />
+    <Divider
+      style={
+        Object {
+          "backgroundColor": "grey",
+          "marginTop": 15,
+          "width": 300,
+        }
+      }
+    />
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "marginTop": 20,
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "textAlign": "center",
+          }
+        }
+      >
+        No account?
+      </Text>
+      <Button
+        TouchableComponent={[Function]}
+        buttonStyle={
+          Object {
+            "borderRadius": 3,
+          }
+        }
+        clear={true}
+        disabled={false}
+        iconRight={false}
+        loadingProps={
+          Object {
+            "color": "white",
+            "size": "small",
+          }
+        }
+        onPress={[Function]}
+        title="Sign Up"
+        titleStyle={
+          Object {
+            "color": "#03A9F4",
+          }
+        }
+      />
+    </View>
+  </Card>
+</KeyboardAvoidingView>
+`;

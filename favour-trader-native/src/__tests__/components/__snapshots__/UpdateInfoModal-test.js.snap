@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing UpdateInfoModal component renders as expected 1`] = `
+<KeyboardAvoidingView
+  behavior="padding"
+  keyboardVerticalOffset={0}
+>
+  <Component
+    animationType="slide"
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    transparent={false}
+    visible={false}
+  >
+    <Card
+      title="Update Info"
+    >
+      <View
+        style={Object {}}
+      >
+        <Input
+          defaultValue=""
+          onChangeText={[Function]}
+          placeholder="First Name"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 10,
+          }
+        }
+      >
+        <Input
+          defaultValue=""
+          onChangeText={[Function]}
+          placeholder="Last Name"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 10,
+          }
+        }
+      >
+        <Input
+          defaultValue=""
+          onChangeText={[Function]}
+          placeholder="Country"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 10,
+          }
+        }
+      >
+        <Input
+          defaultValue=""
+          onChangeText={[Function]}
+          placeholder="State"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 10,
+          }
+        }
+      >
+        <Input
+          defaultValue=""
+          onChangeText={[Function]}
+          placeholder="City"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 10,
+          }
+        }
+      >
+        <Input
+          defaultValue=""
+          onChangeText={[Function]}
+          placeholder="Postal Code"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 10,
+          }
+        }
+      >
+        <Input
+          defaultValue=""
+          onChangeText={[Function]}
+          placeholder="About"
+        />
+      </View>
+      <View
+        style={
+          Object {
+            "flexDirection": "row",
+            "justifyContent": "space-around",
+          }
+        }
+      >
+        <Button
+          TouchableComponent={[Function]}
+          buttonStyle={
+            Object {
+              "marginBottom": 15,
+              "marginTop": 15,
+              "width": 150,
+            }
+          }
+          clear={false}
+          disabled={false}
+          iconRight={false}
+          loadingProps={
+            Object {
+              "color": "white",
+              "size": "small",
+            }
+          }
+          onPress={[Function]}
+          title="update Info"
+        />
+        <Button
+          TouchableComponent={[Function]}
+          buttonStyle={
+            Object {
+              "backgroundColor": "red",
+              "marginBottom": 15,
+              "marginTop": 15,
+              "width": 150,
+            }
+          }
+          clear={false}
+          disabled={false}
+          iconRight={false}
+          loadingProps={
+            Object {
+              "color": "white",
+              "size": "small",
+            }
+          }
+          onPress={[Function]}
+          title="Close"
+        />
+      </View>
+      <View />
+    </Card>
+  </Component>
+</KeyboardAvoidingView>
+`;

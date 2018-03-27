@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing Trades component renders as expected 1`] = `
+<View>
+  <Picker
+    mode="dialog"
+    onValueChange={[Function]}
+    selectedValue="active"
+  >
+    <PickerItem
+      label="Active Trades"
+      value="active"
+    />
+    <PickerItem
+      label="Sent Trades"
+      value="sent"
+    />
+    <PickerItem
+      label="Received Trades"
+      value="received"
+    />
+  </Picker>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    ellipsizeMode="tail"
+  >
+     
+    Looks like you don't have any active trades yet.
+     
+  </Text>
+</View>
+`;

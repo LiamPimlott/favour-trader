@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing SignUp component renders as expected 1`] = `
+<KeyboardAvoidingView
+  behavior="padding"
+  keyboardVerticalOffset={0}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "transparent",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <Card
+    title="Ready to do Favour ⇋ Trading?"
+  >
+    <Text
+      accessible={true}
+      allowFontScaling={true}
+      ellipsizeMode="tail"
+    >
+      We just need a bit of info to get you going..
+    </Text>
+    <View
+      style={
+        Object {
+          "marginBottom": 15,
+          "marginTop": 10,
+        }
+      }
+    >
+      <Input
+        leftIcon={
+          <Icon
+            color="black"
+            name="face"
+            raised={false}
+            reverse={false}
+            reverseColor="white"
+            size={24}
+            underlayColor="white"
+          />
+        }
+        onChangeText={[Function]}
+        onSubmitEditing={[Function]}
+        placeholder="First Name"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "marginBottom": 15,
+          "marginTop": 10,
+        }
+      }
+    >
+      <Input
+        leftIcon={
+          <Icon
+            color="black"
+            name="face"
+            raised={false}
+            reverse={false}
+            reverseColor="white"
+            size={24}
+            underlayColor="white"
+          />
+        }
+        onChangeText={[Function]}
+        onSubmitEditing={[Function]}
+        placeholder="Last Name"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "marginBottom": 15,
+          "marginTop": 10,
+        }
+      }
+    >
+      <Input
+        leftIcon={
+          <Icon
+            color="black"
+            name="mail-outline"
+            raised={false}
+            reverse={false}
+            reverseColor="white"
+            size={24}
+            underlayColor="white"
+          />
+        }
+        onChangeText={[Function]}
+        onSubmitEditing={[Function]}
+        placeholder="E-mail Address"
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "marginBottom": 15,
+          "marginTop": 10,
+        }
+      }
+    >
+      <Input
+        leftIcon={
+          <Icon
+            color="black"
+            name="lock-outline"
+            raised={false}
+            reverse={false}
+            reverseColor="white"
+            size={24}
+            underlayColor="white"
+          />
+        }
+        onChangeText={[Function]}
+        placeholder="Password"
+        secureTextEntry={true}
+        style={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 10,
+          }
+        }
+      />
+    </View>
+    <Button
+      TouchableComponent={[Function]}
+      backgroundColor="#03A9F4"
+      buttonStyle={
+        Object {
+          "borderRadius": 0,
+          "marginBottom": 10,
+          "marginLeft": 0,
+          "marginRight": 0,
+          "width": 300,
+        }
+      }
+      clear={false}
+      disabled={false}
+      iconRight={false}
+      loadingProps={
+        Object {
+          "color": "white",
+          "size": "small",
+        }
+      }
+      onPress={[Function]}
+      title="Sign Up"
+    />
+  </Card>
+</KeyboardAvoidingView>
+`;

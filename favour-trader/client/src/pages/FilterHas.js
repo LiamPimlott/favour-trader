@@ -21,6 +21,8 @@ class FilterHas extends Main {
             .catch( (err) => {
                 console.log(err);
             });
+        } else {
+            this.setState({ redirect: true });
         }
     }
 }
