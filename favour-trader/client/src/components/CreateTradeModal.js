@@ -35,8 +35,6 @@ class CreateTradeModal extends Component {
 
     componentWillMount() {
         const { authService } = this.props;
-        const userProfile = this.props.authService.getProfile();
-        const userEmail = userProfile.email;
         this.mounted = true;
         const config = {
             headers: {
@@ -45,10 +43,7 @@ class CreateTradeModal extends Component {
                 'Authorization': authService.getToken(),
             }
         };
-
-        axios.get('/api/users/has', {
-            email: userEmail,
-        }, config)
+        axios.get('/api/users/has', config)
             .then(res => res.data.user)
             .then((user) => {
                 if (this.mounted) {

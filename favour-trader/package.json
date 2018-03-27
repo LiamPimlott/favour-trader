@@ -7,6 +7,7 @@
     "devServer": "nodemon server",
     "devClient": "node start-client.js",
     "dev": "concurrently \"npm run devServer\" \"npm run devClient\"",
+    "acceptance": "export NODE_ENV=acceptance&& node dbrefresh.js&& npm run dev",
     "test": "mocha --timeout 10000 --exit",
     "testServerWin": "set NODE_ENV=test&&nodemon server",
     "testServerMac": "export NODE_ENV=test&&nodemon server"
