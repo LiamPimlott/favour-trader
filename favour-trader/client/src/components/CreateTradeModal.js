@@ -43,7 +43,6 @@ class CreateTradeModal extends Component {
                 'Authorization': authService.getToken(),
             }
         };
-
         axios.get('/api/users/has', config)
             .then(res => res.data.user)
             .then((user) => {

@@ -4,7 +4,7 @@ Feature('Login');
 Scenario('Valid Login submission', (I, loginPage) => {
     I.amOnPage('/');
     loginPage.login('example@gmail.com', 'password');
-    I.see("Matched Traders");
+    I.see("Sorry, No Matches :( Try updating the skills you are seeking.");
 });
 
 Scenario('Validation check', (I, loginPage) => {
@@ -29,7 +29,7 @@ Scenario('Invalid submission checks @invalid', (I, loginPage) => {
     I.see('Incorrect password.')
 });
 
-Scenario('should redirect me to register', (I, loginPage) => {
+Scenario('should redirect me to register', (I) => {
     I.amOnPage('/');
     I.click('register now!');
     I.see("Hone your Skills,");
