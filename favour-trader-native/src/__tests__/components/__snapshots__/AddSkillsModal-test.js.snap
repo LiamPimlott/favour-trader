@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Testing AddSkillsModal component renders as expected 1`] = `
+<KeyboardAvoidingView
+  behavior="padding"
+  keyboardVerticalOffset={0}
+>
+  <Component
+    animationType="slide"
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    transparent={false}
+    visible={null}
+  >
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-around",
+        }
+      }
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "fontSize": 20,
+          }
+        }
+      >
+         
+        Add skills I am looking for: 
+      </Text>
+      <Switch
+        disabled={false}
+        onValueChange={[Function]}
+        style={
+          Object {
+            "transform": Array [
+              Object {
+                "scaleX": 1,
+              },
+              Object {
+                "scaleY": 1,
+              },
+            ],
+          }
+        }
+        value={false}
+      />
+    </View>
+    <View
+      style={
+        Object {
+          "flexDirection": "row",
+          "justifyContent": "space-around",
+        }
+      }
+    >
+      <Button
+        TouchableComponent={[Function]}
+        buttonStyle={
+          Object {
+            "marginBottom": 15,
+            "marginTop": 15,
+            "width": 150,
+          }
+        }
+        clear={false}
+        disabled={false}
+        iconRight={false}
+        loadingProps={
+          Object {
+            "color": "white",
+            "size": "small",
+          }
+        }
+        onPress={[Function]}
+        title="Save Skills"
+      />
+      <Button
+        TouchableComponent={[Function]}
+        buttonStyle={
+          Object {
+            "backgroundColor": "red",
+            "marginBottom": 15,
+            "marginTop": 15,
+            "width": 150,
+          }
+        }
+        clear={false}
+        disabled={false}
+        iconRight={false}
+        loadingProps={
+          Object {
+            "color": "white",
+            "size": "small",
+          }
+        }
+        onPress={[Function]}
+        title="Close"
+      />
+    </View>
+  </Component>
+</KeyboardAvoidingView>
+`;
