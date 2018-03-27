@@ -22,6 +22,11 @@ script:
 - npm test
 - cd client
 - npm test
+- killall node
+- cd ..
+- npm run acceptance &
+- sleep 10
+- cd client
 - npm run e2etest
 - killall node
 env:
