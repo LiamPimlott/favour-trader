@@ -112,7 +112,7 @@ function clearDB() {
     })
 }
 
-describe.only("Contract Model Tests", (done) => {
+describe("Contract Model Tests", (done) => {
     before((done) => {
         connect().then(addSkills()).then(addUsers()).then(done())
     })
