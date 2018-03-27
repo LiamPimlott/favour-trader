@@ -92,7 +92,7 @@ export default class ProfileSkills extends Component {
                             hideChevron={!this.props.isCurrentUser}
                             title={item.category.skill}
                             accessible={true}
-                            accessibilityLabel={`${item.category.skill} + ' has skill'`}
+                            accessibilityLabel={`${item.category.skill}` + ' has skill'}
                             rightIcon={{ name: 'delete-forever' }}
                             onPressRightIcon={() => { this.deleteSkillToggle(item._id) }}
                         />
@@ -105,9 +105,9 @@ export default class ProfileSkills extends Component {
                         <ListItem
                             key={i}
                             hideChevron={!this.props.isCurrentUser}
-                            title={category.skill}
+                            title={item.category.skill}
                             accessible={true}
-                            accessibilityLabel={`${category.skill} + ' wants skill'`}
+                            accessibilityLabel={`${item.category.skill}` + ' wants skill'}
                             rightIcon={{ name: 'delete-forever' }}
                             onPressRightIcon={() => { this.deleteSkillToggle(item._id) }}
                         />

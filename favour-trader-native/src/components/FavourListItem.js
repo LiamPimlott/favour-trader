@@ -22,7 +22,7 @@ export default class FavourListItem extends Component {
                 leftIcon={{ name: iconName, color: iconColour }}
                 accessible={true}
                 accessibilityLabel={`${this.props.title} +' favour list'`}
-                leftIconOnPress={this._onPress}
+                onPress={this._onPress}
             />
         );
     }

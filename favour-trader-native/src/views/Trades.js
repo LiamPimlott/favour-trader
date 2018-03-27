@@ -110,13 +110,13 @@ export default class Trades extends React.Component {
         return (
             <View>
                 <Picker selectedValue={this.state.source}
-                    onValueChange={this.setSource}
-                    style={styles.picker}>
+                        onValueChange={this.setSource}
+                        style={styles.picker}
+                        accessible={true}
+                        accessibilityLabel={`${this.state.source} + ' trade picker'`}>
                     <Picker.Item label="Active Trades" value="active" />
                     <Picker.Item label="Sent Trades" value="sent" />
                     <Picker.Item label="Received Trades" value="received" />
-                    accessible={true}
-                    accessibilityLabel={`${this.state.source} + ' trade picker'`}
                 </Picker>
                 {
                     (trades !== null && trades instanceof Array && trades.length !== 0) ? (

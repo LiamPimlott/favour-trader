@@ -126,10 +126,12 @@ export default class UserProfile extends React.Component {
                     axios.put('http://favour-trader-test.appspot.com/api/users/update', body, config)
                         .then((res) => {
                             this.setState({
+                                loaded: false,
                                 has: res.data.user.has,
                                 wants: res.data.user.wants
                             });
                         })
+                        .then(()=>{this.setState({loaded: true})})
                 }
             )
         })

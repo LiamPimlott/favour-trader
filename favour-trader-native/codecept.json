@@ -10,7 +10,11 @@
   },
   "include": {
     "I": "./steps_file.js",
-    "loginPage": "./acceptance/pages/login.js"
+    "loginPage": "./acceptance/pages/login.js",
+    "signUpPage": "./acceptance/pages/SignUp.js",
+    "homePage": "./acceptance/pages/Home.js",
+    "userProfilePage": "./acceptance/pages/userProfile.js",
+    "offerTradePage": "./acceptance/pages/OfferTrade.js"
   },
   "mocha": {},
   "bootstrap": false,
