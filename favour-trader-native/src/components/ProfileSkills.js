@@ -91,6 +91,8 @@ export default class ProfileSkills extends Component {
                             key={i}
                             hideChevron={!this.props.isCurrentUser}
                             title={item.category.skill}
+                            accessible={true}
+                            accessibilityLabel={`${item.category.skill}` + ' has skill'}
                             rightIcon={{ name: 'delete-forever' }}
                             onPressRightIcon={() => { this.deleteSkillToggle(item._id) }}
                         />
@@ -103,7 +105,9 @@ export default class ProfileSkills extends Component {
                         <ListItem
                             key={i}
                             hideChevron={!this.props.isCurrentUser}
-                            title={category.skill}
+                            title={item.category.skill}
+                            accessible={true}
+                            accessibilityLabel={`${item.category.skill}` + ' wants skill'}
                             rightIcon={{ name: 'delete-forever' }}
                             onPressRightIcon={() => { this.deleteSkillToggle(item._id) }}
                         />
@@ -121,6 +125,8 @@ export default class ProfileSkills extends Component {
                         selectedBackgroundColor="pink"
                         onPress={this.updateIndex}
                         selectedIndex={this.state.index}
+                        accessible={true}
+                        accessibilityLabel={'has or wants'}
                         buttons={['Has', 'Wants']}
                         containerStyle={{ height: 30 }} />
                     <View>
@@ -142,9 +148,13 @@ export default class ProfileSkills extends Component {
                                 <Button
                                     title={"Delete"}
                                     onPress={this.deleteSkill}
+                                    accessible={true}
+                                    accessibilityLabel={'delete'}
                                 />
                                 <Button
                                     title={"Close"}
+                                    accessible={true}
+                                    accessibilityLabel={'Close'}
                                     onPress={() => { this.setState({ toggleDelete: false }) }}
                                 />
                             </Card>

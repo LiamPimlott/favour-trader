@@ -63,6 +63,8 @@ class UpdateInfoModal extends React.Component {
                                 placeholder='First Name'
                                 defaultValue={this.state.firstName}
                                 onChangeText={(text) => {this.setState({firstName: text})}}
+                                accessible={true}
+                                accessibilityLabel={'firstName'}
                             />
                         </View>
                         <View style={styles.input}>
@@ -70,6 +72,8 @@ class UpdateInfoModal extends React.Component {
                                 placeholder='Last Name'
                                 defaultValue={this.state.lastName}
                                 onChangeText={(text) => {this.setState({lastName: text})}}
+                                accessible={true}
+                                accessibilityLabel={'lastName'}
                             />
                         </View>
                         <View style={styles.input}>
@@ -77,6 +81,8 @@ class UpdateInfoModal extends React.Component {
                                 placeholder='Country'
                                 defaultValue={this.state.country}
                                 onChangeText={(text) => {this.setState({country: text})}}
+                                accessible={true}
+                                accessibilityLabel={'country'}
                             />
                         </View>
                         <View style={styles.input}>
@@ -84,6 +90,8 @@ class UpdateInfoModal extends React.Component {
                                 placeholder='State'
                                 defaultValue={this.state.state}
                                 onChangeText={(text) => {this.setState({state: text})}}
+                                accessible={true}
+                                accessibilityLabel={'state'}
                             />
                         </View>
                         <View style={styles.input}>
@@ -91,6 +99,8 @@ class UpdateInfoModal extends React.Component {
                                 placeholder='City'
                                 defaultValue={this.state.city}
                                 onChangeText={(text) => {this.setState({city: text})}}
+                                accessible={true}
+                                accessibilityLabel={'city'}
                             />
                         </View>
                         <View style={styles.input}>
@@ -98,6 +108,8 @@ class UpdateInfoModal extends React.Component {
                                 placeholder='Postal Code'
                                 defaultValue={this.state.postalCode}
                                 onChangeText={(text) => {this.setState({postalCode: text})}}
+                                accessible={true}
+                                accessibilityLabel={'postalCode'}
                             />
                         </View>
                         <View style={styles.input}>
@@ -105,6 +117,8 @@ class UpdateInfoModal extends React.Component {
                                 placeholder='About'
                                 defaultValue={this.state.about}
                                 onChangeText={(text) => {this.setState({about: text})}}
+                                accessible={true}
+                                accessibilityLabel={'about'}
                             />
                         </View>
                         <View style={styles.rowAlign}>
@@ -113,13 +127,19 @@ class UpdateInfoModal extends React.Component {
                                 title='update Info'
                                 onPress={() => {
                                     this.update();
-                                }}/>
+                                }}
+                                accessible={true}
+                                accessibilityLabel={'updateInfo'}
+                                />
                             <Button
                                 buttonStyle={styles.closeButton}
                                 title='Close'
                                 onPress={() => {
                                     this.props.toggle();
-                                }}/>
+                                }}
+                                accessible={true}
+                                accessibilityLabel={'close'}
+                                />
                         </View>
 
                         {this.state.missingFields ? (<Text>Missing Required Fields</Text>) : (<View />)}

@@ -86,6 +86,8 @@ export default class Trades extends React.Component {
                         roundAvatar
                         title={`${item.offeror.name.first} ⇋ ${item.offeree.name.first}`}
                         subtitle={`This trade is currently ${item.status.toLowerCase()}`}
+                        accessible={true}
+                        accessibilityLabel={`${item.offeror.name.first} ⇋ ${item.offeree.name.first} + ' trade'`}
                         avatar={{ uri: 'https://cdn.onlinewebfonts.com/svg/img_104784.png' }}
                         onPress={() => {
                             this.props.navigation.navigate('TradeOverview', {
@@ -108,8 +110,10 @@ export default class Trades extends React.Component {
         return (
             <View>
                 <Picker selectedValue={this.state.source}
-                    onValueChange={this.setSource}
-                    style={styles.picker}>
+                        onValueChange={this.setSource}
+                        style={styles.picker}
+                        accessible={true}
+                        accessibilityLabel={`${this.state.source} + ' trade picker'`}>
                     <Picker.Item label="Active Trades" value="active" />
                     <Picker.Item label="Sent Trades" value="sent" />
                     <Picker.Item label="Received Trades" value="received" />

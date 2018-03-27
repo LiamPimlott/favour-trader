@@ -37,5 +37,18 @@ We ran into trouble at this point, depending on your laptop - you will not be ab
 We have a backup version of the application available at https://exp.host/@ismailkhowaja/favourtrader.
 You should be able to scan the bar code on that page with the Expo mobile app in order to run it :)
 
+## Running snapshot testing
+- Navigate to /favour-trader-native
+- Run `npm install`
+- Run `npm test`
+
+## Setting up / Running acceptance tests
+
+1. To get codecept and appium working, follow these (https://codecept.io/mobile/) instructions under the setting up section.
+2. Run 'appium-doctor' in a terminal and make sure you have the proper requirements installed.
+3. navigate to /favour-trader-native/codecept.json and ensure the "app" field is set to the full path of /myapp2.apk on your machine.
+4. open a new terminal run 'appium'
+5. open a second terminal, ensure you are in /favour-trader-native and run 'codeceptjs run --steps'
+
 ## Final Note:
 The mobile version of our application connects to our production environment located at http://favour-trader.appspot.com.

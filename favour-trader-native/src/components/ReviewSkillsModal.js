@@ -47,7 +47,7 @@ class ReviewSkillsModal extends React.Component {
                                 ))
                             }
                         </List>
-                        <Button onPress={ () => {toggle()} } title={"Close"}>
+                        <Button onPress={ () => {toggle()} } title={"Close"} accessible={true} accessibilityLabel={'Close'}>
                         </Button>
                     </View>
                 </View>

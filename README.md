@@ -51,14 +51,6 @@ Option 2 - Running server and web client concurrently: (note: this option is mor
 - Run `npm run dev` to run the devServer and devClient concurrently in one shell.
 - A front end build is only require if accessing the front-end from the server (localhost//:3001), otherwise just do any browsing through the webpack server (localhost//:3000).
 
-Running Mobile Client:
-- ** SEE THE README FILE IN THE /favour-trader-native DIRECTORY **
-
-Notes for working on this repository:
-- Please only work off of the 'develop' branch (we will merge develop into master when a new release is scheduled)
-- You must have at least 1 code review before you merge your branch.
-- Any changes must pass the TravisCI builds. (These are automaticly ran via github integrations).
-
 ## Testing:
 
 The tests use Mocha, Chai, and CodeceptJS. They connect to a totally different MongoDB instance as to not destroy the dev or prod dbs.
@@ -71,10 +63,20 @@ The tests use Mocha, Chai, and CodeceptJS. They connect to a totally different M
 - Navigate to /favour-trader/client
 - Run `npm install`
 - Run `npm test`
+
+Running / Testing Mobile Client:
+
+- ** SEE THE README FILE IN THE /favour-trader-native DIRECTORY **
+
+Notes for working on this repository:
+- Please only work off of the 'develop' branch (we will merge develop into master when a new release is scheduled)
+- You must have at least 1 code review before you merge your branch.
+- Any changes must pass the TravisCI builds. (These are automaticly ran via github integrations).
+
 ### Running client accpetance tests:
-- In the /favour-trader folder, run node dbrefresh.js with  NODE_ENV=acceptance in the .env file
-- First, start the server and client like in Option 1 using NODE_ENV=acceptance
-- in /favour-trader/client, run npm run e2etests
+- In the /favour-trader folder, run `node dbrefresh.js` with  `NODE_ENV=acceptance` in the .env file
+- First, start the server and client like in Option 1 using `NODE_ENV=acceptance`
+- in /favour-trader/client, run `npm run e2etests`
 
 Note: the dbrefresh script sometimes doesn't add the skills into MongoDB, causing the tests to fail. If you encounter
 the test failing when selecting a skill, try running the dbrefresh script again.

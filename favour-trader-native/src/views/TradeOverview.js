@@ -97,6 +97,8 @@ export default class TradeOverview extends React.Component {
 						key={i}
 						checked={this.checkFavourStatus(item)}
 						onPress={() => this.markAsComplete(item)}
+						accessible={true}
+                        accessibilityLabel={`${item.skillId.skill} +' trade skills'`}
 					/>
 				))
 			);
@@ -320,6 +322,8 @@ export default class TradeOverview extends React.Component {
 					<Button
 						title={'Return to Trades'}
 						onPress={() => navigate('Trades')}
+						accessible={true}
+                        accessibilityLabel={`${trade.status}+ ' return to Trade'`}
 					/>
 				</View>
 			);
@@ -334,6 +338,8 @@ export default class TradeOverview extends React.Component {
 						<Text>Awaiting Response</Text>
 						<Button
 							title={'Return to Trades'}
+							accessible={true}
+                        	accessibilityLabel={'Termination return to Trade'}
 							onPress={() => navigate('Trades')}
 						/>
 					</View>
@@ -346,6 +352,8 @@ export default class TradeOverview extends React.Component {
 						<Button
 							title={'Confirm Termination'}
 							onPress={this.requestTermination}
+							accessible={true}
+                        	accessibilityLabel={'Confirm Termination'}
 						/>
 					</View>
 				)
@@ -359,10 +367,14 @@ export default class TradeOverview extends React.Component {
 						<Button
 							title={'Save Changes'}
 							onPress={this.saveUpdatedFavours}
+							accessible={true}
+                        	accessibilityLabel={`${trade.status}+ 'save changes'`}
 						/>
 						<Button style={styles.stackedButton}
 							title={'Reset Changes'}
 							onPress={this.resetFavours}
+							accessible={true}
+                        	accessibilityLabel={`${trade.status}+ 'Reset Changes'`}
 						/>
 					</View>
 				);
@@ -372,6 +384,8 @@ export default class TradeOverview extends React.Component {
 						<Button
 							title={'Confirm Trade Completion'}
 							onPress={this.requestTermination}
+							accessible={true}
+                        	accessibilityLabel={'Confirm Trade Completion'}
 						/>
 					</View>
 				);
@@ -381,6 +395,8 @@ export default class TradeOverview extends React.Component {
 						<Button
 							title={'Request to Terminate Trade'}
 							onPress={this.requestTermination}
+							accessible={true}
+                        	accessibilityLabel={'Request to Terminate Trade'}
 						/>
 					</View >
 				)
@@ -395,6 +411,8 @@ export default class TradeOverview extends React.Component {
 					<Button
 						title={'Return to Trades'}
 						onPress={() => navigate('Trades')}
+						accessible={true}
+                        accessibilityLabel={`${this.state.isOfferor} + ' is offeror Return to Trades'`}
 					/>
 				</View>
 			);
@@ -404,10 +422,14 @@ export default class TradeOverview extends React.Component {
 					<Button
 						title={'Accept Trade'}
 						onPress={this.acceptTrade}
+						accessible={true}
+                        accessibilityLabel={`${this.state.isOfferor} + ' Accept Trade'`}
 					/>
 					< Button style={styles.stackedButton}
 						title={'Decline Trade'}
 						onPress={this.declineTrade}
+						accessible={true}
+                        accessibilityLabel={`${this.state.isOfferor} + ' Decline Trade'`}
 					/>
 				</View >
 			);

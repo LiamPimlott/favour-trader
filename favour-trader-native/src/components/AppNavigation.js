@@ -80,8 +80,9 @@ export default AppNavigation = new StackNavigator({
                 }
             };
             return ({
-                headerLeft: <Button color={'rgba(0, 0, 0, 0)'} onPress={() => navigation.navigate('DrawerToggle')} title={'☰'} />,
-                headerRight: <Button color={'grey'} onPress={doLogout} title={'Log out'} />,
+                headerLeft: <Button onPress={() => navigation.navigate('DrawerToggle')}
+                                    title={'Menu'} accessible={true} accessibilityLabel={'drawer'}/>,
+                headerRight: <Button color={'grey'} onPress={doLogout} title={'Log out'} accessible={true} accessibilityLabel={'Log out'}/>,
             }); 
         },
     },

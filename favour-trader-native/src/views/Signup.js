@@ -58,6 +58,8 @@ export default class SignUp extends React.Component {
                         <Input
                             leftIcon={ <Icon name={'face'} /> }
                             placeholder="First Name"
+                            accessible={true}
+                            accessibilityLabel={'firstName'}
                             ref={(input) => this.firstNameInput = input}
                             onSubmitEditing={() => this.lastNameInput.focus()}
                             onChangeText={(firstName) => this.setState({firstName})}
@@ -67,6 +69,8 @@ export default class SignUp extends React.Component {
                         <Input
                             leftIcon={ <Icon name={'face'} /> }
                             placeholder="Last Name"
+                            accessible={true}
+                            accessibilityLabel={'lastName'}
                             ref={(input) => this.lastNameInput = input}
                             onChangeText={(lastName) => this.setState({lastName})}
                             onSubmitEditing={() => this.emailInput.focus()}
@@ -77,6 +81,8 @@ export default class SignUp extends React.Component {
                             placeholder="E-mail Address"
                             leftIcon={ <Icon name='mail-outline'/> }
                             ref={(input) => this.emailInput = input}
+                            accessible={true}
+                            accessibilityLabel={'emailAddress'}
                             onChangeText={(email) => this.setState({email})}
                             onSubmitEditing={() => this.passwordInput.focus()}
                         />
@@ -88,12 +94,16 @@ export default class SignUp extends React.Component {
                             style={styles.input}
                             secureTextEntry
                             ref={(input) => this.passwordInput = input}
+                            accessible={true}
+                            accessibilityLabel={'password'}
                             onChangeText={(password) => this.setState({password})}
                         />
                     </View>
                     <Button
                         backgroundColor='#03A9F4'
                         buttonStyle={styles.button}
+                        accessible={true}
+                        accessibilityLabel={'signup'}
                         title='Sign Up'
                         onPress={this.submit}/>
                 </Card>
