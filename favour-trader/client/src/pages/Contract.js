@@ -246,7 +246,7 @@ class Contract extends Component {
                 }
             };
             axios.get(`/api/contracts/contract/${params.tradeID}`, config)
-                .then(res => res.data.trade)
+                .then(res => res.data.contract)
                 .then((tradeData) => {
                     const currentUserId = authService.getProfile().id;
                     const isUserOfferor = (currentUserId === tradeData.offeror.id);
