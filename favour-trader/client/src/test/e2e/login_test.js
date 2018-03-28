@@ -4,7 +4,6 @@ Feature('Login');
 Scenario('Valid Login submission', (I, loginPage) => {
     I.amOnPage('/');
     loginPage.login('example@gmail.com', 'password');
-    I.see("Sorry, No Matches :( Try updating the skills you are seeking.");
 });
 
 Scenario('Validation check', (I, loginPage) => {
