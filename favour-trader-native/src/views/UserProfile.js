@@ -71,7 +71,7 @@ export default class UserProfile extends React.Component {
 
     async fetchProfile() {
         const { profileId } = this.state;
-        let endpoint = `http://favour-trader-test.appspot.com/api/users/${profileId}/profile/`;
+        let endpoint = `http://favour-trader.appspot.com/api/users/${profileId}/profile/`;
         if (this.authService.loggedIn() && this.mounted) {
             const profile = await this.authService.getProfile();
             this.authService.getToken()
@@ -123,7 +123,7 @@ export default class UserProfile extends React.Component {
                             Authorization: token
                         }
                     };
-                    axios.put('http://favour-trader-test.appspot.com/api/users/update', body, config)
+                    axios.put('http://favour-trader.appspot.com/api/users/update', body, config)
                         .then((res) => {
                             this.setState({
                                 loaded: false,
