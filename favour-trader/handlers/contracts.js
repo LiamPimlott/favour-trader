@@ -257,8 +257,6 @@ contractsHandlers.terminationRequest = function(req, res, next) {
             contract.offeree.id != req.user.id
         ) {
             res.json({ success: false, message: "Unauthorized."})
-        } else if ( contract.status !== 'Accepted' ) {
-            res.json({ success: false, message: "Contract must be active."});
         } else {
             const userRole = (req.user.id == contract.offeror.id) ? 'offeror' : 'offeree';
             contract[userRole].requestTermination = true;
