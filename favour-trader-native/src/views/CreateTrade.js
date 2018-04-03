@@ -80,7 +80,7 @@ export default class HomeScreen extends Component {
                     },
                 };
 
-                axios.get('http://favour-trader-test.appspot.com/api/users/profile/', config)
+                axios.get('http://favour-trader.appspot.com/api/users/profile/', config)
                     .then(res => res.data)
                     .then(profileInfo => {
                         if (this.mounted) {
